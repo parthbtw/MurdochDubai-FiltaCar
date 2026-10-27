@@ -16,6 +16,7 @@ const PROTECTED_FIELDS = [
   'draft',
   'corridor',
   'ocr',
+  'ai_reads',
   'candidates',
   'history',
   'seller_approval',
