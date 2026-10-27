@@ -1,18 +1,20 @@
 import { normalizeArabic } from './arabicDictionary.js';
+import { latestOcr, normalizePartNumber } from './evidence.js';
 
+// The record's part number, only when two sources confirm it: the newest clear
+// OCR reading has the same candidate, or OCR and CodeBuddy AI agreed on it.
 export function confirmedPartNumber(record) {
   const pn = record.part_details?.part_number;
   const value = typeof pn === 'object' ? pn?.extracted_value : pn;
   if (!value) return null;
-  const field = 'part_details.part_number.extracted_value';
-  const source = record.field_sources?.[field] || pn?.extraction_method || '';
-  const seller = String(source).toLowerCase().startsWith('seller') ||
-    [...(record.history || [])].reverse().find(e => e.field === field)?.by === 'seller';
-  if (!seller && !/spreadsheet/i.test(source)) return null;
-  if (!record.ocr || record.ocr.unclear) return null;
-  const canonical = s => String(s).replace(/[\s-]/g, '').toUpperCase();
-  const tokens = String(record.ocr.text || '').match(/[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*/g) || [];
-  return tokens.some(t => canonical(t) === canonical(value)) ? String(value) : null;
+  const source = String(record.field_sources?.['part_details.part_number.extracted_value'] ?? '');
+  if (source.startsWith('OCR + CodeBuddy AI agree')) return String(value);
+  const ocr = latestOcr(record);
+  const candidate = ocr?.part_number_candidate;
+  if (ocr && ocr.unclear === false && candidate && normalizePartNumber(candidate) === normalizePartNumber(value)) {
+    return String(value);
+  }
+  return null;
 }
 
 export function hasTestRecord(record) {
@@ -22,10 +24,9 @@ export function hasTestRecord(record) {
 }
 
 const GROUPS = [
-  [['genuine', 'original', 'authentic', 'أصلي'], 'Cannot claim: authenticity is never certified'],
+  [['genuine', 'original', 'authentic', 'أصلي', 'OEM', 'وكالة'], 'Cannot claim: authenticity is never certified'],
   [['guaranteed', 'guarantee', 'warranty', 'مضمون'], 'Cannot claim: no guarantees offered'],
   [['fits all', 'universal', 'fits any', 'يركب على الكل'], 'Cannot claim: compatibility is not guaranteed'],
-  [['OEM', 'وكالة'], 'Cannot claim: part number not confirmed by two sources', 'oem'],
   [['tested working', 'fully functional', 'working', 'شغال', 'مجرب'], 'Cannot claim: no test record', 'test'],
 ];
 
@@ -44,11 +45,6 @@ export function applyClaimGuard(text, record) {
       }).join('');
       const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${arabic ? arabicPattern : escaped}(?![\\p{L}\\p{N}])`, 'giu');
       output = output.replace(pattern, match => {
-        if (kind === 'oem') {
-          const pn = confirmedPartNumber(record);
-          const remainder = output.slice(output.indexOf(match) + match.length).trim();
-          if (pn && remainder === `part number ${pn}` && output.trim().startsWith(match)) return match;
-        }
         blocked.push({ phrase: match, reason });
         return '';
       });

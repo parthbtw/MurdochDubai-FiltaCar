@@ -1,5 +1,6 @@
 // Arabic note parser for Gulf scrapyard terminology.
-// DICTIONARY is the single place for a native speaker to review and extend terms.
+// DICTIONARY and DONOR_TERMS are the single place for a native speaker to
+// review and extend terms. Keys may be multi-word phrases.
 // parseArabicNote never guesses: anything not in the dictionary, the stopword
 // list or the marker words is returned verbatim in unknown_words.
 
@@ -55,17 +56,47 @@ export const DICTIONARY = {
     "جيد": "good",
     "ممتازة": "excellent",
     "ممتاز": "excellent",
+    "سليمان": "intact",
+    "مستعمل": "used",
+    "مستعملة": "used",
+    "نظيف": "clean",
+    "نظيفة": "clean",
+    "خفيف": "light",
+    "خفيفة": "light",
+    "باهت": "faded",
+    "ضرر": "damage",
+    "مقطوع": "cut",
+    "مقطوعان": "cut",
+    "منحني": "bent",
+    "منحنية": "bent",
   },
   features: {
     "كهربائي": "electric",
+    "كهربائية": "electric",
     "كهربا": "electric",
+    "الكهرباء": "electric",
     "تدفئة": "heated",
     "سخان": "heated",
+    "مدفأة": "heated",
     "طي": "folding",
     "ينطوي": "folding",
+    "قابل للطي": "folding",
     "كاميرا": "camera",
+    "بكاميرا": "camera",
     "إشارة": "indicator",
     "اشارة": "indicator",
+  },
+  parts: {
+    "الزجاج": "glass",
+    "الجسم": "housing",
+    "الإطار": "frame",
+    "القاعدة": "base",
+    "الموصل": "connector",
+    "باب": "door",
+    "سلك": "wire",
+    "سلكان": "wire",
+    "أطراف": "pins",
+    "التوصيل": "wiring",
   },
   colour: {
     "أبيض": "white",
@@ -79,42 +110,71 @@ export const DICTIONARY = {
   },
 };
 
-// Multi-word terms matched on the normalised token stream.
-export const PHRASES = [
-  { phrase: "قابل للطي", group: "features", value: "folding" },
-];
+// Vehicle makes and models. Donor evidence only: never fitment, never an
+// attribute of the part.
+export const DONOR_TERMS = {
+  "لاند كروزر": "Land Cruiser",
+  "نيسان": "Nissan",
+  "باترول": "Patrol",
+  "برادو": "Prado",
+  "باجيرو": "Pajero",
+  "هيونداي": "Hyundai",
+  "توسان": "Tucson",
+  "أكاديا": "Acadia",
+  "لكزس": "Lexus",
+  "فورد": "Ford",
+  "إكسبلورر": "Explorer",
+  "بي إم دبليو": "BMW",
+  "إكس 5": "X5",
+};
 
-// Function words ignored by unknown-word detection (never treated as attributes).
+// Function and filler words, ignored silently (never attributes, never unknown).
 export const STOPWORDS = new Set(
   [
     "في", "من", "مع", "على", "هذا", "هذه", "ذلك", "عن", "و", "او", "الى",
     "لدي", "عند", "بها", "منها", "منه", "فقط", "جدا", "لا", "يوجد", "بحالة",
+    "غير", "لم", "يتم", "صغير",
+    "بدون", "مرفقة", "الرجاء", "تحتاج", "يدويا", "أسفل", "ظاهر",
+    "واضح", "مؤكد", "مؤكدة", "مذكور",
   ].map(normalizeArabic),
 );
 
-// Known words that name the item or a group but carry no attribute value
-// themselves (e.g. "mirror", "side", "colour").
+// Known words that name the item, a group or a record detail but carry no
+// attribute value themselves (e.g. "mirror", "side", "colour", "part number").
 export const MARKER_WORDS = new Set(
-  ["لون", "مرآة", "مرايا", "جانب", "جانبية"].map(normalizeArabic),
+  [
+    "لون", "مرآة", "مرايا", "جانب", "جانبية", "للمرآة", "صور", "حالة",
+    "رقم", "قطعة", "كود", "سجل", "فحص", "فحصها", "تحقق", "أخصائي",
+  ].map(normalizeArabic),
 );
 
-const LOOKUP = new Map();
-for (const [group, terms] of Object.entries(DICTIONARY)) {
-  for (const [term, value] of Object.entries(terms)) {
-    LOOKUP.set(normalizeArabic(term), { group, value });
-  }
+// Terms are keyed by their normalised, prefix-stripped words so "الزجاج",
+// "والزجاج" and "زجاج" all match. Multi-word terms are tried longest first.
+const SINGLE = new Map();
+const MULTI = [];
+function addTerm(term, entry) {
+  const words = normalizeArabic(term).split(/\s+/).map(stripPrefixes);
+  if (words.length === 1) SINGLE.set(words[0], entry);
+  else MULTI.push({ ...entry, words });
 }
+for (const [group, terms] of Object.entries(DICTIONARY)) {
+  for (const [term, value] of Object.entries(terms)) addTerm(term, { kind: "attribute", group, value });
+}
+for (const [term, value] of Object.entries(DONOR_TERMS)) addTerm(term, { kind: "donor", value });
+MULTI.sort((a, b) => b.words.length - a.words.length);
 
 const YEAR_RANGE = { min: 1990, max: 2030 };
 
 /**
  * Parse an Arabic seller note.
  * @returns {{ attributes: {attribute: string, value: string, word: string, source: "Arabic Note"}[],
+ *             donor_evidence: {value: string, word: string, source: "Arabic Note"}[],
  *             years: number[], unknown_words: string[] }}
  */
 export function parseArabicNote(text) {
   const normalized = normalizeArabic(text);
   const attributes = [];
+  const donor_evidence = [];
   const years = [];
   const unknown_words = [];
   const seen = new Set();
@@ -125,41 +185,33 @@ export function parseArabicNote(text) {
   }
 
   const tokens = normalized.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const bare = tokens.map(stripPrefixes);
 
-  // Multi-word phrases first, so their words are not flagged unknown.
-  const consumed = new Set();
-  for (const { phrase, group, value } of PHRASES) {
-    const wanted = normalizeArabic(phrase).split(/\s+/);
-    for (let i = 0; i + wanted.length <= tokens.length; i += 1) {
-      if (wanted.every((w, j) => tokens[i + j] === w)) {
-        for (let j = 0; j < wanted.length; j += 1) consumed.add(i + j);
-        const key = `${group}:${value}`;
-        if (!seen.has(key)) {
-          seen.add(key);
-          attributes.push({ attribute: group, value, word: phrase, source: "Arabic Note" });
-        }
-        break;
-      }
+  const record = (entry, word) => {
+    const key = `${entry.kind}:${entry.group}:${entry.value}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    if (entry.kind === "donor") donor_evidence.push({ value: entry.value, word, source: "Arabic Note" });
+    else attributes.push({ attribute: entry.group, value: entry.value, word, source: "Arabic Note" });
+  };
+
+  for (let i = 0; i < tokens.length; ) {
+    const multi = MULTI.find((e) => e.words.every((w, j) => bare[i + j] === w || tokens[i + j] === w));
+    if (multi) {
+      record(multi, tokens.slice(i, i + multi.words.length).join(" "));
+      i += multi.words.length;
+      continue;
     }
+    const token = tokens[i];
+    const word = bare[i];
+    i += 1;
+    if (/^\d+$/.test(word)) continue; // numbers are handled as years
+    if (STOPWORDS.has(word) || STOPWORDS.has(token)) continue;
+    if (MARKER_WORDS.has(word) || MARKER_WORDS.has(token)) continue;
+    const hit = SINGLE.get(word) || SINGLE.get(token);
+    if (hit) record(hit, token);
+    else if (!unknown_words.includes(token)) unknown_words.push(token);
   }
 
-  for (const [i, token] of tokens.entries()) {
-    if (consumed.has(i)) continue;
-    const bare = stripPrefixes(token);
-    if (/^\d+$/.test(bare)) continue; // numbers are handled as years
-    if (STOPWORDS.has(bare) || STOPWORDS.has(token)) continue;
-    if (MARKER_WORDS.has(bare)) continue;
-    const hit = LOOKUP.get(bare);
-    if (hit) {
-      const key = `${hit.group}:${hit.value}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        attributes.push({ attribute: hit.group, value: hit.value, word: token, source: "Arabic Note" });
-      }
-    } else if (!unknown_words.includes(token)) {
-      unknown_words.push(token);
-    }
-  }
-
-  return { attributes, years, unknown_words };
+  return { attributes, donor_evidence, years, unknown_words };
 }

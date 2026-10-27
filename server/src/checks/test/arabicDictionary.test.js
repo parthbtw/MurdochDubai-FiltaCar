@@ -103,9 +103,68 @@ test("normalisation: diacritics, tatweel, alef forms, taa marbuta, prefixes", ()
 });
 
 test("unknown word is reported, never guessed as an attribute", () => {
-  const result = parseArabicNote("برادو");
-  assert.deepEqual(result.unknown_words, ["برادو"]);
+  const result = parseArabicNote("زرنيخ");
+  assert.deepEqual(result.unknown_words, ["زرنيخ"]);
   assert.deepEqual(result.attributes, []);
+  assert.deepEqual(result.donor_evidence, []);
+});
+
+test("filler words are ignored silently and produce nothing", () => {
+  const result = parseArabicNote("غير لم يتم صغير على من فقط");
+  assert.deepEqual(result.unknown_words, []);
+  assert.deepEqual(result.attributes, []);
+  assert.deepEqual(result.donor_evidence, []);
+});
+
+test("makes and models are donor evidence only, never attributes", () => {
+  const cases = {
+    "لاند كروزر": "Land Cruiser",
+    "نيسان": "Nissan",
+    "باترول": "Patrol",
+    "برادو": "Prado",
+    "باجيرو": "Pajero",
+    "هيونداي": "Hyundai",
+    "توسان": "Tucson",
+    "أكاديا": "Acadia",
+    "لكزس": "Lexus",
+    "فورد": "Ford",
+    "إكسبلورر": "Explorer",
+    "بي إم دبليو": "BMW",
+  };
+  for (const [word, value] of Object.entries(cases)) {
+    const result = parseArabicNote(word);
+    assert.deepEqual(result.donor_evidence.map((d) => d.value), [value], word);
+    assert.deepEqual(result.attributes, [], `${word} must not be an attribute`);
+    assert.deepEqual(result.unknown_words, [], `${word} must not be unknown`);
+  }
+});
+
+test("multi-word makes are matched as one phrase inside a sentence", () => {
+  const result = parseArabicNote("مرآة يمين من بي إم دبليو 2019");
+  assert.deepEqual(result.donor_evidence.map((d) => d.value), ["BMW"]);
+  assert.deepEqual(result.unknown_words, []);
+  assert.deepEqual(result.years, [2019]);
+});
+
+test("part and material words match after normalisation (ال, و, alef forms, taa marbuta)", () => {
+  const cases = {
+    "الزجاج": "glass",
+    "والزجاج": "glass",
+    "زجاج": "glass",
+    "الجسم": "housing",
+    "والجسم": "housing",
+    "الإطار": "frame",
+    "الاطار": "frame",
+    "القاعدة": "base",
+    "القاعده": "base",
+    "الموصل": "connector",
+  };
+  for (const [word, value] of Object.entries(cases)) {
+    assert.equal(oneAttribute(word, "parts")[0]?.value, value, word);
+  }
+  assert.equal(oneAttribute("كاميرا", "features")[0]?.value, "camera");
+  assert.deepEqual(parseArabicNote("وبي إم دبليو").donor_evidence.map((d) => d.value), ["BMW"]);
+  assert.deepEqual(parseArabicNote("اكاديا").donor_evidence.map((d) => d.value), ["Acadia"]);
 });
 
 test("item and label words (mirror, side, colour) are markers, not attributes or unknowns", () => {
@@ -123,11 +182,12 @@ test("stopwords are ignored, not unknown words", () => {
 });
 
 test("a mixed note yields attributes, a year and unknown words together", () => {
-  const result = parseArabicNote("يمين كهربائي ٢٠١٨ برادو");
+  const result = parseArabicNote("يمين كهربائي ٢٠١٨ برادو زرنيخ");
   assert.deepEqual(result.years, [2018]);
   const side = result.attributes.find((a) => a.attribute === "side");
   assert.equal(side?.value, "right");
   const feature = result.attributes.find((a) => a.attribute === "features");
   assert.equal(feature?.value, "electric");
-  assert.deepEqual(result.unknown_words, ["برادو"]);
+  assert.deepEqual(result.donor_evidence.map((d) => d.value), ["Prado"]);
+  assert.deepEqual(result.unknown_words, ["زرنيخ"]);
 });

@@ -1,16 +1,20 @@
 import { applyClaimGuard, confirmedPartNumber, hasTestRecord } from './claimGuard.js';
+import { isAiOnlySource } from './evidence.js';
 
 export function buildDraft(record, gaps, corridor) {
   const blocked_claims = [];
   const open = path => gaps.some(g => ['missing', 'conflict'].includes(g.type) &&
     (g.field === path || path.startsWith(`${g.field}.`) || g.field.startsWith(`${path}.`)));
+  // AI-only values never reach the draft; agreed or seller-confirmed ones may.
+  const aiOnly = path => Object.entries(record.field_sources || {}).some(([key, source]) =>
+    (key === path || path.startsWith(`${key}.`)) && isAiOnlySource(source));
   const guard = value => {
     const result = applyClaimGuard(value, record);
     blocked_claims.push(...result.blocked);
     return result.text.replace(/\u2014/g, '-');
   };
   const read = path => {
-    if (open(path)) return '';
+    if (open(path) || aiOnly(path)) return '';
     const value = path.split('.').reduce((v, key) => v?.[key], record);
     return value == null ? '' : guard(Array.isArray(value) ? value.join(', ') : String(value));
   };
@@ -30,15 +34,16 @@ export function buildDraft(record, gaps, corridor) {
   if (donor) paragraphs.push(`Removed from a ${donor} (donor vehicle, not a fitment guarantee). Please match the part number before buying.`);
   if (side) paragraphs.push(`${side}. ${corridor.uk_side_wording.label}.`);
   if (corridor.drive_side_warning.value) paragraphs.push(`${corridor.drive_side_warning.value} ${corridor.drive_side_warning.label}.`);
-  paragraphs.push('Fragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.');
+  paragraphs.push(`Fragile, glass. Pack securely. Shipping guidance, verify: ${corridor.shipping.tier}.`);
   const item_specifics = {};
   if (side) item_specifics['Placement on Vehicle'] = side;
   if (facts[3]) item_specifics.Colour = facts[3];
   const features = read('part_details.features');
   if (features) item_specifics.Features = features;
+  // Plain number only, and only when two sources confirm it.
   const confirmed = confirmedPartNumber(record);
-  if (pn && confirmed && !open('part_details.part_number.extracted_value')) {
-    item_specifics['Manufacturer Part Number'] = guard(`OEM part number ${confirmed}`);
+  if (pn && confirmed && !open('part_details.part_number.extracted_value') && !aiOnly('part_details.part_number.extracted_value')) {
+    item_specifics['Manufacturer Part Number'] = confirmed;
   }
   // Imported titles and notes are also audited, but never copied as fitment.
   for (const path of ['original_title_en', 'original_title_ar', 'notes_ar']) {

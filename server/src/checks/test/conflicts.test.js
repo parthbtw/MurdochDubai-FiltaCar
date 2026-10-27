@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { analyzeConflicts } from "../conflicts.js";
+import { analyzeConflicts, sellerOwnsField } from "../conflicts.js";
+import { runChecks } from "../runChecks.js";
 import { baseRecord, gapWhere } from "./helpers.js";
 
 const PN_FIELD = "part_details.part_number.extracted_value";
@@ -44,31 +45,91 @@ test("missing placement raises a missing gap", () => {
   assert.ok(gapWhere(analyzeConflicts(record), "part_details.placement", "missing"));
 });
 
-test("part number conflict fires when OCR candidates do not match", () => {
-  const record = baseRecord({
-    ocr: { text: "MIRROR SBM-9999-ZZZ 2017", confidence: 0.9, unclear: false, quality: "good" },
-  });
+const NO_PN = { part_details: { part_number: { extracted_value: null, extraction_method: "none", requires_manual_verification: true } } };
+
+function ocrReading(overrides = {}) {
+  return {
+    engine: "tesseract.js (local)",
+    photo: "/demo/labels/TEST-001.png",
+    text: "SBM-9999-ZZZ\n",
+    confidence: 91,
+    unclear: false,
+    quality: { sharpness: 1500, blurry: false },
+    part_number_candidate: "SBM-9999-ZZZ",
+    read_at: "2026-10-27T15:00:00.000Z",
+    ...overrides,
+  };
+}
+
+test("label mismatch: a clear OCR candidate that differs raises a seller-fixable conflict", () => {
+  const record = baseRecord({ ocr: [ocrReading()] });
   const gap = gapWhere(analyzeConflicts(record), PN_FIELD, "conflict");
   assert.ok(gap);
-  assert.match(gap.detail, /SBM-0001-T17/);
-  assert.match(gap.detail, /SBM-9999-ZZZ/);
+  assert.equal(
+    gap.detail,
+    "record says SBM-0001-T17; label read as SBM-9999-ZZZ by OCR. Please check the stamp on the part.",
+  );
+  const result = runChecks(record);
+  assert.equal(result.readiness_status, "information_missing");
+});
+
+test("label mismatch says OCR and CodeBuddy AI only when the newest AI read of that photo agrees", () => {
+  const photo = "/demo/labels/TEST-001.png";
+  const agree = baseRecord({
+    ocr: [ocrReading()],
+    ai_reads: [{ engine: "CodeBuddy AI", mode: "live", photo, result: { part_number: "SBM-9999-ZZZ" }, agreement: "agree" }],
+  });
+  assert.match(gapWhere(analyzeConflicts(agree), PN_FIELD, "conflict").detail, /by OCR and CodeBuddy AI\./);
+
+  const otherPhoto = structuredClone(agree);
+  otherPhoto.ai_reads[0].photo = "/demo/labels/OTHER.png";
+  assert.match(gapWhere(analyzeConflicts(otherPhoto), PN_FIELD, "conflict").detail, /by OCR\./);
+
+  const newerDisagree = structuredClone(agree);
+  newerDisagree.ai_reads.push({ ...agree.ai_reads[0], agreement: "disagree" });
+  assert.match(gapWhere(analyzeConflicts(newerDisagree), PN_FIELD, "conflict").detail, /by OCR\./);
+});
+
+test("label mismatch uses only the newest OCR reading and part_number_candidate, not text", () => {
+  const older = ocrReading();
+  const newer = ocrReading({ text: "SBM-9999-ZZZ", part_number_candidate: "SBM-0001-T17" });
+  assert.ok(!gapWhere(analyzeConflicts(baseRecord({ ocr: [older, newer] })), PN_FIELD, "conflict"));
+  assert.ok(gapWhere(analyzeConflicts(baseRecord({ ocr: [newer, older] })), PN_FIELD, "conflict"));
+});
+
+test("label mismatch is skipped when the candidate is unclear or the number is seller-owned", () => {
+  const unclear = baseRecord({ ocr: [ocrReading({ unclear: true })] });
+  assert.ok(!gapWhere(analyzeConflicts(unclear), PN_FIELD, "conflict"));
+  const seller = baseRecord({ ocr: [ocrReading()], field_sources: { [PN_FIELD]: "seller edit" } });
+  assert.ok(!gapWhere(analyzeConflicts(seller), PN_FIELD, "conflict"));
+  const confirmed = baseRecord({ ocr: [ocrReading()], field_sources: { [PN_FIELD]: "CodeBuddy AI, confirmed by seller" } });
+  assert.ok(!gapWhere(analyzeConflicts(confirmed), PN_FIELD, "conflict"));
 });
 
 test("part number comparison ignores dashes, spaces and case", () => {
-  const record = baseRecord({
-    ocr: { text: "MIRROR sbm 0001 t17 2017", confidence: 0.9, unclear: false, quality: "good" },
-  });
-  // "sbm 0001 t17" splits into short tokens, so no false conflict is expected.
+  const record = baseRecord({ ocr: [ocrReading({ part_number_candidate: "sbm 0001 t17" })] });
   assert.ok(!gapWhere(analyzeConflicts(record), PN_FIELD, "conflict"));
 });
 
 test("OCR unclear raises a missing part number gap with the exact detail", () => {
   const record = baseRecord({
-    ocr: { text: "MIRROR SBM-0001-T17 2017", confidence: 0.4, unclear: true, quality: "poor" },
+    ...NO_PN,
+    ocr: [ocrReading({ unclear: true, part_number_candidate: null })],
   });
-  const gap = gapWhere(analyzeConflicts(record), PN_FIELD, "missing");
-  assert.ok(gap);
-  assert.equal(gap.detail, "OCR Unclear, seller to type value");
+  const gaps = analyzeConflicts(record).filter((g) => g.field === PN_FIELD);
+  assert.equal(gaps.length, 1, "one part number gap, so one question");
+  assert.equal(gaps[0].type, "missing");
+  assert.equal(gaps[0].detail, "OCR Unclear, seller to type value");
+});
+
+test("OCR unclear is not raised once the part has a part number", () => {
+  const record = baseRecord({ ocr: [ocrReading({ unclear: true, part_number_candidate: null })] });
+  assert.ok(!analyzeConflicts(record).some((g) => g.detail === "OCR Unclear, seller to type value"));
+});
+
+test("OCR unclear also works with an old plain-object ocr value", () => {
+  const record = baseRecord({ ...NO_PN, ocr: { text: "??", confidence: 20, unclear: true } });
+  assert.equal(gapWhere(analyzeConflicts(record), PN_FIELD, "missing").detail, "OCR Unclear, seller to type value");
 });
 
 test("a part number flagged requires_manual_verification raises a conflict", () => {
@@ -108,11 +169,46 @@ test("required fields raise missing gaps when absent", () => {
   }
 });
 
-test("unknown Arabic words become one missing gap on notes_ar", () => {
-  const record = baseRecord({ notes_ar: "برادو يمين" });
-  const gap = gapWhere(analyzeConflicts(record), "notes_ar", "missing");
+test("unknown Arabic words become one cannot_claim item on notes_ar, never missing", () => {
+  const record = baseRecord({ notes_ar: "زرنيخ يمين قنفذ" });
+  const gaps = analyzeConflicts(record).filter((g) => g.field === "notes_ar");
+  assert.equal(gaps.length, 1);
+  assert.equal(gaps[0].type, "cannot_claim");
+  assert.equal(gaps[0].detail, "Some Arabic words were not recognised; nothing from them is used in the listing");
+  assert.equal(runChecks(record).readiness_status, "ready_for_review");
+});
+
+test("colour code gap is raised when both colour fields are empty and the note flags the colour", () => {
+  const record = baseRecord({ notes_ar: "مرآة يمين، اللون باهت ولا يوجد كود لون" });
+  const gap = gapWhere(analyzeConflicts(record), "part_details.colour_code", "missing");
   assert.ok(gap);
-  assert.match(gap.detail, /برادو/);
+  assert.equal(runChecks(record).readiness_status, "information_missing");
+  const q = runChecks(record).questions.find((x) => x.field === "part_details.colour_code");
+  assert.match(q.question_en, /colour code/);
+  assert.match(q.question_ar, /كود اللون/);
+});
+
+test("colour code gap is not raised without a colour flag, or once colour or colour code is known", () => {
+  const flag = "اللون غير مؤكد";
+  assert.ok(!gapWhere(analyzeConflicts(baseRecord({ notes_ar: "يمين" })), "part_details.colour_code", "missing"));
+  for (const part_details of [{ colour: "silver" }, { colour_code: "1F7" }]) {
+    assert.ok(!gapWhere(analyzeConflicts(baseRecord({ notes_ar: flag, part_details })), "part_details.colour_code", "missing"));
+  }
+  const seller = baseRecord({ notes_ar: flag, field_sources: { "part_details.colour_code": "seller edit" } });
+  assert.ok(!gapWhere(analyzeConflicts(seller), "part_details.colour_code", "missing"));
+});
+
+test("a donor year conflict is seller-fixable and clears once the seller owns the year", () => {
+  const record = baseRecord({ notes_ar: "٢٠١٥" });
+  assert.ok(gapWhere(analyzeConflicts(record), "donor_vehicle.year", "conflict"));
+  assert.equal(runChecks(record).readiness_status, "information_missing");
+  const edited = baseRecord({
+    notes_ar: "٢٠١٥",
+    donor_vehicle: { year: 2015 },
+    field_sources: { "donor_vehicle.year": "seller edit" },
+  });
+  assert.ok(!gapWhere(analyzeConflicts(edited), "donor_vehicle.year", "conflict"));
+  assert.equal(runChecks(edited).readiness_status, "ready_for_review");
 });
 
 test("risky claim words become cannot_claim gaps on the title fields", () => {
@@ -171,12 +267,21 @@ test("seller field_sources value 'seller edit' wins and suppresses conflicts", (
   assert.ok(!gapWhere(gaps, "donor_vehicle.year", "missing"));
 });
 
-test("seller field_sources value 'seller' also wins", () => {
-  const record = baseRecord({
-    notes_ar: "٢٠١٥",
-    field_sources: { "donor_vehicle.year": "seller" },
-  });
-  assert.ok(!gapWhere(analyzeConflicts(record), "donor_vehicle.year", "conflict"));
+test("'CodeBuddy AI, confirmed by seller' is seller ownership", () => {
+  const record = baseRecord({ field_sources: { [PN_FIELD]: "CodeBuddy AI, confirmed by seller" } });
+  assert.equal(sellerOwnsField(record, PN_FIELD), true);
+});
+
+test("bookkeeping values like 'seller SKU label' are not seller ownership", () => {
+  for (const value of ["seller SKU label", "seller register", "seller", "Seller edit", "seller edit "]) {
+    const record = baseRecord({
+      notes_ar: "٢٠١٥",
+      field_sources: { item_id: "seller SKU label", "donor_vehicle.year": value },
+    });
+    assert.equal(sellerOwnsField(record, "donor_vehicle.year"), false, value);
+    assert.equal(sellerOwnsField(record, "item_id"), false);
+    assert.ok(gapWhere(analyzeConflicts(record), "donor_vehicle.year", "conflict"), `${value} must not suppress the conflict`);
+  }
 });
 
 test("a seller edit of a parent path covers the leaf gap field", () => {

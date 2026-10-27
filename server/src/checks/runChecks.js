@@ -15,7 +15,7 @@ function readinessFor(gaps) {
     (g) => g.type === "conflict" && !SELLER_FIXABLE_CONFLICT_FIELDS.has(g.field),
   );
   if (needsSpecialist) return "specialist_review_required";
-  // Seller-fixable conflicts (side, part number) and missing data are
+  // Seller-fixable conflicts (side, part number, year) and missing data are
   // things the seller can resolve, so they only block for information.
   if (gaps.some((g) => g.type === "conflict" || g.type === "missing")) return "information_missing";
   return "ready_for_review"; // cannot_claim alone never changes readiness
