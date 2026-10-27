@@ -99,7 +99,7 @@
       "damage_notes": [],
       "readable": false
     },
-    "agreement": "tesseract_only",
+    "agreement": "neither",
     "read_at": "2026-10-27T15:33:47.499Z",
     "label": "read by CodeBuddy AI"
   },
@@ -125,7 +125,7 @@
       "damage_notes": [],
       "readable": true
     },
-    "agreement": "tesseract_only",
+    "agreement": "neither",
     "read_at": "2026-10-27T15:33:51.152Z",
     "label": "read by CodeBuddy AI"
   },

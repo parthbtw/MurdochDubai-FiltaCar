@@ -263,7 +263,7 @@ test('repeated calls reuse the stable sandbox and remove separate per-call outpu
     assert.notEqual(path.dirname(filename), isolatedSandbox)
     assert.equal(fs.existsSync(path.dirname(filename)), false)
   }
-  assert.equal(path.resolve(AI_SANDBOX_DIR), fileURLToPath(new URL('../.ai-sandbox/', import.meta.url)).replace(/\/$/, ''))
+  assert.equal(path.resolve(AI_SANDBOX_DIR), path.resolve(fileURLToPath(new URL('../.ai-sandbox/', import.meta.url))))
 })
 
 test('reader never spawns without a key', async () => {
@@ -313,8 +313,39 @@ test('CLI discovery checks executable files on PATH without executing them', () 
   fs.mkdirSync(binDir)
   const binary = path.join(binDir, 'codebuddy')
   fs.writeFileSync(binary, '#!/bin/sh\nexit 99\n', { mode: 0o755 })
-  assert.equal(findCodebuddy({ PATH: binDir }), binary)
-  fs.chmodSync(binary, 0o644)
-  assert.equal(findCodebuddy({ PATH: binDir }), null)
+  if (process.platform === 'win32') {
+    assert.equal(findCodebuddy({ PATH: binDir, PATHEXT: '.COM;.EXE;.BAT;.CMD' }), null)
+  } else {
+    assert.equal(findCodebuddy({ PATH: binDir }), binary)
+    fs.chmodSync(binary, 0o644)
+    assert.equal(findCodebuddy({ PATH: binDir }), null)
+  }
   assert.equal(findCodebuddy({ PATH: path.join(tmpDir, 'missing-bin') }), null)
+})
+
+test('Windows CLI discovery follows PATHEXT and rejects extensionless files on every host', () => {
+  const binDir = path.join(tmpDir, 'windows-bin')
+  fs.mkdirSync(binDir)
+  fs.writeFileSync(path.join(binDir, 'codebuddy'), 'must never execute', { mode: 0o755 })
+  const options = { platform: 'win32' }
+  const env = { PATH: `${path.join(tmpDir, 'absent')};${binDir}`, PATHEXT: ';.EXE;.BAT;.CMD;.PS1;' }
+  assert.equal(findCodebuddy(env, options), null)
+  for (const extension of ['.cmd', '.exe', '.bat', '.ps1']) {
+    const binary = path.join(binDir, `codebuddy${extension}`)
+    fs.writeFileSync(binary, 'must never execute', { mode: 0o644 })
+    assert.equal(findCodebuddy(env, options), binary)
+    assert.equal(findCodebuddy({ ...env, PATHEXT: '.COM' }, options), null)
+    assert.equal(findCodebuddy({ ...env, PATHEXT: '' }, options), null)
+    fs.unlinkSync(binary)
+  }
+  fs.mkdirSync(path.join(binDir, 'codebuddy.cmd'))
+  assert.equal(findCodebuddy(env, options), null)
+})
+
+test('Windows CLI discovery uses standard extensions when PATHEXT is absent', () => {
+  const binDir = path.join(tmpDir, 'windows-default-bin')
+  fs.mkdirSync(binDir)
+  const binary = path.join(binDir, 'codebuddy.cmd')
+  fs.writeFileSync(binary, 'must never execute', { mode: 0o644 })
+  assert.equal(findCodebuddy({ PATH: binDir }, { platform: 'win32' }), binary)
 })

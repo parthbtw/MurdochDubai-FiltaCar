@@ -13,3 +13,7 @@ export const MAX_PHOTO_BYTES = 8 * 1024 * 1024
 export const MAX_SHEET_BYTES = 2 * 1024 * 1024
 export const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 export const SHEET_TYPES = ['text/csv', 'application/csv', 'application/vnd.ms-excel']
+
+// Illustration assumptions, not measured timings.
+export const MANUAL_MINUTES_PER_LISTING = 15
+export const FILTACAR_MINUTES_PER_LISTING = 3

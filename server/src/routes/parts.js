@@ -1,11 +1,8 @@
 import { Router } from 'express'
 import { readParts, writeParts, readCompatibilityMap } from '../store.js'
-import { runChecks } from '../checks/index.js'
+import { runChecks, buildQuestionPack } from '../checks/index.js'
 
 const router = Router()
-
-// TODO next milestone: GET /api/export/ebay.csv (UK buyer listing export).
-// TODO next milestone: GET /api/metrics (pipeline quality metrics).
 
 const VALID_STATUSES = ['ready_for_review', 'information_missing', 'specialist_review_required']
 const PROTECTED_FIELDS = [
@@ -87,6 +84,19 @@ router.get('/:id', (req, res) => {
     return res.status(404).json({ error: `part ${req.params.id} not found` })
   }
   res.json(part)
+})
+
+// Copyable text only. No message is sent and the stored record is unchanged.
+router.get('/:id/question-pack', (req, res) => {
+  const part = findPart(readParts(), req.params.id)
+  if (!part) {
+    return res.status(404).json({ error: `part ${req.params.id} not found` })
+  }
+  res.json({
+    item_id: part.item_id,
+    text: buildQuestionPack(part),
+    questions_count: (part.questions || []).length,
+  })
 })
 
 // PUT /api/parts/:id: merge changed fields, tag their field_sources as
