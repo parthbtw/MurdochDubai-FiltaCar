@@ -67,7 +67,9 @@ it('validates years, numeric measurements, choices, lists and part number groups
     for (const input of ['0', '-2', 'Infinity', 'a', '']) expect(validateField(editorFor(path)!, input)).toBe('Enter a positive number.')
     expect(validateField(editorFor(path)!, '1.25')).toBeNull()
   }
-  expect(validateField(editorFor('part_details.part_number')!, 'SBM--A')).toBeTruthy()
+  expect(validateField(editorFor('part_details.part_number')!, 'SBM--A')).toBeNull()
+  expect(fieldPatch(editorFor('part_details.part_number')!, 'sbm __ 7944--pj14')).toEqual({ part_details: { part_number: { extracted_value: 'SBM-7944-PJ14' } } })
+  expect(validateField(editorFor('part_details.part_number')!, 'SBM--?A')).toBeTruthy()
   expect(validateField(editorFor('part_details.part_number')!, 'sbm - a1')).toBeNull()
   expect(validateField(editorFor('part_details.placement')!, 'Front')).toBeTruthy()
   expect(validateField(editorFor('included_components')!, '')).toBeTruthy()

@@ -277,3 +277,39 @@ included IDs are strings; AI status reason is nullable; reference years are rang
 compatibility entries carry their source dictionary. Production part types were not loosened.
 The two test failures were a duplicate photo filename and an async two-error-state race;
 fixed the presentation and waited for both errors without deleting or weakening assertions.
+
+### F4 intake, export, impact and navigation
+
+The existing Framed sheet direction and seed 407422327 continue without a redraw.
+Keep the mirror glass ground, Apple system faces, supplied mark and traceable source chips.
+All routes retain the same phone column and 16 px inset arithmetic.
+
+Add parts asks which files to attach and to which recorded item. Photos and spreadsheet form
+two grouped sections. Selection shows actual file names, sizes and photo previews. Upload
+progress is indeterminate because the fetch API does not return upload progress events.
+Results use returned IDs, warnings and saved readings for the newly processed photos.
+
+Export asks which approved drafts can be downloaded. The mock notice is always rendered,
+including loading, empty and error states. Row previews use stored drafts and approval times;
+Used and Car Mirrors are the fixed mock CSV template values defined in the contract.
+CSV columns remain visible in contract order. No price is calculated.
+
+Impact asks what the checks caught and what time evidence is available. The finding and nine
+bare type figures use the returned metrics. The reader list uses one blue hue, aligned counts
+and grey zeros with zero-width bars. Time assumptions are explicitly labelled; optional baseline
+methods and dates remain visible alongside the distinction between elapsed and active time.
+
+The opaque four-tab bar reserves its own safe-area height outside the scroll viewport.
+The approval bar sits above it and reserves its measured height with ResizeObserver.
+Tab return retains route, query, scroll and the queue lane when returning from a part.
+Label check and evidence share structured reader presentation, including earlier saved readings.
+Source-sheet and history values use plain field labels instead of serialized objects.
+Fact edits are trailing text controls with 44 px targets. Only identifiers use monospace.
+
+F4 validation: 155 client tests pass in three consecutive complete suite runs, with no skips.
+All 278 server tests pass. Typecheck and production build pass. ESLint has zero errors and the
+three existing component refresh warnings. No packages were added and no servers were started.
+App source lint reports zero failures and 15 warnings: 14 identifier monospace warnings retained
+by the explicit brief, plus one warning on the existing print rule that removes shadows.
+Browser inspection is unavailable: the bundled Playwright browser is absent and installed Chrome
+aborts under this sandbox. No visual measurements or screenshots are claimed for F4.

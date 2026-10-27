@@ -66,7 +66,7 @@ export function LabelScreen() {
     if (invalid) { setError(invalid); manualRef.current?.focus(); return }
     if (record) void mutate('Saving number', () => updatePart(id, fieldPatch(field, manual)), record)
   }
-  return <PhoneScreen title="Check label" detail backTo={`/parts/${encodeURIComponent(id)}`} backLabel={id}>
+  return <PhoneScreen title="Check label" detail monoTitle={false} backTo={`/parts/${encodeURIComponent(id)}`} backLabel={id}>
     {part.isPending ? <LoadingRows label="Loading label" /> : part.isError ? <ErrorBlock error={part.error} retry={() => void part.refetch()} /> : record && <>
       <p className="mt-2 font-mono">{id}</p>
       {photo ? <section className="group mt-4 p-4" aria-label="Recorded label photo"><LabelPhoto key={photo} photo={photo} /><p className="mt-3 text-footnote">{ocr ? `Sharpness ${ocr.quality.sharpness}` : 'Quality not recorded'}</p>{ocr?.quality.blurry && <p className="status-tag tone-warning mt-2">Blurry, retake</p>}{ocr?.unclear && <p className="mt-2">OCR unclear</p>}<SourceLine record={record} path="photos" />

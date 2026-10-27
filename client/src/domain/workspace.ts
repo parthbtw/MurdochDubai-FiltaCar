@@ -1,3 +1,4 @@
+import { fieldLabel } from './fields'
 import type { ActionRequired, PartRecord } from '@/api/types'
 import { newestOcrFor, photoUrl } from './photos'
 
@@ -29,7 +30,9 @@ export const agreementText = {
 
 export function historyValue(value: unknown): string {
   if (value == null) return 'Not recorded'
-  return typeof value === 'object' ? JSON.stringify(value) : String(value)
+  if (Array.isArray(value)) return value.length ? value.map(historyValue).join('; ') : 'None recorded'
+  if (typeof value === 'object') return Object.entries(value).map(([key, child]) => `${fieldLabel(key)}: ${historyValue(child)}`).join('; ') || 'None recorded'
+  return String(value)
 }
 
 export function recordFacts(value: unknown, prefix = ''): { path: string; value: unknown }[] {

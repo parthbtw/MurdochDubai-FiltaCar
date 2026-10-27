@@ -1,4 +1,4 @@
-import type { ApiErrorBody, AiStatus, CompatibilityEntry, ExportPreview, Metrics, PartRecord, PartsResponse, QuestionPack } from '@/api/types'
+import type { ApiErrorBody, AiStatus, CompatibilityEntry, ExportPreview, Metrics, PartRecord, PartsResponse, QuestionPack, UploadResult } from '@/api/types'
 import partsJson from './parts.json'
 import metricsJson from './metrics.json'
 import partJson from './part-MIR-0007.json'
@@ -51,3 +51,22 @@ export const aiReadPart = aiReadPartJson as unknown as PartRecord
 
 import aiStatusNowJson from './ai-status-now.json'
 export const aiStatusNow = aiStatusNowJson as unknown as AiStatus
+
+import uploadBlurryJson from './upload-blurry-MIR-0004.json'
+import uploadNewPartJson from './upload-new-part.json'
+import uploadInventoryJson from './upload-inventory-csv.json'
+import uploadBadTypeJson from './upload-bad-type-400.json'
+import exportPreviewOneJson from './export-preview-one.json'
+import metricsAfterJson from './metrics-after.json'
+import exportOneText from './export-one.csv?raw'
+import uploadUnknownItemJson from './upload-unknown-item-404.json'
+
+export const uploadBlurry = uploadBlurryJson as unknown as UploadResult
+export const uploadNewPart = uploadNewPartJson as unknown as UploadResult
+export const uploadInventory = uploadInventoryJson as unknown as UploadResult
+export const uploadBadType = uploadBadTypeJson as ApiErrorBody
+export const exportPreviewOne = exportPreviewOneJson as ExportPreview
+export const metricsAfter = metricsAfterJson as Metrics
+export const exportOneCsv: string = exportOneText
+// Documented unknown-item response from docs/CONTRACT.md.
+export const uploadUnknownItem = uploadUnknownItemJson as ApiErrorBody

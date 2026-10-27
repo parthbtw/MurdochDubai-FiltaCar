@@ -8,5 +8,6 @@ export function useRecordUpdate() {
     client.setQueryData(queryKeys.part(record.item_id), record)
     void client.invalidateQueries({ queryKey: ['parts'] })
     void client.invalidateQueries({ queryKey: ['metrics'] })
+    void client.invalidateQueries({ queryKey: ['export-preview'] })
   }
 }

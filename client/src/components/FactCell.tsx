@@ -19,8 +19,8 @@ export function FactCell({ record, path, label, value, note, mono = false, trace
   const source = sourceFor(record, path)
   const gaps = gapsFor(record, path)
   const values = Array.isArray(value) ? value.length ? value : ['None reported'] : [displayValue(value)]
-  return <div className={cn('fact-cell', changed && 'fact-changed')} id={factId(path)} tabIndex={-1}>
-    <button className="pressable block min-h-11 w-full px-4 py-3 text-start" aria-label={`Source for ${traceLabel.toLowerCase()}: ${source ?? 'No source recorded'}`} onClick={event => onTrace({ path, label: traceLabel, trigger: event.currentTarget })}>
+  return <div className={cn('fact-cell grid grid-cols-[minmax(0,1fr)_auto]', changed && 'fact-changed')} id={factId(path)} tabIndex={-1}>
+    <button className="pressable block min-h-11 min-w-0 flex-1 px-4 py-3 text-start" aria-label={`Source for ${traceLabel.toLowerCase()}: ${source ?? 'No source recorded'}`} onClick={event => onTrace({ path, label: traceLabel, trigger: event.currentTarget })}>
       <span className="block text-footnote text-muted-foreground">{label}</span>
       {values.map((text, index) => (path === 'original_title_ar' || path === 'notes_ar')
         ? <ClaimText key={index} text={displayValue(text)} claims={record.draft?.blocked_claims ?? []} className="mt-1 break-words text-base" />
@@ -32,8 +32,8 @@ export function FactCell({ record, path, label, value, note, mono = false, trace
       </div>)}
       <span className="source-chip mt-1"><span className="source-chip-label">{source ?? 'No source recorded'}</span></span>
     </button>
-    {onEdit && <div className="px-4 pb-2"><Button variant="outline" onClick={onEdit} aria-label={`Edit ${traceLabel.toLowerCase()}`}>Edit</Button></div>}
-    {path === 'part_details.part_number.extracted_value' && (!record.part_details.part_number.extracted_value || record.part_details.part_number.requires_manual_verification) && <Link className="pressable flex min-h-11 items-center px-4 pb-2 font-semibold" to={`/parts/${encodeURIComponent(record.item_id)}/label`}>Check label</Link>}
-    {note && <div className="px-4 pb-3 text-footnote text-muted-foreground">{note}</div>}
+    {onEdit && <Button variant="ghost" className="col-start-2 row-start-1 me-2 mt-1 shrink-0 text-accent" onClick={onEdit} aria-label={`Edit ${traceLabel.toLowerCase()}`}>Edit</Button>}
+    {path === 'part_details.part_number.extracted_value' && (!record.part_details.part_number.extracted_value || record.part_details.part_number.requires_manual_verification) && <Link className="pressable col-span-full flex min-h-11 items-center px-4 pb-2 font-semibold" to={`/parts/${encodeURIComponent(record.item_id)}/label`}>Check label</Link>}
+    {note && <div className="col-span-full px-4 pb-3 text-footnote text-muted-foreground">{note}</div>}
   </div>
 }

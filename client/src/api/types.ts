@@ -113,6 +113,7 @@ export interface Metrics {
   claims_blocked: number
   readers: { ocr_reads: number; ai_reads: number; by_agreement: Record<Agreement, number>; ai_declined_to_guess: number }
   seller_edits: number
+  seller_field_edits: number
   measured: { approved_with_timing: number; median_minutes_to_approval: number | null }
   baseline?: { minutes_per_listing: number; measured_on: string; method: string }
   time_estimate: { source: 'assumption' | 'measured'; manual_minutes_per_listing: number; filtacar_minutes_per_listing: number; basis: string }

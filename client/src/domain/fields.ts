@@ -21,7 +21,7 @@ export type FieldKind = 'text' | 'number' | 'year' | 'partNumber' | 'list' | 'ch
 export interface EditableField { path: string; kind: FieldKind; help: string; choices?: string[] }
 const text = (path: string): EditableField => ({ path, kind: 'text', help: 'Enter the value you have recorded. Do not guess.' })
 export const editableFields: EditableField[] = [
-  { path: 'part_details.part_number.extracted_value', kind: 'partNumber', help: 'Letters and digits in groups joined by hyphens, for example SBM-7943-AC15. Spaces are removed and letters uppercased.' },
+  { path: 'part_details.part_number.extracted_value', kind: 'partNumber', help: 'Letters and digits in groups joined by hyphens, for example SBM-7943-AC15. Spaces and underscores become hyphens; repeated hyphens collapse and letters are uppercased.' },
   { path: 'part_details.placement', kind: 'choice', choices: ['Left', 'Right'], help: 'Choose Left or Right.' }, text('part_details.colour_code'), text('condition.testing_status'),
   { path: 'condition.cosmetic_damage', kind: 'list', help: 'One recorded defect per line. Leave empty if none reported.' },
   text('donor_vehicle.make'), text('donor_vehicle.model'),
@@ -34,7 +34,7 @@ export const editorFor = (path: string) => editableFields.find(field => field.pa
 export function valueAt(value: unknown, path: string): unknown {
   return path.split('.').reduce<unknown>((current, key) => current && typeof current === 'object' ? (current as Record<string, unknown>)[key] : undefined, value)
 }
-export const normalizePartNumber = (value: string) => value.replace(/\s/g, '').toUpperCase()
+export const normalizePartNumber = (value: string) => value.trim().replace(/[\s_-]+/g, '-').toUpperCase()
 export function validateField(field: EditableField, input: string, currentYear = new Date().getFullYear()): string | null {
   if (field.kind === 'partNumber' && !/^[A-Z0-9]+(?:-[A-Z0-9]+)+$/.test(normalizePartNumber(input))) return 'Enter letters and digits in groups joined by hyphens, for example SBM-7943-AC15.'
   if (field.kind === 'year' && (!/^\d{4}$/.test(input.trim()) || Number(input) < 1950 || Number(input) > currentYear + 1)) return `Enter a four-digit year from 1950 to ${currentYear + 1}.`

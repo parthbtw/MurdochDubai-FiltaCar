@@ -104,7 +104,7 @@ export function PartScreen() {
         {fact('notes_ar', 'Arabic yard note', record.notes_ar)}
       </FactSection>
       {editing && <FactEditor key={editing.path} record={record} field={editing} onClose={() => setEditing(null)} onSaved={next => { setRipple(next); setChangedFields(next.changedFields) }} />}
-      <div className="approval-space" aria-hidden="true" /><ApprovalAction record={record} sticky />
+      <ApprovalAction record={record} sticky />
       <SourceSheet record={record} field={field} onClose={() => { setField(null); requestAnimationFrame(() => lastTrigger?.focus()) }} />
     </>}
   </PhoneScreen>

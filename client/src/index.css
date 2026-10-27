@@ -36,6 +36,7 @@
     --danger: 358 72.2892% 32.5490%;
     --danger-soft: 356.4706 73.9130% 95.4902%;
     --radius: 16px;
+    --tab-bar-height: calc(60px + env(safe-area-inset-bottom));
     color-scheme: light;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -52,7 +53,7 @@
 
 @layer components {
   .phone-app { inline-size: 100%; block-size: 100dvh; margin-inline: auto; overflow: hidden; background: hsl(var(--ground)); }
-  .app-scroll { block-size: 100%; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none; scroll-padding-block-start: calc(64px + env(safe-area-inset-top)); }
+  .app-scroll { block-size: calc(100% - var(--tab-bar-height)); overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none; scroll-padding-block-start: calc(64px + env(safe-area-inset-top)); }
   .app-scroll::-webkit-scrollbar, .photo-strip::-webkit-scrollbar { display: none; }
   .safe-inline { padding-inline-start: max(16px, env(safe-area-inset-left)); padding-inline-end: max(16px, env(safe-area-inset-right)); }
   .safe-bottom { padding-block-end: max(24px, env(safe-area-inset-bottom)); }
@@ -141,13 +142,30 @@
 
 @layer components {
   .field-select { inline-size: 100%; min-block-size: 44px; font-size: 16px; padding-block: 8px; padding-inline: 12px; border: 1px solid hsl(var(--input)); border-radius: 8px; background: hsl(var(--background)); }
-  .approval-space { block-size: 180px; }
-  .approval-sticky { position: fixed; inset-block-end: 0; inset-inline: 0; max-inline-size: 430px; margin-inline: auto; z-index: 25; padding-block-start: 12px; padding-block-end: max(16px, env(safe-area-inset-bottom)); padding-inline: 16px; border-block-start: 1px solid hsl(var(--border)); background: hsl(var(--ground)); }
+  .approval-space { block-size: 100px; }
+  .approval-sticky { position: fixed; inset-block-end: var(--tab-bar-height); inset-inline: 0; max-inline-size: 430px; margin-inline: auto; z-index: 25; padding-block: 12px; padding-inline: 16px; border-block-start: 1px solid hsl(var(--border)); background: hsl(var(--ground)); }
   .approval-sticky details[open] { max-block-size: 28dvh; overflow-y: auto; overscroll-behavior: contain; }
   .label-viewport { display: flex; align-items: center; justify-content: center; block-size: 260px; overflow: hidden; border-radius: 8px; background: hsl(var(--ground)); touch-action: none; }
   .label-viewport img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; user-select: none; }
   .fact-changed { animation: fact-feedback 1800ms ease-out; }
   .changed-text { display: block; color: hsl(var(--ready)); background: hsl(var(--ready-soft)); }
+  .bottom-tabs { position: fixed; inset-block-end: 0; inset-inline: 0; max-inline-size: 430px; margin-inline: auto; z-index: 30; block-size: var(--tab-bar-height); padding-block-end: env(safe-area-inset-bottom); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block-start: 1px solid hsl(var(--border)); background: hsl(var(--ground)); }
+  .bottom-tab { min-block-size: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding-block: 6px; color: hsl(var(--muted-foreground)); font-size: 11px; font-weight: 600; }
+  .bottom-tab[aria-current='page'] { color: hsl(var(--accent)); }
+  .export-row { display: grid; gap: 10px; }
+  .export-row dd { margin-block-start: 2px; }
+  .impact-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
+  .impact-figures dd { margin-block-start: 2px; font-size: 28px; line-height: 34px; font-variant-numeric: tabular-nums; }
+  .reader-bars { display: grid; gap: 16px; }
+  .reader-bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; }
+  .reader-count { text-align: end; font-variant-numeric: tabular-nums; }
+  .reader-track { grid-column: 1 / -1; block-size: 6px; background: hsl(var(--muted)); border-radius: 3px; overflow: hidden; }
+  .reader-bar { block-size: 100%; background: hsl(var(--accent)); }
+  .reader-zero { color: hsl(var(--muted-foreground)); }
+  .reader-zero .reader-bar { background: hsl(var(--muted-foreground)); }
+  .upload-progress > div { inline-size: 40% !important; animation: upload-wait 1600ms ease-in-out infinite alternate; }
 }
+@keyframes upload-wait { to { transform: translateX(150%); } }
+@media (prefers-reduced-motion: reduce) { .upload-progress > div { animation: none; } }
 @keyframes fact-feedback { from { background: hsl(var(--warning-soft)); } to { background: hsl(var(--background)); } }
 @media (prefers-reduced-motion: reduce) { .fact-changed { background: hsl(var(--warning-soft)); } }

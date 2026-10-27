@@ -5,7 +5,7 @@ import mark from '@/assets/brand/filtacar-mark.png'
 import { cn } from '@/lib/utils'
 
 const scrollPositions = new Map<string, number>()
-export function PhoneScreen({ title, detail = false, backTo = '/', backLabel = 'Readiness queue', children }: { title: string; detail?: boolean; backTo?: string; backLabel?: string; children: ReactNode }) {
+export function PhoneScreen({ title, detail = false, monoTitle = detail, backTo = '/', backLabel = 'Readiness queue', children }: { title: string; detail?: boolean; monoTitle?: boolean; backTo?: string; backLabel?: string; children: ReactNode }) {
   const location = useLocation()
   const navigation = useNavigationType()
   const navigate = useNavigate()
@@ -26,15 +26,15 @@ export function PhoneScreen({ title, detail = false, backTo = '/', backLabel = '
     <header className="top-bar safe-inline">
       <div className="top-bar-row">
         {detail ? <Link to={backTo} className="pressable -ms-2 flex min-h-11 items-center gap-0.5 rounded-md pe-2 text-sm" aria-label={`Back to ${backLabel}`} onClick={event => {
-          if (location.state?.returnTo === backTo && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate(-1) }
+          if (!location.state?.restoredTab && location.state?.returnTo === backTo && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) { event.preventDefault(); navigate(-1) }
         }}>
           <ChevronLeft aria-hidden="true" className="h-5 w-5 shrink-0 rtl:rotate-180" />{backLabel}
         </Link> : <div className="flex items-center gap-2"><img src={mark} alt="" className="h-8 w-8 object-contain" /><span className="text-base font-semibold">FiltaCar</span></div>}
-        {collapsed ? <span aria-hidden="true" className={cn('truncate text-sm font-semibold', detail && 'font-mono')}>{detail ? title : 'Readiness queue'}</span> : !detail && <span className="text-xs text-muted-foreground">DXB-SLV-014</span>}
+        {collapsed ? <span aria-hidden="true" className={cn('truncate text-sm font-semibold', monoTitle && 'font-mono')}>{title}</span> : !detail && <span className="text-xs text-muted-foreground">DXB-SLV-014</span>}
       </div>
     </header>
     <main key={location.pathname} className={cn('safe-inline safe-bottom pb-6 pt-5', location.key !== 'default' && (detail ? 'route-push' : navigation === 'POP' ? 'route-back' : ''))}>
-      <h1 className={cn('large-title', detail && 'font-mono')}>{title}</h1>
+      <h1 className={cn('large-title', monoTitle && 'font-mono')}>{title}</h1>
       {children}
     </main>
   </div>
