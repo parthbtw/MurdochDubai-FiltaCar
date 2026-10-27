@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node --watch src/listen.js",
     "start": "node src/listen.js",
-    "test": "node --test tests/",
+    "test": "node --test",
     "fixtures": "node scripts/generate-demo-fixtures.js",
     "ai:preread": "node scripts/ai-preread.js",
     "ai:labels": "node scripts/generate-ai-labels.js"
