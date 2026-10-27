@@ -152,6 +152,56 @@ test("MIR-0009 and MIR-0010 stay specialist_review_required (electrical damage)"
   }
 });
 
+test("MIR-0009 and MIR-0010 gaps and questions show plain electrical findings without regex syntax", () => {
+  for (const [id, label] of [["MIR-0009", "wires cut"], ["MIR-0010", "connector pins bent"]]) {
+    const result = runChecks(seed(id));
+    const gap = result.gaps_and_conflicts.find((g) => g.field === "condition.testing_status");
+    assert.ok(gap.detail.includes(`found: ${label}`), id);
+    assert.ok(result.questions.some((q) => q.field === gap.field && q.question_en.includes(label)), id);
+    for (const text of [
+      ...result.gaps_and_conflicts.map((g) => g.detail),
+      ...result.questions.flatMap((q) => [q.question_en, q.question_ar]),
+    ]) {
+      assert.equal(text.includes("\\"), false, `${id}: ${text}`);
+      assert.doesNotMatch(text, /\(\?:|[|\[\]{}^$*+]/u, id);
+    }
+  }
+});
+
+test("risky title phrases produce one gap and question each with the specific guard reason", () => {
+  const result = runChecks(baseRecord({ original_title_en: "OEM genuine tested working fits all" }));
+  const gaps = result.gaps_and_conflicts.filter((gap) => gap.type === "cannot_claim");
+  const reasons = {
+    oem: "authenticity is never certified",
+    genuine: "authenticity is never certified",
+    "tested working": "no test record",
+    "fits all": "compatibility is not guaranteed",
+  };
+  assert.equal(gaps.length, 4);
+  assert.equal(result.questions.length, 4);
+  assert.equal(result.draft.blocked_claims.length, 4);
+  for (const [phrase, reason] of Object.entries(reasons)) {
+    const matching = gaps.filter((gap) => gap.field === "original_title_en" && gap.detail.includes(`"${phrase}"`));
+    assert.equal(matching.length, 1, phrase);
+    assert.equal(matching[0].detail, `Cannot claim "${phrase}": ${reason}`);
+    assert.ok(result.questions.some((q) => q.field === "original_title_en" && q.question_en.includes(`"${phrase}": ${reason}`)));
+  }
+});
+
+test("repeated title claims stay unique per phrase and field, and separate fields retain their own gaps", () => {
+  const result = runChecks(baseRecord({
+    original_title_en: "OEM genuine OEM GENUINE",
+    original_title_ar: "OEM",
+    part_details: { features: ["poems"] },
+  }));
+  const claims = result.gaps_and_conflicts.filter((gap) => gap.type === "cannot_claim");
+  assert.equal(claims.filter((gap) => gap.field === "original_title_en").length, 2);
+  assert.equal(claims.filter((gap) => gap.field === "original_title_ar").length, 1);
+  assert.equal(claims.length, 3);
+  assert.ok(claims.every((gap) => gap.detail.endsWith("authenticity is never certified")));
+  assert.ok(!claims.some((gap) => gap.sources.includes("part_details.features.0")));
+});
+
 function demoCase() {
   return baseRecord({
     part_details: { part_number: { extracted_value: null, extraction_method: "none", requires_manual_verification: true } },

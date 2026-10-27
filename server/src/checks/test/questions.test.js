@@ -31,6 +31,7 @@ const everyGapKind = [
   baseRecord({ part_details: NO_PN, ocr: ocr("SBM-0003-AB") }),
   baseRecord({ condition: { state: "Used", cosmetic_damage: ["two wires cut at connector"], testing_status: "Untested" } }),
   baseRecord({ condition: { state: "Used", cosmetic_damage: [], testing_status: "Untested" } }),
+  baseRecord({ part_details: { features: ["OEM"] } }),
 ];
 
 const isGeneric = (q) => /please check [\w.]+ \(/.test(q.question_en) || q.question_ar.includes("يرجى مراجعة بيانات هذه القطعة");

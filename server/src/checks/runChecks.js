@@ -6,6 +6,8 @@ import { analyzeConflicts, SELLER_FIXABLE_CONFLICT_FIELDS } from "./conflicts.js
 import { questionsFor } from "./questions.js";
 import { buildCorridor } from './corridor.js';
 import { buildDraft } from './draft.js';
+import { normalizeArabic } from './arabicDictionary.js';
+import { applyClaimGuard } from './claimGuard.js';
 export { buildQuestionPack } from './questionPack.js';
 
 function readinessFor(gaps) {
@@ -25,14 +27,32 @@ export function runChecks(record) {
   const gaps = analyzeConflicts(record);
   const corridor = buildCorridor(record);
   const draft = buildDraft(record, gaps, corridor);
+  const claimKey = (field, phrase) => `${field}:${normalizeArabic(phrase).toLowerCase().replace(/\s+/g, ' ').trim()}`;
+  const claimGaps = new Map();
+  for (const gap of gaps) {
+    const match = gap.type === 'cannot_claim' && gap.detail.match(/^Cannot claim "(.+)" in the title without proof$/);
+    if (match) claimGaps.set(claimKey(gap.field, match[1]), gap);
+  }
   for (const block of draft.blocked_claims) {
     const sources = [];
     const visit = (value, path) => {
-      if (typeof value === 'string' && value.toLowerCase().includes(block.phrase.toLowerCase())) sources.push(path);
+      if (typeof value === 'string' && applyClaimGuard(value, record).blocked.some(hit => claimKey('', hit.phrase) === claimKey('', block.phrase))) sources.push(path);
       else if (value && typeof value === 'object') Object.entries(value).forEach(([key, child]) => visit(child, path ? `${path}.${key}` : key));
     };
     for (const key of ['part_details', 'condition', 'donor_vehicle', 'original_title_en', 'original_title_ar', 'notes_ar']) visit(record[key], key);
-    gaps.push({ field: 'draft', type: 'cannot_claim', detail: block.reason, sources: sources.length ? sources : ['seller data'] });
+    for (const source of new Set(sources.length ? sources : ['seller data'])) {
+      const key = claimKey(source, block.phrase);
+      const existing = claimGaps.get(key);
+      const detail = `Cannot claim "${block.phrase.toLowerCase()}": ${block.reason.replace(/^Cannot claim:\s*/, '')}`;
+      if (existing) {
+        existing.detail = detail;
+      } else {
+        const field = ['original_title_en', 'original_title_ar'].includes(source) ? source : 'draft';
+        const gap = { field, type: 'cannot_claim', detail, sources: [source] };
+        gaps.push(gap);
+        claimGaps.set(key, gap);
+      }
+    }
   }
   return {
     gaps_and_conflicts: gaps,
