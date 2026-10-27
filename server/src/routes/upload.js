@@ -14,6 +14,7 @@ import {
   isEmptyValue,
   appendHistory,
   setFieldSource,
+  withdrawApproval,
 } from '../records.js'
 import {
   MAX_PHOTOS,
@@ -223,6 +224,7 @@ router.post('/', upload.fields([
   // Run Developer C's checks on every affected record and save the keys
   // they return. A throwing check never blocks the upload.
   for (const part of affected) {
+    withdrawApproval(part)
     try {
       const checked = runChecks(part)
       for (const key of Object.keys(checked)) {

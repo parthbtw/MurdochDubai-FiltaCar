@@ -39,6 +39,7 @@ router.get('/', (req, res) => {
       ai_declined_to_guess: 0,
     },
     seller_edits: 0,
+    seller_field_edits: 0,
     measured: { approved_with_timing: 0, median_minutes_to_approval: null },
     time_estimate: {
       source: 'assumption',
@@ -69,6 +70,7 @@ router.get('/', (req, res) => {
       if (Object.hasOwn(metrics.readers.by_agreement, read.agreement)) metrics.readers.by_agreement[read.agreement]++
       if (read.result?.part_number === null) metrics.readers.ai_declined_to_guess++
     }
+    metrics.seller_field_edits += (part.history || []).filter((entry) => entry.by === 'seller' && entry.field !== 'seller_approval').length
     metrics.seller_edits += (part.history || []).filter((entry) => entry.by === 'seller').length
   }
   timings.sort((a, b) => a - b)

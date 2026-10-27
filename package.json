@@ -13,6 +13,7 @@
     "test:client": "npm test -w client",
     "dev:client": "npm run dev -w client",
     "dev:server": "npm run dev -w server",
+    "demo:reset": "git checkout -- data/parts.json data/ai_preread.json && echo Demo data reset to the committed state",
     "ai:preread": "npm run ai:preread -w server --"
   },
   "devDependencies": {

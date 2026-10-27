@@ -115,3 +115,16 @@ export function newRecord(item_id) {
 export function findPart(parts, id) {
   return parts.find((p) => p.item_id === id)
 }
+
+// Approval is the last step and must be repeated after a record changes.
+export function withdrawApproval(record) {
+  if (record.seller_approval?.approved !== true) return
+  const previous = record.seller_approval
+  record.seller_approval = { approved: false, approved_at: null }
+  appendHistory(record, [{
+    field: 'seller_approval',
+    old: previous,
+    new: record.seller_approval,
+  }], 'system: changed after approval')
+  setFieldSource(record, 'seller_approval.approved', 'withdrawn after change')
+}

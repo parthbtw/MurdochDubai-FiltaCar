@@ -204,3 +204,19 @@ test('uploaded photo is served from /uploads', async () => {
   assert.equal(staticRes.status, 200)
   assert.equal(staticRes.headers['content-type'], 'image/png')
 })
+
+test('photo upload withdraws approval on an approved record', async () => {
+  const approved = await request(app).post('/api/parts/MIR-0002/approve')
+  assert.equal(approved.status, 200)
+  const uploaded = await request(app).post('/api/upload')
+    .field('item_id', 'MIR-0002')
+    .attach('photos', path.join(demoDir, 'clear_label.png'), 'clear_label.png')
+  assert.equal(uploaded.status, 200)
+  const part = uploaded.body.parts[0]
+  assert.deepEqual(part.seller_approval, { approved: false, approved_at: null })
+  assert.equal(part.field_sources['seller_approval.approved'], 'withdrawn after change')
+  const withdrawal = part.history.find(entry => entry.by === 'system: changed after approval')
+  assert.equal(withdrawal.field, 'seller_approval')
+  assert.deepEqual(withdrawal.old, approved.body.seller_approval)
+  assert.equal(part.corridor.checklist.items.find(item => item.id === 'seller_approval').status, 'unknown')
+})

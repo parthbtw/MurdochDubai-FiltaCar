@@ -23,7 +23,15 @@
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "ready_for_review",
-    "actions_required": [],
+    "actions_required": [
+      {
+        "priority": 6,
+        "field": "original_title_ar",
+        "action_en": "For item MIR-0001, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0001: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك.",
+        "blocking": false
+      }
+    ],
     "donor_vehicle": {
       "make": "Toyota",
       "model": "Land Cruiser",
@@ -45,7 +53,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 3",
       "donor_vehicle.model": "spreadsheet row 3",
       "donor_vehicle.year": "spreadsheet row 3",
@@ -68,8 +76,23 @@
       "packaged_dimensions_cm.height": "spreadsheet row 3",
       "included_components": "spreadsheet row 3"
     },
-    "questions": [],
-    "gaps_and_conflicts": [],
+    "questions": [
+      {
+        "field": "original_title_ar",
+        "question_en": "For item MIR-0001, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0001: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك."
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "original_title_ar",
+        "type": "cannot_claim",
+        "detail": "Cannot claim: subjective condition; describe the actual condition instead",
+        "sources": [
+          "Arabic yard note"
+        ]
+      }
+    ],
     "photos": [
       "uploads/mir-0001-01.jpg",
       "uploads/mir-0001-02.jpg",
@@ -91,8 +114,130 @@
         "read_at": "2026-10-27T15:33:27.213Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used O/S Wing Mirror SBM-7940-LC17",
+      "description": "Used. Light scuff on housing edge.\n\nUntested, not described as working.\n\nRemoved from a 2017 Toyota Land Cruiser (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nO/S (offside, right) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nToyota Land Cruiser 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nToyota Land Cruiser 2017 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "O/S (offside, right)",
+        "Manufacturer Part Number": "SBM-7940-LC17"
+      },
+      "compatibility": {
+        "supported": [
+          "Toyota Land Cruiser 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Toyota Land Cruiser 2017 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": [
+        {
+          "phrase": "حالة جيدة",
+          "reason": "Cannot claim: subjective condition; describe the actual condition instead"
+        }
+      ]
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "O/S (offside, right)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 38,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -180,7 +325,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 4",
       "donor_vehicle.model": "spreadsheet row 4",
       "donor_vehicle.year": "spreadsheet row 4",
@@ -225,8 +370,125 @@
         "read_at": "2026-10-27T15:33:33.079Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used N/S Wing Mirror SBM-7941-NP16",
+      "description": "Used. Small crack on mirror glass.\n\nUntested, not described as working.\n\nRemoved from a 2016 Nissan Patrol (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nN/S (nearside, left) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nNissan Patrol 2015-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nNissan Patrol 2016 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "N/S (nearside, left)",
+        "Manufacturer Part Number": "SBM-7941-NP16"
+      },
+      "compatibility": {
+        "supported": [
+          "Nissan Patrol 2015-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Nissan Patrol 2016 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "N/S (nearside, left)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 39,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -290,7 +552,15 @@
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "ready_for_review",
-    "actions_required": [],
+    "actions_required": [
+      {
+        "priority": 6,
+        "field": "original_title_ar",
+        "action_en": "For item MIR-0003, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0003: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك.",
+        "blocking": false
+      }
+    ],
     "donor_vehicle": {
       "make": "Toyota",
       "model": "Prado",
@@ -311,7 +581,7 @@
       "condition.state": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 5",
       "donor_vehicle.model": "spreadsheet row 5",
       "donor_vehicle.year": "spreadsheet row 5",
@@ -334,8 +604,23 @@
       "packaged_dimensions_cm.height": "spreadsheet row 5",
       "included_components": "spreadsheet row 5"
     },
-    "questions": [],
-    "gaps_and_conflicts": [],
+    "questions": [
+      {
+        "field": "original_title_ar",
+        "question_en": "For item MIR-0003, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0003: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك."
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "original_title_ar",
+        "type": "cannot_claim",
+        "detail": "Cannot claim: subjective condition; describe the actual condition instead",
+        "sources": [
+          "Arabic yard note"
+        ]
+      }
+    ],
     "photos": [
       "uploads/mir-0003-01.jpg",
       "uploads/mir-0003-02.jpg",
@@ -358,8 +643,130 @@
         "read_at": "2026-10-27T15:33:38.042Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used O/S Wing Mirror SBM-7942-PR18",
+      "description": "Used.\n\nUntested, not described as working.\n\nRemoved from a 2018 Toyota Prado (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nO/S (offside, right) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nToyota Prado 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nToyota Prado 2018 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "O/S (offside, right)",
+        "Manufacturer Part Number": "SBM-7942-PR18"
+      },
+      "compatibility": {
+        "supported": [
+          "Toyota Prado 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Toyota Prado 2018 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": [
+        {
+          "phrase": "بحالة ممتازة",
+          "reason": "Cannot claim: subjective condition; describe the actual condition instead"
+        }
+      ]
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "O/S (offside, right)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 40,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -426,8 +833,13 @@
     },
     "readiness_status": "information_missing",
     "actions_required": [
-      "locate or photograph the part number stamp",
-      "confirm mirror side before listing"
+      {
+        "priority": 3,
+        "field": "part_details.part_number.extracted_value",
+        "action_en": "For item MIR-0004, the label photo could not be read (OCR Unclear, seller to type value). Could you type the part number?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0004: صورة الملصق غير واضحة. هل يمكنك كتابة رقم القطعة؟",
+        "blocking": true
+      }
     ],
     "donor_vehicle": {
       "make": "Mitsubishi",
@@ -449,7 +861,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 6",
       "donor_vehicle.model": "spreadsheet row 6",
       "donor_vehicle.year": "spreadsheet row 6",
@@ -476,19 +888,17 @@
     "questions": [
       {
         "field": "part_details.part_number.extracted_value",
-        "question_en": "Can you provide the part number stamped on the mirror housing?",
-        "question_ar": "هل يمكنك تزويدنا برقم القطعة المكتوب على جسم المرآة؟"
+        "question_en": "For item MIR-0004, the label photo could not be read (OCR Unclear, seller to type value). Could you type the part number?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0004: صورة الملصق غير واضحة. هل يمكنك كتابة رقم القطعة؟"
       }
     ],
     "gaps_and_conflicts": [
       {
         "field": "part_details.part_number.extracted_value",
         "type": "missing",
-        "detail": "no part number found in spreadsheet, yard note or photos",
+        "detail": "OCR Unclear, seller to type value",
         "sources": [
-          "spreadsheet row 6",
-          "Arabic yard note",
-          "yard photo log"
+          "OCR"
         ]
       }
     ],
@@ -512,8 +922,122 @@
         "read_at": "2026-10-27T15:33:42.098Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used N/S Wing Mirror",
+      "description": "Used. Housing scratched on outer edge.\n\nUntested, not described as working.\n\nRemoved from a 2014 Mitsubishi Pajero (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nN/S (nearside, left) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: under 2 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nMitsubishi Pajero 2014 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "N/S (nearside, left)"
+      },
+      "compatibility": {
+        "supported": [],
+        "unverified": [
+          "Mitsubishi Pajero 2014 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "N/S (nearside, left)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "under 2 kg",
+        "size": "standard",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 41,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "fail",
+            "detail": "Part number missing or unresolved."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -580,8 +1104,34 @@
     },
     "readiness_status": "information_missing",
     "actions_required": [
-      "test mirror adjustment before listing",
-      "locate part number"
+      {
+        "priority": 3,
+        "field": "part_details.part_number.extracted_value",
+        "action_en": "For item MIR-0005, the label photo could not be read (OCR Unclear, seller to type value). Could you type the part number?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0005: صورة الملصق غير واضحة. هل يمكنك كتابة رقم القطعة؟",
+        "blocking": true
+      },
+      {
+        "priority": 4,
+        "field": "condition.testing_status",
+        "action_en": "For item MIR-0005, the part has not been tested. Could it be tested before we list it?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0005: لم يتم فحص القطعة. هل يمكن فحصها قبل العرض؟",
+        "blocking": true
+      },
+      {
+        "priority": 5,
+        "field": "weight_kg",
+        "action_en": "For item MIR-0005, what is the packaged weight in kilograms? Please weigh the package.",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0005: ما وزن العبوة بالكيلوغرام؟ يرجى وزن العبوة.",
+        "blocking": true
+      },
+      {
+        "priority": 5,
+        "field": "packaged_dimensions_cm",
+        "action_en": "For item MIR-0005, what are the packaged length, width and height in centimetres?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0005: ما طول العبوة وعرضها وارتفاعها بالسنتيمتر؟",
+        "blocking": true
+      }
     ],
     "donor_vehicle": {
       "make": "Hyundai",
@@ -603,7 +1153,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 7",
       "donor_vehicle.model": "spreadsheet row 7",
       "donor_vehicle.year": "spreadsheet row 7",
@@ -624,31 +1174,56 @@
     },
     "questions": [
       {
-        "field": "condition.testing_status",
-        "question_en": "Can the mirror be tested before it is listed?",
-        "question_ar": "هل يمكن فحص المرآة قبل عرضها للبيع؟"
+        "field": "part_details.part_number.extracted_value",
+        "question_en": "For item MIR-0005, the label photo could not be read (OCR Unclear, seller to type value). Could you type the part number?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0005: صورة الملصق غير واضحة. هل يمكنك كتابة رقم القطعة؟"
       },
       {
-        "field": "part_details.part_number.extracted_value",
-        "question_en": "What is the part number for this mirror?",
-        "question_ar": "ما هو رقم القطعة لهذه المرآة؟"
+        "field": "weight_kg",
+        "question_en": "For item MIR-0005, what is the packaged weight in kilograms? Please weigh the package.",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0005: ما وزن العبوة بالكيلوغرام؟ يرجى وزن العبوة."
+      },
+      {
+        "field": "packaged_dimensions_cm",
+        "question_en": "For item MIR-0005, what are the packaged length, width and height in centimetres?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0005: ما طول العبوة وعرضها وارتفاعها بالسنتيمتر؟"
+      },
+      {
+        "field": "condition.testing_status",
+        "question_en": "For item MIR-0005, the part has not been tested. Could it be tested before we list it?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0005: لم يتم فحص القطعة. هل يمكن فحصها قبل العرض؟"
       }
     ],
     "gaps_and_conflicts": [
       {
-        "field": "condition.testing_status",
+        "field": "part_details.part_number.extracted_value",
         "type": "missing",
-        "detail": "mirror has not been tested, function unknown",
+        "detail": "OCR Unclear, seller to type value",
         "sources": [
-          "Arabic yard note"
+          "OCR"
         ]
       },
       {
-        "field": "part_details.part_number.extracted_value",
+        "field": "weight_kg",
         "type": "missing",
-        "detail": "no part number recorded in any source",
+        "detail": "packaged weight in kilograms is missing or invalid",
         "sources": [
-          "spreadsheet row 7",
+          "seller inventory"
+        ]
+      },
+      {
+        "field": "packaged_dimensions_cm",
+        "type": "missing",
+        "detail": "packaged length, width and height in centimetres are missing or invalid",
+        "sources": [
+          "seller inventory"
+        ]
+      },
+      {
+        "field": "condition.testing_status",
+        "type": "missing",
+        "detail": "part is untested; function unknown and cannot be claimed",
+        "sources": [
           "Arabic yard note"
         ]
       }
@@ -673,8 +1248,117 @@
         "read_at": "2026-10-27T15:33:47.516Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used O/S Wing Mirror",
+      "description": "Used. Scratch across glass, housing intact.\n\nUntested, not described as working.\n\nRemoved from a 2015 Hyundai Tucson (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nO/S (offside, right) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg (estimated, weight not provided).\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nHyundai Tucson 2015 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "O/S (offside, right)"
+      },
+      "compatibility": {
+        "supported": [],
+        "unverified": [
+          "Hyundai Tucson 2015 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "O/S (offside, right)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": true
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "fail",
+            "detail": "Part number missing or unresolved."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "fail",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "fail",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -735,7 +1419,13 @@
     },
     "readiness_status": "information_missing",
     "actions_required": [
-      "confirm housing colour code with seller"
+      {
+        "priority": 5,
+        "field": "part_details.colour_code",
+        "action_en": "For item MIR-0006, the colour and colour code are not recorded. What is the colour, and the colour code if there is one?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0006: لون القطعة وكود اللون غير مسجلين. ما هو اللون، وما هو كود اللون إن وجد؟",
+        "blocking": true
+      }
     ],
     "donor_vehicle": {
       "make": "Toyota",
@@ -758,7 +1448,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 8",
       "donor_vehicle.model": "spreadsheet row 8",
       "donor_vehicle.year": "spreadsheet row 8",
@@ -784,18 +1474,18 @@
     "questions": [
       {
         "field": "part_details.colour_code",
-        "question_en": "What is the paint colour code of the mirror housing?",
-        "question_ar": "ما هو كود لون جسم المرآة؟"
+        "question_en": "For item MIR-0006, the colour and colour code are not recorded. What is the colour, and the colour code if there is one?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0006: لون القطعة وكود اللون غير مسجلين. ما هو اللون، وما هو كود اللون إن وجد؟"
       }
     ],
     "gaps_and_conflicts": [
       {
         "field": "part_details.colour_code",
         "type": "missing",
-        "detail": "housing colour code not recorded, photos show a faded finish",
+        "detail": "colour and colour code are both empty, and the Arabic yard note says the colour is unconfirmed",
         "sources": [
-          "spreadsheet row 8",
-          "yard photo log"
+          "spreadsheet",
+          "Arabic yard note"
         ]
       }
     ],
@@ -820,8 +1510,125 @@
         "read_at": "2026-10-27T15:33:51.165Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used O/S Wing Mirror SBM-7942-PR18",
+      "description": "Used. Paint faded on top face.\n\nUntested, not described as working.\n\nRemoved from a 2018 Toyota Prado (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nO/S (offside, right) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nToyota Prado 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nToyota Prado 2018 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "O/S (offside, right)",
+        "Manufacturer Part Number": "SBM-7942-PR18"
+      },
+      "compatibility": {
+        "supported": [
+          "Toyota Prado 2016-2021 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Toyota Prado 2018 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "O/S (offside, right)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 43,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -888,7 +1695,27 @@
     },
     "readiness_status": "information_missing",
     "actions_required": [
-      "resolve donor year conflict between spreadsheet and Arabic note"
+      {
+        "priority": 2,
+        "field": "donor_vehicle.year",
+        "action_en": "For item MIR-0007, the years do not agree (spreadsheet row 9 says 2018, Arabic yard note says 2015). Which year is correct?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0007: سنة الصنع غير متطابقة بين المصادر (2018، 2015). ما هي سنة الصنع الصحيحة؟",
+        "blocking": true
+      },
+      {
+        "priority": 6,
+        "field": "notes_ar",
+        "action_en": "For item MIR-0007, we did not recognise some words in your Arabic note (اكاديمي). Nothing from them is used in the listing. Could you explain what they mean?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0007: لم نتعرف على بعض الكلمات في ملاحظتك (اكاديمي). لم نستخدم شيئا منها في الإعلان. هل يمكنك توضيح معناها؟",
+        "blocking": false
+      },
+      {
+        "priority": 6,
+        "field": "original_title_ar",
+        "action_en": "For item MIR-0007, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0007: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك.",
+        "blocking": false
+      }
     ],
     "donor_vehicle": {
       "make": "GMC",
@@ -911,7 +1738,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 9",
       "donor_vehicle.model": "spreadsheet row 9",
       "donor_vehicle.year": "spreadsheet row 9",
@@ -937,17 +1764,43 @@
     "questions": [
       {
         "field": "donor_vehicle.year",
-        "question_en": "The spreadsheet says the donor is a 2018 Acadia but the yard note says 2015. Which year is correct?",
-        "question_ar": "الجدول يقول أن السيارة أكاديمي 2018 لكن ملاحظة الساحة تقول 2015. أي سنة صحيحة؟"
+        "question_en": "For item MIR-0007, the years do not agree (spreadsheet row 9 says 2018, Arabic yard note says 2015). Which year is correct?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0007: سنة الصنع غير متطابقة بين المصادر (2018، 2015). ما هي سنة الصنع الصحيحة؟"
+      },
+      {
+        "field": "notes_ar",
+        "question_en": "For item MIR-0007, we did not recognise some words in your Arabic note (اكاديمي). Nothing from them is used in the listing. Could you explain what they mean?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0007: لم نتعرف على بعض الكلمات في ملاحظتك (اكاديمي). لم نستخدم شيئا منها في الإعلان. هل يمكنك توضيح معناها؟"
+      },
+      {
+        "field": "original_title_ar",
+        "question_en": "For item MIR-0007, subjective condition cannot be claimed. Please describe the actual damage and condition instead.",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0007: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك."
       }
     ],
     "gaps_and_conflicts": [
       {
         "field": "donor_vehicle.year",
         "type": "conflict",
-        "detail": "spreadsheet lists donor year as 2018, Arabic yard note states 2015",
+        "detail": "spreadsheet row 9 says 2018, Arabic yard note says 2015",
         "sources": [
           "spreadsheet row 9",
+          "Arabic yard note"
+        ]
+      },
+      {
+        "field": "notes_ar",
+        "type": "cannot_claim",
+        "detail": "Some Arabic words were not recognised; nothing from them is used in the listing",
+        "sources": [
+          "Arabic yard note"
+        ]
+      },
+      {
+        "field": "original_title_ar",
+        "type": "cannot_claim",
+        "detail": "Cannot claim: subjective condition; describe the actual condition instead",
+        "sources": [
           "Arabic yard note"
         ]
       }
@@ -972,8 +1825,134 @@
         "read_at": "2026-10-27T15:33:51.213Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used N/S Wing Mirror SBM-7943-AC15",
+      "description": "Used. Minor parking scrape on lower housing.\n\nUntested, not described as working.\n\nRemoved from a GMC Acadia (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nN/S (nearside, left) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: under 2 kg.\n\nIncluded: mirror glass, housing, cover\n\nCompatibility\nGMC Acadia 2015-2018 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nGMC Acadia 2018 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "N/S (nearside, left)",
+        "Manufacturer Part Number": "SBM-7943-AC15"
+      },
+      "compatibility": {
+        "supported": [
+          "GMC Acadia 2015-2018 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "GMC Acadia 2018 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": [
+        {
+          "phrase": "حالة جيدة",
+          "reason": "Cannot claim: subjective condition; describe the actual condition instead"
+        },
+        {
+          "phrase": "بحالة جيدة",
+          "reason": "Cannot claim: subjective condition; describe the actual condition instead"
+        }
+      ]
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "N/S (nearside, left)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "under 2 kg",
+        "size": "standard",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 44,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -1040,8 +2019,27 @@
     },
     "readiness_status": "information_missing",
     "actions_required": [
-      "confirm whether mirror is left or right side",
-      "explain UK right-hand drive implications to buyer"
+      {
+        "priority": 3,
+        "field": "part_details.placement",
+        "action_en": "For item MIR-0008, the side is not given. Is the part left or right?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0008: جهة القطعة غير محددة. هل القطعة يمين أم يسار؟",
+        "blocking": true
+      },
+      {
+        "priority": 5,
+        "field": "included_components",
+        "action_en": "For item MIR-0008, which components are included? List only the components supplied with this part.",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0008: ما المكونات المرفقة؟ يرجى ذكر المكونات التي ستباع مع هذه القطعة فقط.",
+        "blocking": true
+      },
+      {
+        "priority": 7,
+        "field": "storage_location",
+        "action_en": "Record the rack and bay so the seller can locate the part. Storage location is not listed.",
+        "action_ar": "سجل الرف ومكان التخزين ليسهل العثور على القطعة. لا يظهر مكان التخزين في الإعلان.",
+        "blocking": false
+      }
     ],
     "donor_vehicle": {
       "make": "Lexus",
@@ -1063,7 +2061,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 10",
       "donor_vehicle.model": "spreadsheet row 10",
       "donor_vehicle.year": "spreadsheet row 10",
@@ -1087,19 +2085,31 @@
     "questions": [
       {
         "field": "part_details.placement",
-        "question_en": "Is this the left or right side mirror? The UAE donor car is left-hand drive and UK cars are right-hand drive, so the side must be confirmed.",
-        "question_ar": "هل هذه المرآة يسرى أم يمنى؟ السيارة الإماراتية يقودها اليسار والسيارات البريطانية يقودها اليمين، لذا يجب تأكيد الجانب."
+        "question_en": "For item MIR-0008, the side is not given. Is the part left or right?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0008: جهة القطعة غير محددة. هل القطعة يمين أم يسار؟"
+      },
+      {
+        "field": "included_components",
+        "question_en": "For item MIR-0008, which components are included? List only the components supplied with this part.",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0008: ما المكونات المرفقة؟ يرجى ذكر المكونات التي ستباع مع هذه القطعة فقط."
       }
     ],
     "gaps_and_conflicts": [
       {
         "field": "part_details.placement",
-        "type": "conflict",
-        "detail": "mirror side unclear: UAE donor is left-hand drive and UK cars are right-hand drive, yard note does not state the side",
+        "type": "missing",
+        "detail": "no source gives a side (spreadsheet and Arabic yard note)",
         "sources": [
-          "Arabic yard note",
-          "vehicle registration photo",
-          "yard photo log"
+          "spreadsheet",
+          "Arabic yard note"
+        ]
+      },
+      {
+        "field": "included_components",
+        "type": "missing",
+        "detail": "included components are not recorded",
+        "sources": [
+          "seller inventory"
         ]
       }
     ],
@@ -1123,8 +2133,124 @@
         "read_at": "2026-10-27T15:33:56.905Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used Wing Mirror SBM-7944-LX570",
+      "description": "Used. Housing crack near mounting base.\n\nUntested, not described as working.\n\nRemoved from a 2016 Lexus LX570 (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nCompatibility\nLexus LX570 2015-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nLexus LX570 2016 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Manufacturer Part Number": "SBM-7944-LX570"
+      },
+      "compatibility": {
+        "supported": [
+          "Lexus LX570 2015-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Lexus LX570 2016 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": null,
+        "note": "Side unknown. Please verify left or right."
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 45,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "fail",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "pass",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "fail",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -1185,8 +2311,13 @@
     },
     "readiness_status": "specialist_review_required",
     "actions_required": [
-      "specialist to inspect heated element wiring",
-      "do not list heating function until verified"
+      {
+        "priority": 1,
+        "field": "condition.testing_status",
+        "action_en": "For item MIR-0009, the electrical function cannot be checked from the records (electrical function cannot be verified from the data (found: wires cut); specialist review required before listing). Could a specialist test it before we list it?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0009: لا يمكن التحقق من الوظيفة الكهربائية من السجلات. هل يمكن لأخصائي فحصها قبل العرض؟",
+        "blocking": true
+      }
     ],
     "donor_vehicle": {
       "make": "Ford",
@@ -1209,7 +2340,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 11",
       "donor_vehicle.model": "spreadsheet row 11",
       "donor_vehicle.year": "spreadsheet row 11",
@@ -1235,18 +2366,18 @@
     "questions": [
       {
         "field": "condition.testing_status",
-        "question_en": "Can a specialist verify whether the heating element still works?",
-        "question_ar": "هل يمكن لأخصائي التحقق من عمل عنصر التدفئة؟"
+        "question_en": "For item MIR-0009, the electrical function cannot be checked from the records (electrical function cannot be verified from the data (found: wires cut); specialist review required before listing). Could a specialist test it before we list it?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0009: لا يمكن التحقق من الوظيفة الكهربائية من السجلات. هل يمكن لأخصائي فحصها قبل العرض؟"
       }
     ],
     "gaps_and_conflicts": [
       {
         "field": "condition.testing_status",
-        "type": "cannot_claim",
-        "detail": "heated mirror with cut connector wires, heating function cannot be claimed without specialist testing",
+        "type": "conflict",
+        "detail": "electrical function cannot be verified from the data (found: wires cut); specialist review required before listing",
         "sources": [
           "Arabic yard note",
-          "yard photo log"
+          "Arabic yard note"
         ]
       }
     ],
@@ -1271,8 +2402,125 @@
         "read_at": "2026-10-27T15:34:00.537Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used N/S Wing Mirror SBM-7945-HT",
+      "description": "Used. Two wires cut at connector.\n\nUntested, not described as working.\n\nRemoved from a 2017 Ford Explorer (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nN/S (nearside, left) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: under 2 kg.\n\nIncluded: mirror glass, housing, cover, connector\n\nCompatibility\nFord Explorer 2016-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)\nFord Explorer 2017 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "N/S (nearside, left)",
+        "Manufacturer Part Number": "SBM-7945-HT"
+      },
+      "compatibility": {
+        "supported": [
+          "Ford Explorer 2016-2020 LHD: listed in reference data for this part number, per reference catalogue (test data, not verified)"
+        ],
+        "unverified": [
+          "Ford Explorer 2017 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "N/S (nearside, left)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "under 2 kg",
+        "size": "standard",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 46,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "pass",
+            "detail": "Two-source or seller confirmation required; reference data remains test data."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "fail",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null
@@ -1341,8 +2589,20 @@
     },
     "readiness_status": "specialist_review_required",
     "actions_required": [
-      "specialist to inspect power-fold motor and camera wiring",
-      "verify OCR part number against physical stamp"
+      {
+        "priority": 1,
+        "field": "condition.testing_status",
+        "action_en": "For item MIR-0010, the electrical function cannot be checked from the records (electrical function cannot be verified from the data (found: connector pins bent); specialist review required before listing). Could a specialist test it before we list it?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0010: لا يمكن التحقق من الوظيفة الكهربائية من السجلات. هل يمكن لأخصائي فحصها قبل العرض؟",
+        "blocking": true
+      },
+      {
+        "priority": 2,
+        "field": "part_details.part_number.extracted_value",
+        "action_en": "For item MIR-0010, the part numbers do not agree (record says SBM-7946-PF; label read as SBM-7946-PX by OCR and CodeBuddy AI. Please check the stamp on the part). What is the correct part number?",
+        "action_ar": "بالنسبة للقطعة رقم MIR-0010: رقم القطعة في السجل هو SBM-7946-PF، لكن الملصق في الصورة يقرأ SBM-7946-PX. يرجى التحقق من الرقم المختوم على القطعة. ما هو رقم القطعة الصحيح؟",
+        "blocking": true
+      }
     ],
     "donor_vehicle": {
       "make": "BMW",
@@ -1365,7 +2625,7 @@
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
       "readiness_status": "runChecks",
-      "actions_required": "import validation",
+      "actions_required": "runChecks",
       "donor_vehicle.make": "spreadsheet row 12",
       "donor_vehicle.model": "spreadsheet row 12",
       "donor_vehicle.year": "spreadsheet row 12",
@@ -1390,33 +2650,33 @@
     },
     "questions": [
       {
-        "field": "condition.testing_status",
-        "question_en": "Can a specialist test the power-fold mechanism and the side camera before listing?",
-        "question_ar": "هل يمكن لأخصائي فحص آلية الطي الكهربائي والكاميرا الجانبية قبل العرض؟"
+        "field": "part_details.part_number.extracted_value",
+        "question_en": "For item MIR-0010, the part numbers do not agree (record says SBM-7946-PF; label read as SBM-7946-PX by OCR and CodeBuddy AI. Please check the stamp on the part). What is the correct part number?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0010: رقم القطعة في السجل هو SBM-7946-PF، لكن الملصق في الصورة يقرأ SBM-7946-PX. يرجى التحقق من الرقم المختوم على القطعة. ما هو رقم القطعة الصحيح؟"
       },
       {
-        "field": "part_details.part_number.extracted_value",
-        "question_en": "The part number was read by OCR and may be misread. Can you confirm it against the stamp on the part?",
-        "question_ar": "تمت قراءة رقم القطعة بالتعرف الضوئي وقد يكون خاطئا. هل يمكنك تأكيده من الرقم المحفور على القطعة؟"
+        "field": "condition.testing_status",
+        "question_en": "For item MIR-0010, the electrical function cannot be checked from the records (electrical function cannot be verified from the data (found: connector pins bent); specialist review required before listing). Could a specialist test it before we list it?",
+        "question_ar": "بالنسبة للقطعة رقم MIR-0010: لا يمكن التحقق من الوظيفة الكهربائية من السجلات. هل يمكن لأخصائي فحصها قبل العرض؟"
       }
     ],
     "gaps_and_conflicts": [
       {
-        "field": "condition.testing_status",
-        "type": "cannot_claim",
-        "detail": "power-fold and camera functions cannot be claimed, connector pins are bent and mirror is untested",
+        "field": "part_details.part_number.extracted_value",
+        "type": "conflict",
+        "detail": "record says SBM-7946-PF; label read as SBM-7946-PX by OCR and CodeBuddy AI. Please check the stamp on the part.",
         "sources": [
-          "Arabic yard note",
-          "yard photo log"
+          "OCR photo 1",
+          "OCR + CodeBuddy AI"
         ]
       },
       {
-        "field": "part_details.part_number.extracted_value",
+        "field": "condition.testing_status",
         "type": "conflict",
-        "detail": "part number came from low-confidence OCR and does not match the spreadsheet, which lists no number for this row",
+        "detail": "electrical function cannot be verified from the data (found: connector pins bent); specialist review required before listing",
         "sources": [
-          "OCR photo 1",
-          "spreadsheet row 12"
+          "Arabic yard note",
+          "Arabic yard note"
         ]
       }
     ],
@@ -1442,8 +2702,123 @@
         "read_at": "2026-10-27T15:34:04.075Z"
       }
     ],
-    "draft": null,
-    "corridor": null,
+    "draft": {
+      "title": "Used O/S Wing Mirror",
+      "description": "Used. Camera lens scratched, connector pins bent.\n\nUntested, not described as working.\n\nRemoved from a 2019 BMW X5 (donor vehicle, not a fitment guarantee). Please match the part number before buying.\n\nO/S (offside, right) (guidance, verify).\n\nThis mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number (guidance, verify).\n\nFragile, glass. Pack securely. Shipping guidance, verify: 2 to 15 kg.\n\nIncluded: mirror glass, housing, cover, connector, camera\n\nCompatibility\nBMW X5 2019 LHD: Donor vehicle only, not verified fitment\nSuitability for UK right-hand drive vehicles not verified\nBMW X5 2018-2021 LHD: reference vehicle only; part number unconfirmed, not verified fitment\nBuyer must match the part number before purchase.",
+      "item_specifics": {
+        "Placement on Vehicle": "O/S (offside, right)"
+      },
+      "compatibility": {
+        "supported": [],
+        "unverified": [
+          "BMW X5 2019 LHD: Donor vehicle only, not verified fitment",
+          "Suitability for UK right-hand drive vehicles not verified",
+          "BMW X5 2018-2021 LHD: reference vehicle only; part number unconfirmed, not verified fitment"
+        ],
+        "note": "Buyer must match the part number before purchase."
+      },
+      "blocked_claims": []
+    },
+    "corridor": {
+      "uk_side_wording": {
+        "label": "guidance, verify",
+        "value": "O/S (offside, right)",
+        "note": null
+      },
+      "drive_side_warning": {
+        "label": "guidance, verify",
+        "value": "This mirror came from a left-hand drive vehicle. UK cars are right-hand drive. Mirror glass and angle can differ. The buyer must verify against the part number."
+      },
+      "shipping": {
+        "label": "guidance, verify",
+        "tier": "2 to 15 kg",
+        "size": "medium",
+        "fragile": true,
+        "estimated": false,
+        "packaged_dimensions_cm": {
+          "length": 47,
+          "width": 26,
+          "height": 22
+        }
+      },
+      "packing_alert": {
+        "label": "guidance, verify",
+        "value": "fragile, glass"
+      },
+      "checklist": {
+        "id": "UAE-UK-MIRRORS-TEST-v1",
+        "version": "1.0",
+        "dated": "2026-10-27",
+        "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+        "items": [
+          {
+            "id": "part_number",
+            "status": "fail",
+            "detail": "Part number missing or unresolved."
+          },
+          {
+            "id": "side",
+            "status": "pass",
+            "detail": "Confirmed side and UK wording required."
+          },
+          {
+            "id": "condition",
+            "status": "pass",
+            "detail": "Disclose actual condition and defects; an empty defects array records none reported."
+          },
+          {
+            "id": "testing",
+            "status": "fail",
+            "detail": "Disclose testing status. Unsupported working claims are removed; electrical conflicts require specialist review."
+          },
+          {
+            "id": "photo",
+            "status": "pass",
+            "detail": "At least one recorded photo required."
+          },
+          {
+            "id": "shipping",
+            "status": "pass",
+            "detail": "Positive weight and all three packaged dimensions required."
+          },
+          {
+            "id": "components",
+            "status": "pass",
+            "detail": "List the included components."
+          },
+          {
+            "id": "packing",
+            "status": "pass",
+            "detail": "Fragile glass packing alert shown; verify actual packing before shipment."
+          },
+          {
+            "id": "hazard",
+            "status": "unknown",
+            "detail": "No sourced seller declaration that the item contains no battery or airbag. Verify before shipment."
+          },
+          {
+            "id": "compatibility",
+            "status": "pass",
+            "detail": "Donor evidence and test reference listings are labelled, not verified fitment. Buyer must match the part number."
+          },
+          {
+            "id": "seller_approval",
+            "status": "unknown",
+            "detail": "Seller approval is the last step, after resolving blockers."
+          },
+          {
+            "id": "uk_import_vat",
+            "status": "reference",
+            "detail": "UK import VAT on low-value consignments: verify with the official source. Verify with HM Revenue and Customs."
+          },
+          {
+            "id": "commodity_code",
+            "status": "reference",
+            "detail": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source. Verify with UK Trade Tariff."
+          }
+        ]
+      }
+    },
     "seller_approval": {
       "approved": false,
       "approved_at": null

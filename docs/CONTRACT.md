@@ -145,6 +145,8 @@ Validation errors (400):
 { "error": "readiness_status is computed or system-owned and cannot be edited" }
 ```
 
+When a PUT changes `part_details.part_number.extracted_value` to a nonempty value and the patch supplies neither `extraction_method` nor `requires_manual_verification`, the server sets those fields to `"seller edit"` and `false`. Each changed metadata field has source `"seller edit"` and a history entry by `"seller"`. Explicit metadata in the patch is respected. Clearing the number to null or an empty string sets `requires_manual_verification` to `true`.
+
 ## POST /api/parts/:id/approve
 
 Sets `seller_approval.approved` to `true` with an ISO timestamp and returns the full record.
@@ -154,6 +156,8 @@ Blocked with 409 when:
 - `gaps_and_conflicts` contains any entry with type `"missing"` or `"conflict"`.
 
 Type `"cannot_claim"` alone does not block approval.
+
+Approval is the last step. A PUT that changes any value, an upload that updates the record, a successful AI acceptance, or an AI read that fills a value withdraws an existing approval before checks run. The shared record helper sets `seller_approval` to `{ "approved": false, "approved_at": null }` and appends `{ at, field: "seller_approval", old: <previous approval>, new: { approved: false, approved_at: null }, by: "system: changed after approval" }` to history. It sets `field_sources["seller_approval.approved"]` to `"withdrawn after change"`. The corridor checklist approval item returns to `unknown` when checks run. A PUT with identical values preserves approval. Evidence alone from an AI read does not withdraw approval. A CSV upload with no record changes also preserves it. Approving an already approved record still refreshes its timestamp without another approval history entry.
 
 ```bash
 curl -X POST http://localhost:3001/api/parts/MIR-0001/approve
@@ -434,7 +438,7 @@ Status,Custom label,Title,Description,Condition,Category,Placement on Vehicle,Ma
 
 ## GET /api/metrics
 
-Reads `data/parts.json` on every request without changing it. Counts reflect stored records, including every reading in the OCR and AI arrays, not just the newest photo reading. `facts_with_sources` counts non-blank source strings, not an assertion that each source has been independently verified. Open questions and gaps are the current stored arrays; `claims_blocked` counts `cannot_claim` gaps, not `draft.blocked_claims`. `seller_edits` counts history entries whose `by` is exactly `"seller"`, including approval entries.
+Reads `data/parts.json` on every request without changing it. Counts reflect stored records, including every reading in the OCR and AI arrays, not just the newest photo reading. `facts_with_sources` counts non-blank source strings, not an assertion that each source has been independently verified. Open questions and gaps are the current stored arrays; `claims_blocked` counts `cannot_claim` gaps, not `draft.blocked_claims`. `seller_edits` counts history entries whose `by` is exactly `"seller"`, including approval entries. `seller_field_edits` counts only history entries whose `by` is exactly `"seller"` and whose `field` is not `"seller_approval"`. The existing `seller_edits` count is unchanged.
 
 Example computed from the synthetic demo records after startup checks:
 
@@ -455,6 +459,7 @@ Example computed from the synthetic demo records after startup checks:
     "ai_declined_to_guess": 2
   },
   "seller_edits": 0,
+  "seller_field_edits": 0,
   "measured": { "approved_with_timing": 0, "median_minutes_to_approval": null },
   "time_estimate": {
     "source": "assumption",
@@ -501,6 +506,10 @@ Run `npm test` from the repository root for all backend and checks suites. The s
 
 On start the server runs Developer C's `runChecks` on every record, saves the returned keys and writes `parts.json` once. A record whose checks throw is logged and kept unchanged.
 
+## Demo reset
+
+Run `npm run demo:reset` from the repository root to restore the two committed demo JSON files. The root script is `git checkout -- data/parts.json data/ai_preread.json && echo Demo data reset to the committed state`. This discards local changes in those two files and prints the confirmation after a successful reset.
+
 ## Demo fixtures
 
 `data/demo/` holds offline demo fixtures, generated with sharp from SVG (rerun with `npm run fixtures -w server`):
@@ -546,6 +555,8 @@ Honesty rules: never certify authenticity or guarantee fitment. A working claim 
 `draft.compatibility` is `{ supported: string[], unverified: string[], note }`. `supported` requires the existing two-source `confirmedPartNumber` logic, no unresolved identifier gap, and a matching entry in `data/compatibility_map.json`. Each string names the reference vehicle using "listed in reference data for" and "per reference catalogue (test data, not verified)". This is support within synthetic test reference data, not verified real-world fitment. Each catalogue entry contains `reference_vehicles: [{ make, model, years, drive_side }]` and keeps `source: "synthetic reference catalogue (test data, not verified)"`.
 
 `unverified` always includes the donor vehicle with "Donor vehicle only, not verified fitment". LHD donors also include "Suitability for UK right-hand drive vehicles not verified". Reference vehicles whose part number could not be confirmed go here rather than into supported. `note` is "Buyer must match the part number before purchase." A short Compatibility paragraph is built from this object; no "fits", "compatible with" or "guaranteed" wording is used as a claim. MIR-0010 has no supported reference listing while its number conflicts. `runChecks(record, compatibilityMap?)` is pure: reference JSON is read once at module load, or the optional second argument supplies a map; checks never write files or use the network.
+
+The draft condition sentence capitalizes the damage text after `Used. `, for example `Used. Light scuff on housing edge.`, without changing stored `cosmetic_damage`. Guidance labels appear as a bracketed suffix: `O/S (offside, right) (guidance, verify).` and `The buyer must verify against the part number (guidance, verify).` They never appear as a separate `. guidance, verify.` fragment. Estimated shipping uses `Shipping guidance, verify: 2 to 15 kg (estimated, weight not provided).`, with the actual corridor tier substituted. Disclosures including `Untested`, donor vehicle wording, `not verified`, and `Buyer must match the part number before purchase.` remain unchanged.
 
 `corridor.shipping` derives its illustrative tier from `record.weight_kg` and includes `packaged_dimensions_cm` when all three measurements are valid. Missing weight keeps shipping explicitly estimated, and still creates a blocking missing gap.
 

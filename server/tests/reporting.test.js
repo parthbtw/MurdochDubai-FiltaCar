@@ -226,6 +226,7 @@ test('metrics counts each stored value and reading, including all five agreement
       ai_declined_to_guess: 2,
     },
     seller_edits: 3,
+    seller_field_edits: 3,
     measured: { approved_with_timing: 0, median_minutes_to_approval: null },
     time_estimate: {
       source: 'assumption',
@@ -253,6 +254,7 @@ test('metrics rereads the file on every request and handles absent arrays and an
       ai_declined_to_guess: 0,
     },
     seller_edits: 0,
+    seller_field_edits: 0,
     measured: { approved_with_timing: 0, median_minutes_to_approval: null },
     time_estimate: {
       source: 'assumption',

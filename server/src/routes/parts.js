@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { readParts, writeParts, readCompatibilityMap } from '../store.js'
 import { runChecks, buildQuestionPack } from '../checks/index.js'
+import { isEmptyValue, setFieldSource, withdrawApproval } from '../records.js'
 
 const router = Router()
 
@@ -120,6 +121,23 @@ router.put('/:id', (req, res) => {
   const changes = []
   applyPatch(part, req.body, '', changes)
 
+  const numberPatch = req.body.part_details?.part_number
+  if (changes.some(change => change.field === 'part_details.part_number.extracted_value')) {
+    if (isEmptyValue(part.part_details.part_number.extracted_value)) {
+      applyPatch(part.part_details.part_number, { requires_manual_verification: true }, 'part_details.part_number', changes)
+    } else if (isPlainObject(numberPatch) &&
+      !Object.hasOwn(numberPatch, 'extraction_method') &&
+      !Object.hasOwn(numberPatch, 'requires_manual_verification')) {
+      applyPatch(part.part_details.part_number, {
+        extraction_method: 'seller edit',
+        requires_manual_verification: false,
+      }, 'part_details.part_number', changes)
+      for (const field of ['extraction_method', 'requires_manual_verification']) {
+        setFieldSource(part, `part_details.part_number.${field}`, 'seller edit')
+      }
+    }
+  }
+
   if (changes.length > 0) {
     part.field_sources = part.field_sources || {}
     for (const change of changes) {
@@ -133,6 +151,8 @@ router.put('/:id', (req, res) => {
       })
     }
   }
+
+  if (changes.length > 0) withdrawApproval(part)
 
   // Developer C's checks decide gaps, questions, readiness and drafts.
   const checked = runChecks(part)

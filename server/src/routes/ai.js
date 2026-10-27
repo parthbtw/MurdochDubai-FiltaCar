@@ -11,6 +11,7 @@ import {
 } from '../ai/codebuddyReader.js'
 import { createReadCache } from '../ai/readCache.js'
 import { acceptAiRead, applyAgreement, applyChecks } from '../ai/agreement.js'
+import { withdrawApproval } from '../records.js'
 import { runChecks } from '../checks/index.js'
 
 class AiRequestError extends Error {
@@ -114,12 +115,14 @@ export function createAiRouter({
         return res.json(part)
       }
 
+      const historyLength = (part.history || []).length
       applyAgreement(part, {
         photo,
         result: reading.result,
         mode: 'live',
         readAt: reading.read_at,
       })
+      if ((part.history || []).length > historyLength) withdrawApproval(part)
       applyChecks(part, checks)
       ensureSafeRecord(part)
       parts[index] = part
@@ -146,6 +149,7 @@ export function createAiRouter({
         if ([400, 409].includes(error.status)) throw requestError(error.message, error.status)
         throw error
       }
+      withdrawApproval(part)
       applyChecks(part, checks)
       ensureSafeRecord(part)
       parts[index] = part

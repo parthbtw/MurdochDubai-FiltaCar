@@ -426,3 +426,46 @@ test('/demo serves attached demo label files', async () => {
   assert.equal(res.status, 200)
   assert.match(res.headers['content-type'], /image\/png/)
 })
+
+test('ai-accept withdraws approval using the existing fake reader evidence', async () => {
+  const app = appWith()
+  const part = readData().find(part => part.item_id === 'MIR-0001')
+  part.photos = [photo]
+  part.ocr = [ocr(null)]
+  applyAgreement(part, { photo, result: result(part.part_details.part_number.extracted_value), mode: 'live' })
+  savePart(part)
+  const approved = await request(app).post('/api/parts/MIR-0001/approve')
+  assert.equal(approved.status, 200)
+  const accepted = await request(app).post('/api/parts/MIR-0001/ai-accept').send({ read_index: part.ai_reads.length - 1 })
+  assert.equal(accepted.status, 200)
+  assert.deepEqual(accepted.body.seller_approval, { approved: false, approved_at: null })
+  assert.equal(accepted.body.field_sources['seller_approval.approved'], 'withdrawn after change')
+  const withdrawal = accepted.body.history.find(entry => entry.by === 'system: changed after approval')
+  assert.deepEqual(withdrawal.old, approved.body.seller_approval)
+  assert.equal(withdrawal.field, 'seller_approval')
+  assert.equal(accepted.body.corridor.checklist.items.find(item => item.id === 'seller_approval').status, 'unknown')
+})
+
+test('ai-read agreement filling a number withdraws approval, evidence alone preserves it', async () => {
+  const app = appWith()
+  const part = readData().find(part => part.item_id === 'MIR-0001')
+  part.photos = [photo, otherPhoto]
+  part.ocr = [ocr()]
+  savePart(part)
+  const approved = await request(app).post('/api/parts/MIR-0001/approve')
+  assert.equal(approved.status, 200)
+  const evidence = await request(app).post('/api/parts/MIR-0001/ai-read').send({ photo: otherPhoto })
+  assert.equal(evidence.status, 200)
+  assert.deepEqual(evidence.body.seller_approval, approved.body.seller_approval)
+  // Simulate an approved legacy record with a missing number in temporary data.
+  const legacy = evidence.body
+  legacy.part_details.part_number.extracted_value = null
+  savePart(legacy)
+  const filled = await request(app).post('/api/parts/MIR-0001/ai-read').send({ photo })
+  assert.equal(filled.status, 200)
+  assert.equal(filled.body.part_details.part_number.extracted_value, 'SBM-7941-NP16')
+  assert.deepEqual(filled.body.seller_approval, { approved: false, approved_at: null })
+  const withdrawal = filled.body.history.find(entry => entry.by === 'system: changed after approval')
+  assert.deepEqual(withdrawal.old, approved.body.seller_approval)
+  assert.equal(filled.body.corridor.checklist.items.find(item => item.id === 'seller_approval').status, 'unknown')
+})
