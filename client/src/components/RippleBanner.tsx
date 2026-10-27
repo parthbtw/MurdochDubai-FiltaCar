@@ -1,6 +1,7 @@
 import { RecordedText } from './ArabicText'
 import { Button } from './ui/button'
 import { fieldLabel } from '@/domain/fields'
+import { formatGap } from '@/domain/gaps'
 import { readiness } from '@/domain/readiness'
 import type { Ripple } from '@/domain/ripple'
 
@@ -11,7 +12,7 @@ export function RippleBanner({ ripple, onClose }: { ripple: Ripple; onClose: () 
     {ripple.readiness && <p className="mt-3">{readiness[ripple.readiness.before].label} to {readiness[ripple.readiness.after].label}</p>}
     {ripple.approvalWithdrawn && <p className="mt-3 font-semibold">Approval withdrawn because the record changed. Approve again when ready.</p>}
     {(['resolved', 'added'] as const).map(kind => <div key={kind}>
-      {ripple.gaps[kind].map((gap, index) => <p key={`gap-${index}`} className="mt-2">{kind === 'resolved' ? 'Gap resolved' : 'New gap'}: {fieldLabel(gap.field)} ({gap.type.replaceAll('_', ' ')})</p>)}
+      {ripple.gaps[kind].map((gap, index) => <RecordedText key={`gap-${index}`} className="mt-2" text={`${kind === 'resolved' ? 'Gap resolved' : 'New gap'}: ${formatGap(gap)}`} />)}
       {ripple.questions[kind].map((question, index) => <div key={`question-${index}`} className="mt-2"><p className="text-footnote">{kind === 'resolved' ? 'Question resolved' : 'New question'}: {fieldLabel(question.field)}</p><RecordedText text={question.question_en} /></div>)}
       {ripple.actions[kind].map((action, index) => <div key={`action-${index}`} className="mt-2"><p className="text-footnote">{kind === 'resolved' ? 'Action resolved' : 'New action'}: {fieldLabel(action.field)}</p><RecordedText text={action.action_en} /></div>)}
     </div>)}

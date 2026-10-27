@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 const target = `http://localhost:${process.env.FILTA_API_PORT ?? '3001'}`
@@ -11,6 +11,7 @@ export default defineConfig({
   server: { proxy },
   preview: { proxy },
   test: {
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.ts',

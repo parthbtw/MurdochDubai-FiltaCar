@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { formatGap } from '@/domain/gaps'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -73,7 +74,7 @@ it('sends the smallest nested patch, updates cache, invalidates summaries and sh
   await editYear('2015')
   const ripple = await screen.findByRole('region', { name: 'What changed' })
   expect(ripple).toHaveTextContent('Information missing to Ready for review')
-  expect(ripple).toHaveTextContent('Gap resolved: Donor year (conflict)')
+  expect(ripple).toHaveTextContent('Gap resolved: Donor year: Spreadsheet row 9 says 2018, Arabic yard note says 2015.')
   expect(JSON.parse(mutationCalls()[0][1].body)).toEqual({ donor_vehicle: { year: 2015 } })
   expect(client.getQueryData(['part', 'MIR-0007'])).toEqual(putYear)
   expect(invalidate).toHaveBeenCalledWith({ queryKey: ['parts'] })
@@ -115,7 +116,7 @@ it.each([part0005, part0009])('disables approval for $item_id with human reasons
   expect(screen.getByRole('button', { name: 'Approve listing' })).toBeDisabled()
   expect(screen.getByRole('button', { name: 'Approve listing' })).toHaveAccessibleDescription(/Cannot approve yet/)
   if (record === part0009) expect(screen.getByText('Specialist review required.')).toBeInTheDocument()
-  else expect(screen.getByText(/Part number: Information missing/)).toBeInTheDocument()
+  else expect(screen.getByText('Part number: OCR Unclear, seller to type value.')).toBeInTheDocument()
 })
 it('confirms and cancels approval without a request', async () => {
   mount(<ApprovalAction record={part0001} />)
@@ -131,7 +132,7 @@ it.each([approveMissingError, approveSpecialistError])('shows the captured 409 e
   const dialog = await openApproval()
   await userEvent.click(within(dialog).getByRole('button', { name: 'Approve' }))
   expect(await screen.findByRole('alert')).toHaveTextContent(error.error!)
-  for (const gap of error.gaps_and_conflicts ?? []) expect(screen.getByRole('alert')).toHaveTextContent(gap.detail)
+  for (const gap of error.gaps_and_conflicts ?? []) expect(screen.getByRole('alert')).toHaveTextContent(formatGap(gap))
 })
 it('approves a record with cannot-claim notes and shows the locked state and new history', async () => {
   current = part0001; response = approvedPart

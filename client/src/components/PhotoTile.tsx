@@ -10,10 +10,10 @@ export function PhotoTile({ path, record, compact = false }: { path: string; rec
   const [failed, setFailed] = useState(false)
   const quality = qualityFor(record, path)
   return <figure className={cn('photo-frame', compact ? 'h-16 w-16 shrink-0' : 'min-w-0')}>
-    {failed || !url ? <div role="img" aria-label={`Missing recorded photo: ${fileName(path)}`} className={cn('flex flex-col justify-center bg-muted p-3', compact ? 'h-full' : 'min-h-40')}>
+    {failed || !url ? <div role="img" aria-label={compact ? `Missing recorded photo for ${record.item_id}` : `Missing recorded photo: ${fileName(path)}`} className={cn('flex flex-col justify-center bg-muted p-3', compact ? 'h-full' : 'min-h-40')}>
       <p className={cn('font-semibold', compact ? 'text-xs' : 'text-sm')}>File not in demo pack</p>
-      <p className={cn('break-all text-muted-foreground', compact ? 'sr-only' : 'mt-1 text-footnote')}>{fileName(path)}</p>
-    </div> : <img src={url} alt={`Recorded photo for ${record.item_id}: ${fileName(path)}`} onError={() => setFailed(true)} className={cn('w-full object-contain', compact ? 'h-full' : 'h-40 bg-background')} />}
+      {!compact && <p className="mt-1 break-all text-footnote text-muted-foreground">{fileName(path)}</p>}
+    </div> : <img src={url} alt={compact ? `Recorded photo for ${record.item_id}` : `Recorded photo for ${record.item_id}: ${fileName(path)}`} onError={() => setFailed(true)} className={cn('w-full object-contain', compact ? 'h-full' : 'h-40 bg-background')} />}
     {!compact && <figcaption className="border-t p-3 text-footnote text-muted-foreground">
       {!failed && url && <p className="break-all">{fileName(path)}</p>}
       <p className="mt-1">Source: {sourceFor(record, 'photos') ?? 'No source recorded'}</p>

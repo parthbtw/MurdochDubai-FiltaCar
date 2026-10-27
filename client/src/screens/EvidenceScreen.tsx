@@ -1,3 +1,4 @@
+import { formatGap } from '@/domain/gaps'
 import { fieldLabel } from '@/domain/fields'
 import { formatTime } from '@/domain/time'
 import { sourceTitle } from '@/domain/sources'
@@ -36,7 +37,7 @@ export function EvidenceScreen() {
         <dt className="break-words text-footnote text-muted-foreground">{fieldLabel(fact.path)}</dt><dd className="mt-1 break-words">{fact.path === 'original_title_ar' || fact.path === 'notes_ar' ? <ClaimText text={displayValue(fact.value)} claims={record.draft?.blocked_claims ?? []} /> : isArabic(displayValue(fact.value)) ? <RecordedText text={displayValue(fact.value)} /> : <p className="whitespace-pre-wrap"><GuidanceText text={displayValue(fact.value)} labels={labels} /></p>}<SourceLine record={record} path={fact.path} /></dd>
       </div>)}</dl></WorkspaceSection>
       <WorkspaceSection title="Gaps and conflicts" summary={`${record.gaps_and_conflicts.length} recorded gaps`} expanded>
-        {record.gaps_and_conflicts.length ? <ul className="divided-list">{record.gaps_and_conflicts.map((gap, index) => <li key={index} className="p-4"><p className="text-footnote font-semibold">{gap.type.replaceAll('_', ' ')}: {fieldLabel(gap.field)}</p><RecordedText text={gap.detail} className="mt-2" /><p className="mt-2 text-footnote text-muted-foreground">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p><SourceLine record={record} path="gaps_and_conflicts" /></li>)}</ul> : <p className="p-4">No gaps or conflicts recorded.</p>}
+        {record.gaps_and_conflicts.length ? <ul className="divided-list">{record.gaps_and_conflicts.map((gap, index) => <li key={index} className="p-4"><RecordedText text={formatGap(gap)} className="mt-2" /><p className="mt-2 text-footnote text-muted-foreground">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p><SourceLine record={record} path="gaps_and_conflicts" /></li>)}</ul> : <p className="p-4">No gaps or conflicts recorded.</p>}
       </WorkspaceSection>
       <ReadersPanel record={record} expanded />
       <WorkspaceSection title="Questions for the yard" summary={`${record.questions.length} open questions`} expanded><QuestionsContent record={record} /></WorkspaceSection>

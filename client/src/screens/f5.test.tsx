@@ -124,7 +124,14 @@ it('shows a simple Individual list with the returned photo, title fallback and n
   const title = await screen.findByText(sellPutSeller.draft!.title)
   expect(title.closest('a')).toHaveAttribute('href', `/sell/${sellPutSeller.item_id}/questions`)
   expect(screen.getByText(sellPutSeller.actions_required[0].action_en)).toBeInTheDocument()
-  expect(screen.getByRole('img', { name: /Recorded photo for MIR-0011/ })).toBeInTheDocument()
+  const image = screen.getByRole('img', { name: `Recorded photo for ${sellPutSeller.item_id}` })
+  const card = title.closest('li')!
+  const filename = sellPutSeller.photos[0].split('/').at(-1)!
+  expect(image).toHaveAttribute('src', `/${sellPutSeller.photos[0]}`)
+  expect(card).not.toHaveTextContent(filename)
+  fireEvent.error(image)
+  expect(screen.getByRole('img', { name: `Missing recorded photo for ${sellPutSeller.item_id}` })).toBeInTheDocument()
+  expect(card).not.toHaveTextContent(filename)
   expect(screen.getByText('Information missing')).toBeInTheDocument()
 })
 it('offers Sell a part for an empty Individual account', async () => {

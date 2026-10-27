@@ -16,7 +16,7 @@ export function MyPartsScreen() {
       const action = firstBlockingAction(record)
       const next = record.seller_approval.approved ? '/export' : `/sell/${encodeURIComponent(record.item_id)}/${action ? 'questions' : 'draft'}`
       return <li key={record.item_id} className="divided-row p-4">
-        {record.photos[0] ? <div className="my-part-photo"><PhotoTile path={record.photos[0]} record={record} /></div> : <p className="text-footnote text-muted-foreground">No photo recorded</p>}
+        {record.photos[0] ? <div className="my-part-photo"><PhotoTile path={record.photos[0]} record={record} compact /></div> : <p className="text-footnote text-muted-foreground">No photo recorded</p>}
         <Link to={next} className="pressable block min-h-11 py-3"><RecordedText text={record.draft?.title || 'New part'} className="text-title-3 font-semibold" /><p className="mt-1 text-footnote text-muted-foreground">{record.seller_approval.approved ? approvalText(record) : readiness[record.readiness_status].label}</p><RecordedText className="mt-2 text-sm" text={action?.action_en ?? (record.seller_approval.approved ? 'Next: download the mock export.' : 'Next: review the draft and approve it.')} /></Link>
       </li>
     })}</ul> : <div className="group p-4"><p>No parts yet. Sell your first part.</p><Button asChild className="mt-4 w-full"><Link to="/sell">Sell a part</Link></Button></div>}</div>

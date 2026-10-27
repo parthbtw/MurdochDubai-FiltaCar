@@ -1,3 +1,4 @@
+import { formatGap } from '@/domain/gaps'
 import { sourceTitle } from '@/domain/sources'
 import { useQuery } from '@tanstack/react-query'
 import type { PartRecord } from '@/api/types'
@@ -29,7 +30,7 @@ export function ClaimGuard({ record }: { record: PartRecord }) {
     {claims.length || gaps.length ? <ul className="mt-3 space-y-4">{claims.map((claim, index) => <li key={index}>
       {isArabic(claim.phrase) ? <ArabicText><del aria-describedby={`claim-${record.item_id}-${index}`}>{claim.phrase}</del></ArabicText> : <p><del aria-describedby={`claim-${record.item_id}-${index}`}>{claim.phrase}</del></p>}
       <RecordedText text={claim.reason} className="mt-1 text-sm text-muted-foreground" /><span id={`claim-${record.item_id}-${index}`} className="sr-only">{claim.reason}</span>
-    </li>)}{gaps.map((gap, index) => <li key={`gap-${index}`}><p className="text-footnote text-muted-foreground">Cannot claim: {gap.field}</p><RecordedText text={gap.detail} className="mt-1 text-sm" /><p className="mt-1 text-footnote text-muted-foreground">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p></li>)}</ul> : <p className="mt-2 text-sm">No blocked claims recorded.</p>}
+    </li>)}{gaps.map((gap, index) => <li key={`gap-${index}`}><RecordedText text={formatGap(gap)} className="mt-1 text-sm" /><p className="mt-1 text-footnote text-muted-foreground">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p></li>)}</ul> : <p className="mt-2 text-sm">No blocked claims recorded.</p>}
     <SourceLine record={record} path="draft.blocked_claims" />
   </div>
 }

@@ -1,3 +1,4 @@
+import { formatGap } from '@/domain/gaps'
 import { Link } from 'react-router-dom'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { LockKeyhole } from 'lucide-react'
@@ -6,7 +7,6 @@ import { ApiError } from '@/api/client'
 import { approvePart } from '@/api/endpoints'
 import { useRecordUpdate } from '@/api/useRecordUpdate'
 import { approvalReasons } from '@/domain/approval'
-import { fieldLabel } from '@/domain/fields'
 import { approvalText } from '@/domain/readiness'
 import { ActionSheet } from './ActionSheet'
 import { RecordedText } from './ArabicText'
@@ -39,7 +39,7 @@ export function ApprovalAction({ record, sticky = false, inline = false }: { rec
     finally { setBusy(false) }
   }
   const confirmation = <>
-    {error && <div role="alert"><RecordedText text={error.message} />{gaps.map((gap, index) => <div key={index} className="mt-2"><p>{fieldLabel(gap.field)} ({gap.type.replaceAll('_', ' ')})</p><RecordedText text={gap.detail} /></div>)}</div>}
+    {error && <div role="alert"><RecordedText text={error.message} />{gaps.map((gap, index) => <div key={index} className="mt-2"><RecordedText text={formatGap(gap)} /></div>)}</div>}
     {inline && gaps.length > 0 && <Link className="pressable flex min-h-11 items-center text-accent" to={`/sell/${encodeURIComponent(record.item_id)}/questions`}>Back to Questions</Link>}
     {busy && <div role="status" className="mt-3"><p>Approving...</p><Progress aria-label="Saving approval" /></div>}
     <Button className="mt-4 w-full" disabled={busy || Boolean(reasons.length)} onClick={() => void approve()}>Approve</Button>

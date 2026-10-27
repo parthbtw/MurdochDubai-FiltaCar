@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { classifySource } from '@/domain/sources'
 import { sourceFor } from '@/domain/fieldSource'
-import { gapsFor } from '@/domain/gaps'
+import { formatGap, gapsFor } from '@/domain/gaps'
 import { newestOcrFor } from '@/domain/photos'
 
 export interface TraceField { path: string; label: string; trigger: HTMLButtonElement }
@@ -34,7 +34,7 @@ export function SourceSheet({ record, field, onClose }: { record: PartRecord; fi
         {photo && <div className="mt-4"><PhotoTile path={photo} record={record} />{ocr && <div className="mt-3"><h3 className="text-sm font-semibold">Recorded label reading</h3><RecordedText text={ocr.text || 'No text recorded'} className="mt-1 whitespace-pre-wrap text-sm" /></div>}</div>}
         {classified?.kind === 'seller_edit' && (history ? <section className="mt-4"><h3 className="text-sm font-semibold">Seller change</h3><p className="mt-1 text-footnote">{formatTime(history.at)}</p><RecordedText text={`Old: ${historyValue(history.old)}`} className="mt-2 text-sm" /><RecordedText text={`New: ${historyValue(history.new)}`} className="mt-1 text-sm" /></section> : <p className="mt-3 text-sm">No matching history entry recorded.</p>)}
         {(classified?.kind === 'arabic_note' || classified?.kind === 'translation') && <section className="mt-4"><h3 className="text-sm font-semibold">Original Arabic evidence</h3><ArabicText className="mt-2">{(classified.kind === 'translation' || field?.path === 'original_title_ar' ? record.original_title_ar : record.notes_ar) || 'Not recorded'}</ArabicText></section>}
-        {field && gapsFor(record, field.path).map((gap, index) => <section key={index} className="mt-4"><h3 className="text-sm font-semibold">{gap.type === 'conflict' ? 'Sources disagree' : gap.type === 'missing' ? 'Needs confirmation' : 'Cannot claim'}</h3><RecordedText text={gap.detail} className="mt-1 text-sm" /><p className="mt-2 text-footnote">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p>{gap.sources.some(label => classifySource(label).kind === 'arabic_note') && classified?.kind !== 'arabic_note' && <ArabicText className="mt-2">{record.notes_ar || 'Not recorded'}</ArabicText>}</section>)}
+        {field && gapsFor(record, field.path).map((gap, index) => <section key={index} className="mt-4"><h3 className="text-sm font-semibold">{gap.type === 'conflict' ? 'Sources disagree' : gap.type === 'missing' ? 'Needs confirmation' : 'Cannot claim'}</h3><RecordedText text={formatGap(gap)} className="mt-1 text-sm" /><p className="mt-2 text-footnote">Sources: {gap.sources.map(sourceTitle).join('; ') || 'No source recorded'}</p>{gap.sources.some(label => classifySource(label).kind === 'arabic_note') && classified?.kind !== 'arabic_note' && <ArabicText className="mt-2">{record.notes_ar || 'Not recorded'}</ArabicText>}</section>)}
         {questions.map((question, index) => <section key={index} className="mt-4"><h3 className="text-sm font-semibold">Question to confirm</h3><p className="mt-1 text-sm">{question.question_en}</p><ArabicText className="mt-2">{question.question_ar}</ArabicText></section>)}
       </div>
       </div>

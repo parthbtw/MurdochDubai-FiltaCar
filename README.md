@@ -1,48 +1,70 @@
 # FiltaCar
 
-FiltaCar is a hackathon prototype for the eBay case study "From Salvage Yard to Global Marketplace". It turns messy salvage-yard inputs (photos, spreadsheets, donor-vehicle notes, Arabic notes) from a Dubai salvage seller into honest eBay listing drafts for UK buyers. Every record carries field-level provenance, surfaces gaps and conflicts as questions for the seller, and blocks approval while information is missing or conflicting, so no listing makes a fitment or authenticity claim the evidence does not support.
+FiltaCar turns salvage yard photos, spreadsheets and Arabic notes into listing drafts for used car parts. Business sellers manage a readiness queue; Individual sellers follow Sell a part. Each fact keeps its source, gaps become questions, and the seller approves the final wording. Facts in. Guesses out.
 
-## How to run
+## Requirements
 
-```bash
+Node 18 or newer, with Node 20 recommended, and npm. Google Chrome is needed only for the end to end tests.
+
+## Setup and run
+
+```sh
 npm install
-npm run dev   # runs the Vite client and the Express API together
-npm test      # runs the server tests (node:test + supertest)
+npm run dev
 ```
 
-The API serves on `http://localhost:3001` and the Vite dev server proxies `/api` to it.
+Open http://localhost:5173. An iPhone size works best: in Chrome press Cmd+Option+I, then turn on the device toolbar. The API runs at http://localhost:3001.
 
-- Mock export: `GET /api/export/preview` and `GET /api/export/ebay.csv` include only seller-approved drafts and are marked `MOCK, NOT PUBLISHED`.
-- Evidence metrics: `GET /api/metrics` counts the stored records live and labels the time estimates as assumptions, not measurements.
-- WhatsApp question pack: `GET /api/parts/:id/question-pack` returns copyable English and Arabic questions without sending a message.
+## Tests
 
-## CodeBuddy AI setup
+```sh
+npm test
+npm run e2e
+```
 
-Tesseract remains the offline label reader. CodeBuddy AI is an optional second reader; the app works without the CLI, key or internet.
+The first command runs the server and client unit tests. The second runs eight Playwright journeys in installed Google Chrome at 390 by 844 pixels and checks that browser requests and the CSV fetch stay on localhost. It starts a preview at http://localhost:4473 and an API at http://localhost:3301 using a fresh temporary copy of `data/`. Keep both ports free. Real demo data is unchanged. Reports are in `client/playwright-report/`.
 
-```bash
+If Playwright Chromium is already installed, use `PW_CHROMIUM=1 npm run e2e` instead. CI runs unit tests and the client build, without browser tests.
+
+## Reset the demo
+
+```sh
+npm run demo:reset
+```
+
+This discards local changes to the two committed demo JSON files. Restart the app afterwards.
+
+## Five demo journeys
+
+1. Evidence to export: open MIR-0001, inspect the part number source, approve with confirmation, then download the mock CSV from Export.
+2. Conflicting year: open MIR-0007, change donor year to 2015, inspect What changed, then approve.
+3. Unreadable label: open MIR-0004, choose Check label and type `sbm 7944 pj14`; it saves as `SBM-7944-PJ14` and becomes Ready for review.
+4. Honest wording and blockers: inspect MIR-0003's claim guard, then see why MIR-0009 and MIR-0010 cannot be approved.
+5. Seller intake: switch to Individual, sell `data/demo/clear_label.png`, confirm the label and answer 2016 for donor year; in Business, Add `data/demo/blurry_label.png` to see the retake warning.
+
+## Optional CodeBuddy AI setup
+
+Tesseract is the offline label reader. CodeBuddy AI is an optional second reader; the app works without its CLI, key or internet.
+
+```sh
 npm install -g @tencent-ai/codebuddy-code
 cp server/.env.example server/.env
 ```
 
-Add your key to `CODEBUDDY_API_KEY` in `server/.env` and keep `AI_LIVE_ENABLED=true` to enable new live reads. Restart the API after changing this setup. Keep `server/.env` local; it is ignored by Git.
+Add `CODEBUDDY_API_KEY` to that local file, set `AI_LIVE_ENABLED=true` and restart the API. Keep the file local; Git ignores it. New live reads use credits.
 
-The ten synthetic demo labels are committed in `data/demo/labels/`. Regenerate them with `npm run ai:labels -w server`, then run the optional preread when ready:
+The ten synthetic demo labels are in `data/demo/labels/`. Regenerate with `npm run ai:labels -w server`. Optional `npm run ai:preread` attaches each label, saves both readings, applies agreement, runs checks and writes `data/ai_preread.json`. Failures retain the Tesseract fallback. Successful reads are cached by image hash in `data/ai_read_cache.json` and reused after restart; failures are held in memory for up to 60 seconds. Preread skips completed parts; `npm run ai:preread -- --force` reprocesses them, reuses successful cached reads and retries failures immediately. `GET /api/ai/status` reports availability. Agreement may fill an empty number; an AI only suggestion needs seller confirmation. Live reads use `POST /api/parts/:id/ai-read` with an already attached photo; seller confirmation uses `POST /api/parts/:id/ai-accept`. Existing different numbers stay unchanged. Tests use fake readers.
 
-```bash
-npm run ai:preread
-```
+## Honesty rules
 
-Preread attaches each label, saves Tesseract and AI readings, applies the agreement rules, runs the record checks and writes `data/ai_preread.json`. A failed AI read keeps the Tesseract fallback and processing continues. It skips parts already read; `npm run ai:preread -- --force` processes them again using cached AI results for unchanged image bytes. Only successful AI results are cached by SHA-256 in `data/ai_read_cache.json` and reused by live reads, including after restart. Failures stay only in memory for up to 60 seconds to suppress rapid repeat clicks, then allow a retry. Preread `--force` retries failures immediately while keeping successful cached results. Old disk error entries are ignored. New image reads use credits; tests use fake readers only.
+Demo data is synthetic. Export is marked `MOCK, NOT PUBLISHED`; nothing is published or sent to eBay. No fitment, authenticity or unsupported working claims are made. Seller approval is the last step; changing an approved record withdraws approval.
 
-Check `GET /api/ai/status` for availability. Live reads use `POST /api/parts/:id/ai-read` with `{ "photo": "/demo/labels/MIR-0001.png" }`; that photo must already belong to the record. Agreement can fill an empty part number, while an AI-only result needs seller confirmation through `POST /api/parts/:id/ai-accept`. Existing different numbers are preserved. See the contract for all request and response rules.
+## Folders and API
 
-## Folder ownership
+`client/`: React and TypeScript app, unit tests and browser journeys.
 
-- Developer A: `client/` (React frontend)
-- Developer B: `server/` and `data/` (core API and data pipeline)
-- Developer C: `server/src/checks/` (validation checks)
+`server/`: Express API, uploads, readers and checks.
 
-## API contract
+`data/`: synthetic records, reference data and demo images.
 
-See [docs/CONTRACT.md](docs/CONTRACT.md) for every route, example requests and responses, and the part record shape.
+`docs/`: [API contract](docs/CONTRACT.md), including routes, record shapes and reader rules.
