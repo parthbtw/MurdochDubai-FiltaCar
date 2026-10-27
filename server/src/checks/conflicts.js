@@ -25,7 +25,6 @@ const RISKY_CLAIM_WORDS_AR = ["اصلي", "جديد", "شغال"].map(normalizeA
 // information_missing. Conflicts on anything else (e.g. electrical function
 // that cannot be verified from the data) need specialist_review_required.
 export const SELLER_FIXABLE_CONFLICT_FIELDS = new Set([
-  "donor_vehicle.year",
   "part_details.placement",
   "part_details.part_number.extracted_value",
 ]);
@@ -100,7 +99,7 @@ function sellerOwnsField(record, field) {
   for (let i = history.length - 1; i >= 0; i -= 1) {
     const entry = history[i];
     if (pathCovers(String(entry.field ?? ""), field)) {
-      return typeof entry.by === "string" && entry.by.trim().toLowerCase().startsWith("seller");
+      return entry.by === "seller";
     }
   }
   return false;

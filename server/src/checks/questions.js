@@ -5,6 +5,10 @@
 // name the item and quote the conflicting values (they already live in gap.detail).
 
 const TEMPLATES = {
+  'cannot_claim:draft': {
+    en: (r, g) => `For item ${r.item_id}, we removed an unsupported claim (${g.detail}). Please confirm the factual wording.`,
+    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: حذفنا وصفا غير موثق. يرجى تأكيد الوصف الواقعي للقطعة.`,
+  },
   "conflict:donor_vehicle.year": {
     en: (r, g) => `For item ${r.item_id}, the years do not agree (${g.detail}). Which year is correct?`,
     ar: (r, g) =>

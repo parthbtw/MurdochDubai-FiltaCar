@@ -51,7 +51,7 @@ test("expected readiness per seed (B's rules: seller-fixable conflicts are infor
     "MIR-0004": "information_missing", // missing part number
     "MIR-0005": "information_missing", // untested + missing part number
     "MIR-0006": "information_missing",
-    "MIR-0007": "information_missing", // year conflict is seller-fixable
+    "MIR-0007": "specialist_review_required", // unresolved donor year evidence conflict
     "MIR-0008": "information_missing", // placement unknown
     "MIR-0009": "specialist_review_required", // two cut wires, untested electrics
     "MIR-0010": "specialist_review_required", // bent connector pins, untested electrics
@@ -62,13 +62,13 @@ test("expected readiness per seed (B's rules: seller-fixable conflicts are infor
   }
 });
 
-test("MIR-0007: year conflict stays information_missing because the seller can fix it", () => {
+test("MIR-0007: unresolved year evidence conflict requires specialist review", () => {
   const record = seeds.find((r) => r.item_id === "MIR-0007");
   const result = runChecks(record);
   const gap = result.gaps_and_conflicts.find((g) => g.field === "donor_vehicle.year");
   assert.ok(gap);
   assert.equal(gap.type, "conflict");
-  assert.equal(result.readiness_status, "information_missing");
+  assert.equal(result.readiness_status, "specialist_review_required");
 });
 
 test("MIR-0009 and MIR-0010 stay specialist_review_required (electrical damage)", () => {
@@ -83,13 +83,13 @@ test("MIR-0009 and MIR-0010 stay specialist_review_required (electrical damage)"
   }
 });
 
-test("demo difficult case: unclear OCR + year conflict is information_missing, seller can resolve it", () => {
+test("demo difficult case: unclear OCR + year conflict requires specialist review", () => {
   const record = baseRecord({
     ocr: { text: "MIRR0R SBM-?OO1-T17 2O17", confidence: 0.4, unclear: true, quality: "poor" },
     notes_ar: "٢٠١٥",
   });
   const result = runChecks(record);
-  assert.equal(result.readiness_status, "information_missing");
+  assert.equal(result.readiness_status, "specialist_review_required");
   assert.ok(result.gaps_and_conflicts.some((g) => g.field === "donor_vehicle.year" && g.type === "conflict"));
   assert.ok(
     result.gaps_and_conflicts.some((g) => g.detail === "OCR Unclear, seller to type value"),
@@ -149,8 +149,23 @@ test("a clean record is ready_for_review and cannot_claim alone never changes re
   assert.ok(result.questions.some((q) => q.field === "original_title_en"));
 });
 
-test("draft and corridor are placeholders for the next task", () => {
+test("real seed journeys expose missing demo prerequisites without changing data", () => {
+  assert.ok(seeds.every(record => record.ocr === null));
+  assert.ok(seeds.every(record => runChecks(record).readiness_status !== 'ready_for_review'));
+  const record = structuredClone(seeds.find(part => part.item_id === 'MIR-0007'));
+  const oldYear = record.donor_vehicle.year;
+  record.donor_vehicle.year = 2015;
+  record.field_sources['donor_vehicle.year'] = 'seller edit';
+  record.history.push({ at: '2026-10-27T12:00:00.000Z', field: 'donor_vehicle.year', old: oldYear, new: 2015, by: 'seller' });
+  const result = runChecks(record);
+  assert.equal(result.readiness_status, 'information_missing');
+  assert.ok(!result.gaps_and_conflicts.some(gap => gap.field === 'donor_vehicle.year'));
+  assert.ok(result.gaps_and_conflicts.some(gap => gap.field === 'notes_ar'));
+});
+
+test("draft and corridor contain real listing and guidance outputs", () => {
   const result = runChecks(seeds[0]);
-  assert.deepEqual(result.draft, { title: "", description: "", item_specifics: {}, blocked_claims: [] });
-  assert.equal(result.corridor, null);
+  assert.ok(result.draft.title.includes('Wing Mirror'));
+  assert.ok(result.draft.description.includes('Fragile, glass'));
+  assert.equal(result.corridor.packing_alert.label, 'guidance, verify');
 });
