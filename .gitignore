@@ -154,3 +154,6 @@ vite.config.ts.timestamp-*
 # Uploaded yard photos (runtime data, not committed)
 data/uploads/*
 !data/uploads/.gitkeep
+
+# Local manual timing measurements
+data/manual_baseline.json

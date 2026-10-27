@@ -16,7 +16,7 @@ curl http://localhost:3001/api/health
 
 ## GET /api/parts
 
-Returns all part records. Optional `?status=` filter, one of `ready_for_review`, `information_missing`, `specialist_review_required`. An unknown status value returns 400.
+Returns all part records. Optional `?status=` filter, one of `ready_for_review`, `information_missing`, `specialist_review_required`. An unknown status value returns 400. Optional `?seller_id=` scopes results to one business or individual seller and can be combined with status. An unknown seller returns `{ "parts": [] }`, not an error.
 
 ```bash
 curl http://localhost:3001/api/parts
@@ -101,11 +101,11 @@ curl http://localhost:3001/api/parts/MIR-0007
 
 Merges changed fields into the record. Behaviour:
 
-- The following keys are computed or system-owned and will be rejected with 400 if present in the patch: `gaps_and_conflicts`, `questions`, `readiness_status`, `field_sources`, `draft`, `corridor`, `ocr`, `ai_reads`, `candidates`, `history`, `seller_approval`, `item_id`.
+- The following keys are computed or system-owned and will be rejected with 400 if present in the patch: `gaps_and_conflicts`, `questions`, `actions_required`, `created_at`, `readiness_status`, `field_sources`, `draft`, `corridor`, `ocr`, `ai_reads`, `candidates`, `history`, `seller_approval`, `item_id`.
 - `item_id` cannot be changed (400).
 - For each changed field path, `field_sources[field]` is set to `"seller edit"`.
 - Each change appends `{ "at": "<ISO timestamp>", "field": "<dot path>", "old": ..., "new": ..., "by": "seller" }` to `history`.
-- After the merge the server calls Developer C's `runChecks(record)` and saves every key it returns (`gaps_and_conflicts`, `questions`, `readiness_status`, `draft`, `corridor`).
+- After the merge the server calls Developer C's `runChecks(record)` and saves every key it returns (`gaps_and_conflicts`, `questions`, `actions_required`, `readiness_status`, `draft`, `corridor`), with `field_sources[key]` set to `"runChecks"`. Upload and startup saves do the same.
 - Responds with the full updated record.
 
 ```bash
@@ -229,7 +229,7 @@ Part number rules:
 - If `unclear` is true: the part number is never set. It stays null and `requires_manual_verification` becomes true.
 - If the record already has a different part number: it is not changed; the candidate stays in the OCR entry.
 
-CSV handling (`sheet`): parsed with csv-parse. Expected columns, case-insensitive, extras ignored and listed in warnings: `sku`, `item_id`, `make`, `model`, `year`, `side`, `colour`, `part_number`, `testing_status`, `notes_ar`, `notes_en`, `weight_kg`. Mapping: make/model/year to `donor_vehicle`, side to `part_details.placement`, colour to `part_details.colour_code`, part_number to `part_details.part_number.extracted_value`, testing_status to `condition.testing_status`, notes_ar to `notes_ar`, notes_en to `original_title_en`, weight_kg to `weight_kg`. A row with an existing item_id updates that record, otherwise a new part is created. `field_sources` entries are `"spreadsheet row N (<filename>)"`. Empty cells stay null, never guessed.
+CSV handling (`sheet`): parsed with csv-parse. Expected columns, case-insensitive, extras ignored and listed in warnings: `sku`, `item_id`, `make`, `model`, `year`, `side`, `colour`, `part_number`, `testing_status`, `notes_ar`, `notes_en`, `storage_location`, `weight_kg`, `length_cm`, `width_cm`, `height_cm`, `included_components`. Mapping: make/model/year to `donor_vehicle`, side to `part_details.placement`, colour to `part_details.colour_code`, part_number to `part_details.part_number.extracted_value`, testing_status to `condition.testing_status`, notes_ar to `notes_ar`, notes_en to `original_title_en`, storage_location and weight_kg to the same top-level fields, length_cm/width_cm/height_cm to `packaged_dimensions_cm.length/width/height`. Numeric package cells are parsed strictly; invalid values remain unresolved by checks. `included_components` is a semicolon-separated list trimmed into an array. A row with an existing item_id updates that record, otherwise a new part is created with a sourced ISO `created_at`; updates do not reset it or backfill seed timestamps. `field_sources` entries are `"spreadsheet row N (<filename>)"`. Empty cells stay unknown, never guessed.
 
 Candidate rule: an existing value is never overwritten by OCR or CSV if it differs. The existing value stays and the new value is stored in the record's `candidates` map:
 
@@ -436,18 +436,18 @@ Status,Custom label,Title,Description,Condition,Category,Placement on Vehicle,Ma
 
 Reads `data/parts.json` on every request without changing it. Counts reflect stored records, including every reading in the OCR and AI arrays, not just the newest photo reading. `facts_with_sources` counts non-blank source strings, not an assertion that each source has been independently verified. Open questions and gaps are the current stored arrays; `claims_blocked` counts `cannot_claim` gaps, not `draft.blocked_claims`. `seller_edits` counts history entries whose `by` is exactly `"seller"`, including approval entries.
 
-Example measured from the demo records after startup checks and the agreement relabel:
+Example computed from the synthetic demo records after startup checks:
 
 ```json
 {
   "parts_total": 10,
   "approved": 0,
   "by_status": { "ready_for_review": 3, "information_missing": 5, "specialist_review_required": 2 },
-  "facts_with_sources": 288,
-  "questions_open": 10,
-  "missing_open": 5,
+  "facts_with_sources": 351,
+  "questions_open": 16,
+  "missing_open": 8,
   "conflicts_open": 4,
-  "claims_blocked": 1,
+  "claims_blocked": 4,
   "readers": {
     "ocr_reads": 10,
     "ai_reads": 10,
@@ -455,7 +455,9 @@ Example measured from the demo records after startup checks and the agreement re
     "ai_declined_to_guess": 2
   },
   "seller_edits": 0,
+  "measured": { "approved_with_timing": 0, "median_minutes_to_approval": null },
   "time_estimate": {
+    "source": "assumption",
     "manual_minutes_per_listing": 15,
     "filtacar_minutes_per_listing": 3,
     "basis": "assumption for illustration, not measured"
@@ -463,7 +465,13 @@ Example measured from the demo records after startup checks and the agreement re
 }
 ```
 
-`ai_declined_to_guess` counts only saved AI reads whose `result.part_number` is explicitly null. The two time estimates are constants in `server/src/config.js`; they are illustrative assumptions and are never presented as measured savings. All other counts come from records.
+`ai_declined_to_guess` counts only saved AI reads whose `result.part_number` is explicitly null. Optional `?seller_id=` scopes all record counts and measured timing to one business or individual seller. An unknown seller returns zero counts and an empty measured summary, not an error.
+
+`measured { approved_with_timing, median_minutes_to_approval }` uses only records with valid `created_at` and `seller_approval.approved_at`, with approval not before creation. Durations are elapsed minutes, not active working time. The median averages the two centre values for an even count and is null when there are no valid timings. The ten seeds have no `created_at`, so timing starts empty. GET never writes timestamps or records.
+
+If a valid optional `data/manual_baseline.json` exists with `{ parts, total_minutes, measured_on, method }`, metrics adds `baseline { minutes_per_listing, measured_on, method }`, using `total_minutes / parts`. It is reread per request; missing or malformed baseline data is ignored. Only the synthetic `data/manual_baseline.example.json` is committed; real local baseline data is ignored by Git. Record how the manual exercise was timed, and do not label the example as measured evidence.
+
+`time_estimate` keeps its existing minute fields and adds `source`. Without both a valid baseline and at least one approval timing, `source` is `"assumption"` and the illustrative 15/3 constants from `server/src/config.js` remain. With both, `source` is `"measured"`, the manual field is the baseline average and the FiltaCar field is the median elapsed creation-to-approval time. `basis` identifies that distinction; elapsed time is not a measured saving in active work.
 
 ## GET /api/parts/:id/question-pack
 
@@ -512,7 +520,7 @@ Field names are team spec and must not change, so Developer A's mock data keeps 
 - `part_details`: `category`, `subcategory`, `brand`, `part_number { extracted_value, extraction_method, requires_manual_verification }`, `placement`, plus `colour_code` when a spreadsheet colour column provides it.
 - `condition`: `state`, `cosmetic_damage[]`, `testing_status`.
 - `readiness_status`: one of `ready_for_review`, `information_missing`, `specialist_review_required`.
-- `actions_required[]`: next steps for the seller.
+- `actions_required[]`: ordered `{ priority, field, action_en, action_ar, blocking }` entries, one per gap plus a storage action if missing. Priority 1 is highest: 1 specialist conflicts; 2 seller-fixable conflicts; 3 missing identifiers and OCR/AI confirmation; 4 condition/testing disclosure; 5 shipping weight, dimensions, components and colour code; 6 non-blocking claim/unknown-word notes; 7 missing storage location. Only missing/conflict actions are blocking. Computed and protected from PUT edits.
 - `donor_vehicle { make, model, year, drive_side }`: evidence only, never a fitment claim.
 - `field_sources`: maps each non-empty field path to where the value came from.
 - `questions[]`: `{ field, question_en, question_ar }` for each missing or conflicting detail.
@@ -522,9 +530,27 @@ Field names are team spec and must not change, so Developer A's mock data keeps 
 - `ocr`: null until the upload step fills it, then an array of OCR results, one per processed photo, each `{ engine, photo, text, confidence, unclear, quality { sharpness, blurry }, part_number_candidate, read_at }`.
 - `ai_reads`: optional until the first successful AI read, then an array, newest last, of `{ engine: "CodeBuddy AI", mode: "build-time" | "live", photo, result { part_number, visible_text, damage_notes[], readable }, agreement, read_at }`. See the agreement rules above; AI evidence does not supply other part or vehicle facts.
 - `candidates`: map of field path to `{ value, source }` for CSV or OCR values that differ from an existing value and were therefore not applied, for Developer C's checks.
-- `weight_kg`: from the spreadsheet weight_kg column, null otherwise.
-- `draft`, `corridor`: null until Developer C's checks fill them.
+- `created_at`: server-generated ISO creation timestamp for new upload or CSV records. Existing seed parts have no timestamp and are excluded from measured approval timing. PUT cannot edit it.
+- `storage_location`: optional internal rack/bay string from the spreadsheet or seller edit. Missing storage creates only a priority-7, non-blocking action, never a gap. It is never copied to a draft, export or export Sources.
+- `weight_kg`: positive numeric packaged weight from the spreadsheet or seller edit, unknown/null otherwise. Missing or invalid weight creates a blocking missing gap and bilingual question.
+- `packaged_dimensions_cm { length, width, height }`: positive numeric package measurements in centimetres, unknown/null otherwise. All three are required; a missing or invalid dimension creates one blocking `packaged_dimensions_cm` gap and bilingual question.
+- `included_components[]`: strings naming only components supplied with the part, unknown/null otherwise. Missing/empty components create a blocking gap and bilingual question. The draft adds one `Included: ...` line only when components are present.
+- `draft`, `corridor`: null until Developer C's checks fill them. See the compatibility and checklist contracts below.
 - `seller_approval { approved, approved_at }`.
 - `history[]`: `{ at, field, old, new, by }`, appended on every update.
 
-Honesty rules: never include a fitment claim, a "genuine" or "OEM" authenticity claim, or a "tested working" condition unless a `field_sources` entry supports it. Untested parts keep `testing_status` `"Untested"` and are never described as working.
+Honesty rules: never certify authenticity or guarantee fitment. A working claim requires a sourced `condition.test_record`, not just a testing-status string. Untested parts keep `testing_status` `"Untested"` and are never described as working. Subjective condition words in English and Arabic, including "good condition", "excellent", "like new", "perfect", "mint", "حالة جيدة", "حالة ممتازة", "ممتاز", "نظيف", "زي الجديد" and "مثل الجديد", are removed with `Cannot claim: subjective condition; describe the actual condition instead`. Repeated subjective wording in titles/notes creates one non-blocking bilingual question per part. Original titles and notes remain unchanged as evidence. MIR-0007's subjective title does not change readiness.
+
+## Draft compatibility and corridor checklist
+
+`draft.compatibility` is `{ supported: string[], unverified: string[], note }`. `supported` requires the existing two-source `confirmedPartNumber` logic, no unresolved identifier gap, and a matching entry in `data/compatibility_map.json`. Each string names the reference vehicle using "listed in reference data for" and "per reference catalogue (test data, not verified)". This is support within synthetic test reference data, not verified real-world fitment. Each catalogue entry contains `reference_vehicles: [{ make, model, years, drive_side }]` and keeps `source: "synthetic reference catalogue (test data, not verified)"`.
+
+`unverified` always includes the donor vehicle with "Donor vehicle only, not verified fitment". LHD donors also include "Suitability for UK right-hand drive vehicles not verified". Reference vehicles whose part number could not be confirmed go here rather than into supported. `note` is "Buyer must match the part number before purchase." A short Compatibility paragraph is built from this object; no "fits", "compatible with" or "guaranteed" wording is used as a claim. MIR-0010 has no supported reference listing while its number conflicts. `runChecks(record, compatibilityMap?)` is pure: reference JSON is read once at module load, or the optional second argument supplies a map; checks never write files or use the network.
+
+`corridor.shipping` derives its illustrative tier from `record.weight_kg` and includes `packaged_dimensions_cm` when all three measurements are valid. Missing weight keeps shipping explicitly estimated, and still creates a blocking missing gap.
+
+The versioned definition is `data/checklists/uae-uk-mirrors-test-v1.json`, with `id: "UAE-UK-MIRRORS-TEST-v1"`, `version: "1.0"`, `dated: "2026-10-27"` and `label: "Test checklist for the prototype. Not legal, customs or tax advice."`. Each definition item has bilingual requirements, `checked_by` describing how it is checked, and `blocking`. The final two items are reference-only and name HM Revenue and Customs for UK import VAT on low-value consignments and UK Trade Tariff for commodity-code candidate 7009.10. Verify with those official sources; no tax rates, thresholds or confirmed classification are asserted.
+
+`corridor.checklist` returns `{ id, version, dated, label, items: [{ id, status, detail }] }`, with status `pass`, `fail`, `unknown` or `reference`. It covers identifier/side confirmation, factual condition/defects, testing disclosure, photos, shipping measurements, components, fragile glass packing, hazardous-item verification, cautious compatibility and seller approval. A ready part has no fail on a blocking item. Hazard status is unknown without evidence, packing pass means the alert is shown rather than that packing was inspected, and approval stays unknown until the separate seller-approval endpoint records the last step.
+
+All new seed shipping values and reference vehicle ranges are synthetic test data, sourced to the existing spreadsheet row or the labelled synthetic catalogue. The seed readiness remains MIR-0001 to MIR-0003 ready, MIR-0004 to MIR-0008 missing information, and MIR-0009/MIR-0010 specialist review. Seller corrections still clear MIR-0004's missing number and MIR-0007's year conflict; correcting MIR-0010's number does not clear its electrical specialist blocker.

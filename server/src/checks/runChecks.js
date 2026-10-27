@@ -1,6 +1,5 @@
 // Pure entry point for the checks pipeline. Never mutates its input, makes no
-// network calls, and returns exactly:
-// { gaps_and_conflicts, questions, readiness_status, draft, corridor }
+// network calls, and returns the computed contract fields.
 
 import { analyzeConflicts, SELLER_FIXABLE_CONFLICT_FIELDS } from "./conflicts.js";
 import { questionsFor } from "./questions.js";
@@ -8,6 +7,8 @@ import { buildCorridor } from './corridor.js';
 import { buildDraft } from './draft.js';
 import { normalizeArabic } from './arabicDictionary.js';
 import { applyClaimGuard } from './claimGuard.js';
+import { buildActions } from './actions.js';
+import { buildChecklist } from './checklist.js';
 export { buildQuestionPack } from './questionPack.js';
 
 function readinessFor(gaps) {
@@ -23,10 +24,10 @@ function readinessFor(gaps) {
   return "ready_for_review"; // cannot_claim alone never changes readiness
 }
 
-export function runChecks(record) {
+export function runChecks(record, compatibilityMap) {
   const gaps = analyzeConflicts(record);
   const corridor = buildCorridor(record);
-  const draft = buildDraft(record, gaps, corridor);
+  const draft = buildDraft(record, gaps, corridor, compatibilityMap);
   const claimKey = (field, phrase) => `${field}:${normalizeArabic(phrase).toLowerCase().replace(/\s+/g, ' ').trim()}`;
   const claimGaps = new Map();
   for (const gap of gaps) {
@@ -34,6 +35,19 @@ export function runChecks(record) {
     if (match) claimGaps.set(claimKey(gap.field, match[1]), gap);
   }
   for (const block of draft.blocked_claims) {
+    if (block.reason.startsWith('Cannot claim: subjective condition')) {
+      const key = 'subjective condition';
+      if (!claimGaps.has(key)) {
+        const fields = ['original_title_ar', 'original_title_en', 'notes_ar', 'condition', 'part_details'];
+        const source = fields.find(field => applyClaimGuard(JSON.stringify(record[field] || ''), record).blocked
+          .some(hit => hit.reason === block.reason)) || 'draft';
+        const gap = { field: source, type: 'cannot_claim', detail: block.reason,
+          sources: [record.field_sources?.[source] || source] };
+        gaps.push(gap);
+        claimGaps.set(key, gap);
+      }
+      continue;
+    }
     const sources = [];
     const visit = (value, path) => {
       if (typeof value === 'string' && applyClaimGuard(value, record).blocked.some(hit => claimKey('', hit.phrase) === claimKey('', block.phrase))) sources.push(path);
@@ -54,9 +68,12 @@ export function runChecks(record) {
       }
     }
   }
+  const questions = questionsFor(gaps, record);
+  corridor.checklist = buildChecklist(record, gaps, draft, corridor);
   return {
     gaps_and_conflicts: gaps,
-    questions: questionsFor(gaps, record),
+    questions,
+    actions_required: buildActions(record, gaps, questions),
     readiness_status: readinessFor(gaps),
     draft,
     corridor,

@@ -1,30 +1,135 @@
 {
   "SBM-7940-LC17": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Catalogue entry mirrors the LHD Toyota Land Cruiser layout. UK RHD vehicles mirror the part side, so confirm placement before listing."
+    "region_notes": "Catalogue entry mirrors the LHD Toyota Land Cruiser layout. UK RHD vehicles mirror the part side, so confirm placement before listing.",
+    "reference_vehicles": [
+      {
+        "make": "Toyota",
+        "model": "Land Cruiser",
+        "years": "2016-2021",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7941-NP16": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Listed against LHD Nissan Patrol. Not checked against UK RHD Patrol variants, treat as reference only."
+    "region_notes": "Listed against LHD Nissan Patrol. Not checked against UK RHD Patrol variants, treat as reference only.",
+    "reference_vehicles": [
+      {
+        "make": "Nissan",
+        "model": "Patrol",
+        "years": "2015-2020",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7942-PR18": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Shared housing family across Prado trims. Painted finish, colour must be confirmed per unit. Not verified for UK market vehicles."
+    "region_notes": "Shared housing family across Prado trims. Painted finish, colour must be confirmed per unit. Not verified for UK market vehicles.",
+    "reference_vehicles": [
+      {
+        "make": "Toyota",
+        "model": "Prado",
+        "years": "2016-2021",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7943-AC15": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Catalogue spans Acadia model years 2015 to 2018, which overlaps the recorded donor year conflict. Not verified."
+    "region_notes": "Catalogue spans Acadia model years 2015 to 2018, which overlaps the recorded donor year conflict. Not verified.",
+    "reference_vehicles": [
+      {
+        "make": "GMC",
+        "model": "Acadia",
+        "years": "2015-2018",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7944-LX570": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Lexus LX570 reference only. Side must be resolved because the UAE donor is LHD and UK cars are RHD."
+    "region_notes": "Lexus LX570 reference only. Side must be resolved because the UAE donor is LHD and UK cars are RHD.",
+    "reference_vehicles": [
+      {
+        "make": "Lexus",
+        "model": "LX570",
+        "years": "2015-2020",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7945-HT": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Heated variant with connector-dependent function. Heating cannot be claimed unless wiring is tested. Not verified."
+    "region_notes": "Heated variant with connector-dependent function. Heating cannot be claimed unless wiring is tested. Not verified.",
+    "reference_vehicles": [
+      {
+        "make": "Ford",
+        "model": "Explorer",
+        "years": "2016-2020",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   },
   "SBM-7946-PF": {
     "source": "synthetic reference catalogue (test data, not verified)",
-    "region_notes": "Power-fold camera variant. Electronics require specialist inspection. Part number read by OCR, verify before use. Not verified."
+    "region_notes": "Power-fold camera variant. Electronics require specialist inspection. Part number read by OCR, verify before use. Not verified.",
+    "reference_vehicles": [
+      {
+        "make": "BMW",
+        "model": "X5",
+        "years": "2018-2021",
+        "drive_side": "LHD"
+      }
+    ],
+    "field_sources": {
+      "reference_vehicles": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.make": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.model": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.years": "synthetic reference catalogue (test data, not verified)",
+      "reference_vehicles.0.drive_side": "synthetic reference catalogue (test data, not verified)"
+    }
   }
 }

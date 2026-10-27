@@ -1,0 +1,12 @@
+{
+  "parts": 10,
+  "total_minutes": 150,
+  "measured_on": "2026-10-27",
+  "method": "Synthetic example only, not a measurement. Replace with a documented timed manual listing exercise before saving as manual_baseline.json.",
+  "field_sources": {
+    "parts": "synthetic example, not measured",
+    "total_minutes": "synthetic example, not measured",
+    "measured_on": "synthetic example date, not measured",
+    "method": "synthetic example instructions"
+  }
+}

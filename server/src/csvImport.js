@@ -24,7 +24,12 @@ const COLUMN_MAP = {
   testing_status: 'condition.testing_status',
   notes_ar: 'notes_ar',
   notes_en: 'original_title_en',
+  storage_location: 'storage_location',
   weight_kg: 'weight_kg',
+  length_cm: 'packaged_dimensions_cm.length',
+  width_cm: 'packaged_dimensions_cm.width',
+  height_cm: 'packaged_dimensions_cm.height',
+  included_components: 'included_components',
 }
 
 function parseValue(fieldPath, raw) {
@@ -34,10 +39,11 @@ function parseValue(fieldPath, raw) {
     const year = Number.parseInt(text, 10)
     return Number.isNaN(year) ? text : year
   }
-  if (fieldPath === 'weight_kg') {
-    const weight = Number.parseFloat(text)
-    return Number.isNaN(weight) ? text : weight
+  if (fieldPath === 'weight_kg' || fieldPath.startsWith('packaged_dimensions_cm.')) {
+    const number = Number(text)
+    return Number.isFinite(number) ? number : text
   }
+  if (fieldPath === 'included_components') return String(text).split(';').map(value => value.trim()).filter(Boolean)
   return text
 }
 

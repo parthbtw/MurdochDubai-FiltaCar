@@ -1,7 +1,8 @@
 import { applyClaimGuard, confirmedPartNumber, hasTestRecord } from './claimGuard.js';
 import { isAiOnlySource } from './evidence.js';
+import { buildCompatibility } from './compatibility.js';
 
-export function buildDraft(record, gaps, corridor) {
+export function buildDraft(record, gaps, corridor, compatibilityMap) {
   const blocked_claims = [];
   const open = path => gaps.some(g => ['missing', 'conflict'].includes(g.type) &&
     (g.field === path || path.startsWith(`${g.field}.`) || g.field.startsWith(`${path}.`)));
@@ -35,6 +36,10 @@ export function buildDraft(record, gaps, corridor) {
   if (side) paragraphs.push(`${side}. ${corridor.uk_side_wording.label}.`);
   if (corridor.drive_side_warning.value) paragraphs.push(`${corridor.drive_side_warning.value} ${corridor.drive_side_warning.label}.`);
   paragraphs.push(`Fragile, glass. Pack securely. Shipping guidance, verify: ${corridor.shipping.tier}.`);
+  const included = read('included_components');
+  if (included) paragraphs.push(`Included: ${included}`);
+  const compatibility = buildCompatibility(record, gaps, compatibilityMap);
+  paragraphs.push(`Compatibility\n${[...compatibility.supported, ...compatibility.unverified, compatibility.note].join('\n')}`);
   const item_specifics = {};
   if (side) item_specifics['Placement on Vehicle'] = side;
   if (facts[3]) item_specifics.Colour = facts[3];
@@ -49,5 +54,5 @@ export function buildDraft(record, gaps, corridor) {
   for (const path of ['original_title_en', 'original_title_ar', 'notes_ar']) {
     guard(record[path] || '');
   }
-  return { title, description: paragraphs.join('\n\n'), item_specifics, blocked_claims };
+  return { title, description: paragraphs.join('\n\n'), item_specifics, compatibility, blocked_claims };
 }

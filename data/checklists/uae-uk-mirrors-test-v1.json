@@ -1,0 +1,22 @@
+{
+  "id": "UAE-UK-MIRRORS-TEST-v1",
+  "version": "1.0",
+  "dated": "2026-10-27",
+  "label": "Test checklist for the prototype. Not legal, customs or tax advice.",
+  "field_sources": { "id": "prototype test checklist", "version": "prototype test checklist", "dated": "prototype test checklist", "label": "prototype test checklist", "items": "prototype test checklist" },
+  "items": [
+    { "id": "part_number", "requirement_en": "Part number confirmed", "requirement_ar": "تأكيد رقم القطعة", "checked_by": "Stored number without an identifier gap; two-source confirmation or seller confirmation", "blocking": true },
+    { "id": "side", "requirement_en": "Side confirmed and UK wording available", "requirement_ar": "تأكيد الجانب وتوفر وصف الجانب البريطاني", "checked_by": "Left or right placement without a side gap and corridor UK wording", "blocking": true },
+    { "id": "condition", "requirement_en": "Condition and defects disclosed", "requirement_ar": "توضيح الحالة والعيوب", "checked_by": "Condition state and cosmetic damage array, including an explicit empty array", "blocking": true },
+    { "id": "testing", "requirement_en": "Testing status disclosed; no working claim without a test record", "requirement_ar": "توضيح حالة الفحص وعدم الادعاء بالتشغيل دون سجل فحص", "checked_by": "Testing status without a blocking testing gap; claim guard removes unsupported working claims", "blocking": true },
+    { "id": "photo", "requirement_en": "At least one photo", "requirement_ar": "صورة واحدة على الأقل", "checked_by": "Non-empty photos array", "blocking": true },
+    { "id": "shipping", "requirement_en": "Weight and packaged dimensions present", "requirement_ar": "توفر الوزن وأبعاد العبوة", "checked_by": "Positive numeric weight and length, width and height", "blocking": true },
+    { "id": "components", "requirement_en": "Included components listed", "requirement_ar": "قائمة المكونات المرفقة", "checked_by": "Non-empty included_components array of strings", "blocking": true },
+    { "id": "packing", "requirement_en": "Fragile glass packing alert", "requirement_ar": "تنبيه لتغليف الزجاج القابل للكسر", "checked_by": "Corridor packing alert present; actual packing remains to be verified", "blocking": false },
+    { "id": "hazard", "requirement_en": "Not a hazardous item: side mirror, no battery or airbag", "requirement_ar": "ليست مادة خطرة: مرآة جانبية دون بطارية أو وسادة هوائية", "checked_by": "Sourced seller hazard declaration; unknown without that declaration", "blocking": false },
+    { "id": "compatibility", "requirement_en": "No unverified compatibility claims", "requirement_ar": "عدم ادعاء ملاءمة غير موثقة", "checked_by": "Draft separates test reference data from unverified donor evidence and requires part-number matching", "blocking": true },
+    { "id": "seller_approval", "requirement_en": "Seller approval recorded last", "requirement_ar": "تسجيل موافقة البائع كخطوة أخيرة", "checked_by": "seller_approval.approved is true and approved_at is present; unknown until seller approval", "blocking": false },
+    { "id": "uk_import_vat", "requirement_en": "UK import VAT on low-value consignments: verify with the official source", "requirement_ar": "ضريبة الاستيراد البريطانية للشحنات منخفضة القيمة: تحقق من المصدر الرسمي", "checked_by": "Reference only; no rates or thresholds asserted", "status": "reference", "verify_with": "HM Revenue and Customs", "blocking": false },
+    { "id": "commodity_code", "requirement_en": "Commodity code candidate 7009.10 for vehicle rear-view mirrors: verify with the official source", "requirement_ar": "رمز السلعة المرشح 7009.10 لمرايا الرؤية الخلفية للمركبات: تحقق من المصدر الرسمي", "checked_by": "Reference candidate only; classification must be verified", "status": "reference", "verify_with": "UK Trade Tariff", "blocking": false }
+  ]
+}

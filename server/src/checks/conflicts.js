@@ -5,6 +5,7 @@
 // model data, so they are checked like any other source).
 
 import { normalizeArabic, parseArabicNote } from "./arabicDictionary.js";
+import { hasComponents, hasDimensions, positiveNumber } from './shippingInfo.js';
 import { aiReadings, isAiOnlySource, latestOcr, normalizePartNumber, SELLER_SOURCES } from "./evidence.js";
 
 const SIDE_VALUES = new Set(["left", "right"]);
@@ -116,7 +117,7 @@ function electricalDamage(record, condition) {
 }
 
 function riskyClaimHits(record) {
-  const titleEn = String(record.original_title_en ?? "");
+  const titleEn = String(record.original_title_en ?? "").replace(/\blike\s+new\b/gi, '');
   const titleAr = normalizeArabic(record.original_title_ar ?? "");
   const hits = [];
   const matched = [];
@@ -369,6 +370,19 @@ export function analyzeConflicts(record) {
         sources: [sourceLabel(record, field, "spreadsheet")],
       });
     }
+  }
+
+  for (const [field, present, detail] of [
+    ['weight_kg', positiveNumber(record.weight_kg), 'packaged weight in kilograms is missing or invalid'],
+    ['packaged_dimensions_cm', hasDimensions(record), 'packaged length, width and height in centimetres are missing or invalid'],
+    ['included_components', hasComponents(record), 'included components are not recorded'],
+  ]) {
+    if (!present) gaps.push({ field, type: 'missing', detail, sources: [sourceLabel(record, field, 'seller inventory')] });
+  }
+
+  if (!Array.isArray(condition.cosmetic_damage)) {
+    gaps.push({ field: 'condition.cosmetic_damage', type: 'missing', detail: 'actual defects or none reported must be disclosed',
+      sources: [sourceLabel(record, 'condition.cosmetic_damage', 'seller inventory')] });
   }
 
   // ---- Condition ------------------------------------------------------------

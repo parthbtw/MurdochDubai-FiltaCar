@@ -18,7 +18,7 @@ fs.copyFileSync(
 process.env.FILTA_DATA_DIR = tmpDir
 
 const { createApp } = await import('../src/index.js')
-const app = createApp()
+const app = createApp({ ai: { config: { apiKey: '', liveEnabled: false }, cliPath: null } })
 
 after(() => {
   fs.rmSync(tmpDir, { recursive: true, force: true })
