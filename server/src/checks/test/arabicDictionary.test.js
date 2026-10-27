@@ -32,6 +32,12 @@ test("condition terms map correctly", () => {
     "مشروخ": "cracked",
     "خدش": "scratched",
     "مخدوش": "scratched",
+    "خدوش": "scratched",
+    "شرخ": "cracked",
+    "شق": "cracked",
+    "سليم": "intact",
+    "جيدة": "good",
+    "ممتازة": "excellent",
   };
   for (const [word, value] of Object.entries(cases)) {
     const hits = oneAttribute(word, "condition");
@@ -97,9 +103,17 @@ test("normalisation: diacritics, tatweel, alef forms, taa marbuta, prefixes", ()
 });
 
 test("unknown word is reported, never guessed as an attribute", () => {
-  const result = parseArabicNote("مرايا");
-  assert.deepEqual(result.unknown_words, ["مرايا"]);
+  const result = parseArabicNote("برادو");
+  assert.deepEqual(result.unknown_words, ["برادو"]);
   assert.deepEqual(result.attributes, []);
+});
+
+test("item and label words (mirror, side, colour) are markers, not attributes or unknowns", () => {
+  for (const word of ["مرآة", "مرايا", "جانب", "جانبية", "لون"]) {
+    const result = parseArabicNote(word);
+    assert.deepEqual(result.attributes, [], `${word} must not become an attribute`);
+    assert.deepEqual(result.unknown_words, [], `${word} must not be unknown`);
+  }
 });
 
 test("stopwords are ignored, not unknown words", () => {
@@ -109,11 +123,11 @@ test("stopwords are ignored, not unknown words", () => {
 });
 
 test("a mixed note yields attributes, a year and unknown words together", () => {
-  const result = parseArabicNote("يمين كهربائي ٢٠١٨ مرايا");
+  const result = parseArabicNote("يمين كهربائي ٢٠١٨ برادو");
   assert.deepEqual(result.years, [2018]);
   const side = result.attributes.find((a) => a.attribute === "side");
   assert.equal(side?.value, "right");
   const feature = result.attributes.find((a) => a.attribute === "features");
   assert.equal(feature?.value, "electric");
-  assert.deepEqual(result.unknown_words, ["مرايا"]);
+  assert.deepEqual(result.unknown_words, ["برادو"]);
 });

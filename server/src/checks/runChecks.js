@@ -2,14 +2,19 @@
 // network calls, and returns exactly:
 // { gaps_and_conflicts, questions, readiness_status, draft, corridor }
 
-import { analyzeConflicts } from "./conflicts.js";
+import { analyzeConflicts, SELLER_FIXABLE_CONFLICT_FIELDS } from "./conflicts.js";
 import { questionsFor } from "./questions.js";
 
 function readinessFor(gaps) {
-  const hasConflict = gaps.some((g) => g.type === "conflict");
-  if (hasConflict) return "specialist_review_required";
-  const hasMissing = gaps.some((g) => g.type === "missing");
-  if (hasMissing) return "information_missing";
+  // Conflicts the seller cannot settle by typing a value (e.g. electrical
+  // function that cannot be verified from the data) need a specialist.
+  const needsSpecialist = gaps.some(
+    (g) => g.type === "conflict" && !SELLER_FIXABLE_CONFLICT_FIELDS.has(g.field),
+  );
+  if (needsSpecialist) return "specialist_review_required";
+  // Seller-fixable conflicts (year, side, part number) and missing data are
+  // things the seller can resolve, so they only block for information.
+  if (gaps.some((g) => g.type === "conflict" || g.type === "missing")) return "information_missing";
   return "ready_for_review"; // cannot_claim alone never changes readiness
 }
 

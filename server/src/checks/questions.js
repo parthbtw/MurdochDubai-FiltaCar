@@ -1,49 +1,59 @@
 // Arabic templates pending review by a native speaker.
 
-// One question per gap, keyed by `${type}:${field}` with a fallback per field
-// and a generic default. Templates are short and polite, name the item and
-// quote the conflicting values (they already live in gap.detail).
+// One question per gap, keyed by `${type}:${field}` (contract leaf paths) with
+// a fallback per field and a generic default. Templates are short and polite,
+// name the item and quote the conflicting values (they already live in gap.detail).
 
 const TEMPLATES = {
-  "conflict:year": {
+  "conflict:donor_vehicle.year": {
     en: (r, g) => `For item ${r.item_id}, the years do not agree (${g.detail}). Which year is correct?`,
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: سنة الصنع غير متطابقة (${g.detail}). ما هي سنة الصنع الصحيحة؟`,
   },
-  "conflict:side": {
+  "conflict:part_details.placement": {
     en: (r, g) => `For item ${r.item_id}, the side is unclear (${g.detail}). Is the part left or right?`,
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: جهة القطعة غير واضحة (${g.detail}). هل القطعة يمين أم يسار؟`,
   },
-  "conflict:part_number": {
+  "conflict:part_details.part_number.extracted_value": {
     en: (r, g) => `For item ${r.item_id}, the part numbers do not agree (${g.detail}). What is the correct part number?`,
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: رقم القطعة غير متطابق (${g.detail}). ما هو رقم القطعة الصحيح؟`,
   },
-  "missing:part_number": {
+  "conflict:condition.testing_status": {
+    en: (r, g) =>
+      `For item ${r.item_id}, the electrical function cannot be checked from the records (${g.detail}). Could a specialist test it before we list it?`,
+    ar: (r, g) =>
+      `بالنسبة للقطعة رقم ${r.item_id}: لا يمكن التحقق من الوظيفة الكهربائية من السجلات (${g.detail}). هل يمكن لأخصائي فحصها قبل العرض؟`,
+  },
+  "missing:part_details.part_number.extracted_value": {
     en: (r, g) => `For item ${r.item_id}, the part number is not confirmed (${g.detail}). Could you type the part number?`,
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: رقم القطعة غير مؤكد (${g.detail}). هل يمكنك كتابة رقم القطعة؟`,
   },
-  "missing:year": {
-    en: (r) => `For item ${r.item_id}, the year is missing. What year is the part from?`,
-    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: سنة الصنع غير موجودة. من أي سنة هذه القطعة؟`,
-  },
-  "missing:side": {
+  "missing:part_details.placement": {
     en: (r) => `For item ${r.item_id}, the side is not given. Is the part left or right?`,
     ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: جهة القطعة غير محددة. هل القطعة يمين أم يسار؟`,
   },
-  "missing:condition": {
+  "missing:donor_vehicle.year": {
+    en: (r) => `For item ${r.item_id}, the donor vehicle year is missing. What year is the part from?`,
+    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: سنة سيارة التبرع غير موجودة. من أي سنة هذه القطعة؟`,
+  },
+  "missing:donor_vehicle.make": {
+    en: (r) => `For item ${r.item_id}, the donor make is missing. Which make is the part from?`,
+    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: شركة سيارة التبرع غير موجودة. من أي شركة هذه القطعة؟`,
+  },
+  "missing:donor_vehicle.model": {
+    en: (r) => `For item ${r.item_id}, the donor model is missing. Which model is the part from?`,
+    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: طراز سيارة التبرع غير موجود. من أي طراز هذه القطعة؟`,
+  },
+  "missing:condition.state": {
     en: (r) => `For item ${r.item_id}, the condition is not given. What condition is the part in?`,
     ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: حالة القطعة غير محددة. ما هي حالة القطعة؟`,
   },
-  "missing:make": {
-    en: (r) => `For item ${r.item_id}, the make is missing. Which make is the part for?`,
-    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: الشركة الصانعة غير موجودة. لأي شركة صانعة هذه القطعة؟`,
-  },
-  "missing:model": {
-    en: (r) => `For item ${r.item_id}, the model is missing. Which model is the part for?`,
-    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: طراز المركبة غير موجود. لأي طراز هذه القطعة؟`,
+  "missing:condition.testing_status": {
+    en: (r) => `For item ${r.item_id}, the part has not been tested. Could it be tested before we list it?`,
+    ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: لم يتم فحص القطعة. هل يمكن فحصها قبل العرض؟`,
   },
   "missing:photos": {
     en: (r) => `For item ${r.item_id}, there are no photos. Could you add at least one photo of the part?`,
@@ -54,7 +64,7 @@ const TEMPLATES = {
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: توجد كلمات في الملاحظة لم نفهمها (${g.detail}). ماذا تعني هذه الكلمات؟`,
   },
-  "cannot_claim:title": {
+  "cannot_claim:original_title_en": {
     en: (r, g) => `For item ${r.item_id}, ${g.detail}. Could you confirm it, or should we remove the claim?`,
     ar: (r, g) =>
       `بالنسبة للقطعة رقم ${r.item_id}: ${g.detail}. هل يمكنك تأكيد ذلك، أم نحذف هذه الصفة؟`,

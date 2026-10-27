@@ -47,6 +47,14 @@ export const DICTIONARY = {
     "مشروخ": "cracked",
     "خدش": "scratched",
     "مخدوش": "scratched",
+    "خدوش": "scratched",
+    "شرخ": "cracked",
+    "شق": "cracked",
+    "سليم": "intact",
+    "جيدة": "good",
+    "جيد": "good",
+    "ممتازة": "excellent",
+    "ممتاز": "excellent",
   },
   features: {
     "كهربائي": "electric",
@@ -80,12 +88,15 @@ export const PHRASES = [
 export const STOPWORDS = new Set(
   [
     "في", "من", "مع", "على", "هذا", "هذه", "ذلك", "عن", "و", "او", "الى",
-    "لدي", "عند", "بها", "منها", "منه", "فقط", "جدا",
+    "لدي", "عند", "بها", "منها", "منه", "فقط", "جدا", "لا", "يوجد", "بحالة",
   ].map(normalizeArabic),
 );
 
-// Known words that signal a group but carry no attribute value themselves.
-export const MARKER_WORDS = new Set(["لون"].map(normalizeArabic));
+// Known words that name the item or a group but carry no attribute value
+// themselves (e.g. "mirror", "side", "colour").
+export const MARKER_WORDS = new Set(
+  ["لون", "مرآة", "مرايا", "جانب", "جانبية"].map(normalizeArabic),
+);
 
 const LOOKUP = new Map();
 for (const [group, terms] of Object.entries(DICTIONARY)) {
