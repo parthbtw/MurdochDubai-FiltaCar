@@ -1,0 +1,262 @@
+[
+  {
+    "item_id": "MIR-0001",
+    "photo": "/demo/labels/MIR-0001.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0001.png",
+      "text": "SBM-7940-LC17\n",
+      "confidence": 89,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1775.54,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7940-LC17",
+      "read_at": "2026-10-27T15:33:27.213Z"
+    },
+    "ai": {
+      "part_number": "SBM-7940-LC17",
+      "visible_text": "PART NUMBER\nSBM-7940-LC17",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:33:33.063Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0002",
+    "photo": "/demo/labels/MIR-0002.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0002.png",
+      "text": "SBM-7941-NP16\n",
+      "confidence": 89,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1790.54,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7941-NP16",
+      "read_at": "2026-10-27T15:33:33.079Z"
+    },
+    "ai": {
+      "part_number": "SBM-7941-NP16",
+      "visible_text": "PART NUMBER SBM-7941-NP16",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:33:38.025Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0003",
+    "photo": "/demo/labels/MIR-0003.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0003.png",
+      "text": "SBM-7942-PR18\n",
+      "confidence": 91,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1808.08,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7942-PR18",
+      "read_at": "2026-10-27T15:33:38.042Z"
+    },
+    "ai": {
+      "part_number": "SBM-7942-PR18",
+      "visible_text": "PART NUMBER\nSBM-7942-PR18",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:33:42.079Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0004",
+    "photo": "/demo/labels/MIR-0004.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0004.png",
+      "text": "na\n",
+      "confidence": 27,
+      "unclear": true,
+      "quality": {
+        "sharpness": 0.42,
+        "blurry": true
+      },
+      "part_number_candidate": null,
+      "read_at": "2026-10-27T15:33:42.098Z"
+    },
+    "ai": {
+      "part_number": null,
+      "visible_text": "",
+      "damage_notes": [],
+      "readable": false
+    },
+    "agreement": "tesseract_only",
+    "read_at": "2026-10-27T15:33:47.499Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0005",
+    "photo": "/demo/labels/MIR-0005.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0005.png",
+      "text": "PART NUMBER\n",
+      "confidence": 95,
+      "unclear": true,
+      "quality": {
+        "sharpness": 714.5,
+        "blurry": false
+      },
+      "part_number_candidate": null,
+      "read_at": "2026-10-27T15:33:47.516Z"
+    },
+    "ai": {
+      "part_number": null,
+      "visible_text": "PART NUMBER",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "tesseract_only",
+    "read_at": "2026-10-27T15:33:51.152Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0006",
+    "photo": "/demo/labels/MIR-0006.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0006.png",
+      "text": "SBM-7942-PR18\n",
+      "confidence": 91,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1808.08,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7942-PR18",
+      "read_at": "2026-10-27T15:33:51.165Z"
+    },
+    "ai": {
+      "part_number": "SBM-7942-PR18",
+      "visible_text": "PART NUMBER\nSBM-7942-PR18",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:33:42.079Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0007",
+    "photo": "/demo/labels/MIR-0007.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0007.png",
+      "text": "SBM-7943-AC15\n",
+      "confidence": 89,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1815,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7943-AC15",
+      "read_at": "2026-10-27T15:33:51.213Z"
+    },
+    "ai": {
+      "part_number": "SBM-7943-AC15",
+      "visible_text": "PART NUMBER\nSBM-7943-AC15",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:33:56.890Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0008",
+    "photo": "/demo/labels/MIR-0008.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0008.png",
+      "text": "SBM-7944-LX570\n",
+      "confidence": 91,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1860.42,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7944-LX570",
+      "read_at": "2026-10-27T15:33:56.905Z"
+    },
+    "ai": {
+      "part_number": "SBM-7944-LX570",
+      "visible_text": "PART NUMBER\nSBM-7944-LX570",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:34:00.521Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0009",
+    "photo": "/demo/labels/MIR-0009.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0009.png",
+      "text": "SBM-7945-HT\n",
+      "confidence": 91,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1684.98,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7945-HT",
+      "read_at": "2026-10-27T15:34:00.537Z"
+    },
+    "ai": {
+      "part_number": "SBM-7945-HT",
+      "visible_text": "PART NUMBER\nSBM-7945-HT",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:34:04.058Z",
+    "label": "read by CodeBuddy AI"
+  },
+  {
+    "item_id": "MIR-0010",
+    "photo": "/demo/labels/MIR-0010.png",
+    "tesseract": {
+      "engine": "tesseract.js (local)",
+      "photo": "/demo/labels/MIR-0010.png",
+      "text": "SBM-7946-PX\n",
+      "confidence": 91,
+      "unclear": false,
+      "quality": {
+        "sharpness": 1727.26,
+        "blurry": false
+      },
+      "part_number_candidate": "SBM-7946-PX",
+      "read_at": "2026-10-27T15:34:04.075Z"
+    },
+    "ai": {
+      "part_number": "SBM-7946-PX",
+      "visible_text": "PART NUMBER SBM-7946-PX",
+      "damage_notes": [],
+      "readable": true
+    },
+    "agreement": "agree",
+    "read_at": "2026-10-27T15:34:07.840Z",
+    "label": "read by CodeBuddy AI"
+  }
+]
