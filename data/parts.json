@@ -44,30 +44,76 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 3",
       "donor_vehicle.model": "spreadsheet row 3",
       "donor_vehicle.year": "spreadsheet row 3",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [],
     "gaps_and_conflicts": [],
     "photos": [
       "uploads/mir-0001-01.jpg",
-      "uploads/mir-0001-02.jpg"
+      "uploads/mir-0001-02.jpg",
+      "/demo/labels/MIR-0001.png"
     ],
     "notes_ar": "مرآة جانبية يمين من لاند كروزر 2017، خدوش خفيفة على الإطار فقط، مرفقة صور للمرآة.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0001.png",
+        "text": "SBM-7940-LC17\n",
+        "confidence": 89,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1775.54,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7940-LC17",
+        "read_at": "2026-10-27T15:33:27.213Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:33.063Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0001.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0001.png",
+        "result": {
+          "part_number": "SBM-7940-LC17",
+          "visible_text": "PART NUMBER\nSBM-7940-LC17",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:33:33.063Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0002",
@@ -114,29 +160,75 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 4",
       "donor_vehicle.model": "spreadsheet row 4",
       "donor_vehicle.year": "spreadsheet row 4",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [],
     "gaps_and_conflicts": [],
     "photos": [
-      "uploads/mir-0002-01.jpg"
+      "uploads/mir-0002-01.jpg",
+      "/demo/labels/MIR-0002.png"
     ],
     "notes_ar": "مرآة يسار من نيسان باترول 2016، شرخ صغير على الزجاج فقط، الجسم سليم.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0002.png",
+        "text": "SBM-7941-NP16\n",
+        "confidence": 89,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1790.54,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7941-NP16",
+        "read_at": "2026-10-27T15:33:33.079Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:38.025Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0002.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0002.png",
+        "result": {
+          "part_number": "SBM-7941-NP16",
+          "visible_text": "PART NUMBER SBM-7941-NP16",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:33:38.025Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0003",
@@ -180,31 +272,77 @@
       "part_details.placement": "spreadsheet row 5",
       "condition.state": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 5",
       "donor_vehicle.model": "spreadsheet row 5",
       "donor_vehicle.year": "spreadsheet row 5",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [],
     "gaps_and_conflicts": [],
     "photos": [
       "uploads/mir-0003-01.jpg",
       "uploads/mir-0003-02.jpg",
-      "uploads/mir-0003-03.jpg"
+      "uploads/mir-0003-03.jpg",
+      "/demo/labels/MIR-0003.png"
     ],
     "notes_ar": "مرآة يمين من برادو 2018، لا يوجد ضرر ظاهر، الزجاج والجسم سليمان.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0003.png",
+        "text": "SBM-7942-PR18\n",
+        "confidence": 91,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1808.08,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7942-PR18",
+        "read_at": "2026-10-27T15:33:38.042Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:42.080Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0003.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0003.png",
+        "result": {
+          "part_number": "SBM-7942-PR18",
+          "visible_text": "PART NUMBER\nSBM-7942-PR18",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:33:42.079Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0004",
@@ -253,14 +391,23 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 6",
       "donor_vehicle.model": "spreadsheet row 6",
       "donor_vehicle.year": "spreadsheet row 6",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "part_details.part_number.requires_manual_verification": "upload OCR",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -282,17 +429,55 @@
       }
     ],
     "photos": [
-      "uploads/mir-0004-01.jpg"
+      "uploads/mir-0004-01.jpg",
+      "/demo/labels/MIR-0004.png"
     ],
     "notes_ar": "مرآة جانبية من باجيرو 2014، الرقم غير واضح على القطعة، الرجاء التحقق يدويا.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0004.png",
+        "text": "na\n",
+        "confidence": 27,
+        "unclear": true,
+        "quality": {
+          "sharpness": 0.42,
+          "blurry": true
+        },
+        "part_number_candidate": null,
+        "read_at": "2026-10-27T15:33:42.098Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:47.500Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0004.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0004.png",
+        "result": {
+          "part_number": null,
+          "visible_text": "",
+          "damage_notes": [],
+          "readable": false
+        },
+        "agreement": "tesseract_only",
+        "read_at": "2026-10-27T15:33:47.499Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0005",
@@ -341,14 +526,23 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 7",
       "donor_vehicle.model": "spreadsheet row 7",
       "donor_vehicle.year": "spreadsheet row 7",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "part_details.part_number.requires_manual_verification": "upload OCR",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -382,17 +576,55 @@
       }
     ],
     "photos": [
-      "uploads/mir-0005-01.jpg"
+      "uploads/mir-0005-01.jpg",
+      "/demo/labels/MIR-0005.png"
     ],
     "notes_ar": "مرآة جانبية من هيونداي توسان 2015، لم يتم فحصها، خدش على الزجاج.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0005.png",
+        "text": "PART NUMBER\n",
+        "confidence": 95,
+        "unclear": true,
+        "quality": {
+          "sharpness": 714.5,
+          "blurry": false
+        },
+        "part_number_candidate": null,
+        "read_at": "2026-10-27T15:33:47.516Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:51.153Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0005.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0005.png",
+        "result": {
+          "part_number": null,
+          "visible_text": "PART NUMBER",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "tesseract_only",
+        "read_at": "2026-10-27T15:33:51.152Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0006",
@@ -441,14 +673,22 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 8",
       "donor_vehicle.model": "spreadsheet row 8",
       "donor_vehicle.year": "spreadsheet row 8",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -470,17 +710,55 @@
     ],
     "photos": [
       "uploads/mir-0006-01.jpg",
-      "uploads/mir-0006-02.jpg"
+      "uploads/mir-0006-02.jpg",
+      "/demo/labels/MIR-0006.png"
     ],
     "notes_ar": "مرآة يمين من برادو، اللون باهت ولا يوجد كود لون في السجل.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0006.png",
+        "text": "SBM-7942-PR18\n",
+        "confidence": 91,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1808.08,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7942-PR18",
+        "read_at": "2026-10-27T15:33:51.165Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:51.202Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0006.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0006.png",
+        "result": {
+          "part_number": "SBM-7942-PR18",
+          "visible_text": "PART NUMBER\nSBM-7942-PR18",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:33:42.079Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0007",
@@ -529,14 +807,22 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 9",
       "donor_vehicle.model": "spreadsheet row 9",
       "donor_vehicle.year": "spreadsheet row 9",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -557,17 +843,55 @@
       }
     ],
     "photos": [
-      "uploads/mir-0007-01.jpg"
+      "uploads/mir-0007-01.jpg",
+      "/demo/labels/MIR-0007.png"
     ],
     "notes_ar": "مرآة يسار من أكاديمي 2015 بحالة جيدة، خدش صغير أسفل الجسم.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0007.png",
+        "text": "SBM-7943-AC15\n",
+        "confidence": 89,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1815,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7943-AC15",
+        "read_at": "2026-10-27T15:33:51.213Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:33:56.891Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0007.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0007.png",
+        "result": {
+          "part_number": "SBM-7943-AC15",
+          "visible_text": "PART NUMBER\nSBM-7943-AC15",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:33:56.890Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0008",
@@ -616,14 +940,22 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 10",
       "donor_vehicle.model": "spreadsheet row 10",
       "donor_vehicle.year": "spreadsheet row 10",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -645,17 +977,55 @@
       }
     ],
     "photos": [
-      "uploads/mir-0008-01.jpg"
+      "uploads/mir-0008-01.jpg",
+      "/demo/labels/MIR-0008.png"
     ],
     "notes_ar": "مرآة جانبية من لكزس، الجانب غير مذكور، شق صغير عند القاعدة.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0008.png",
+        "text": "SBM-7944-LX570\n",
+        "confidence": 91,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1860.42,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7944-LX570",
+        "read_at": "2026-10-27T15:33:56.905Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:34:00.521Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0008.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0008.png",
+        "result": {
+          "part_number": "SBM-7944-LX570",
+          "visible_text": "PART NUMBER\nSBM-7944-LX570",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:34:00.521Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0009",
@@ -705,14 +1075,22 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 11",
       "donor_vehicle.model": "spreadsheet row 11",
       "donor_vehicle.year": "spreadsheet row 11",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -734,17 +1112,55 @@
     ],
     "photos": [
       "uploads/mir-0009-01.jpg",
-      "uploads/mir-0009-02.jpg"
+      "uploads/mir-0009-02.jpg",
+      "/demo/labels/MIR-0009.png"
     ],
     "notes_ar": "مرآة يسار مدفأة من فورد إكسبلورر 2017، سلكان مقطوعان عند الموصل، تحتاج فحص أخصائي.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0009.png",
+        "text": "SBM-7945-HT\n",
+        "confidence": 91,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1684.98,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7945-HT",
+        "read_at": "2026-10-27T15:34:00.537Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:34:04.058Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0009.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0009.png",
+        "result": {
+          "part_number": "SBM-7945-HT",
+          "visible_text": "PART NUMBER\nSBM-7945-HT",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:34:04.058Z"
+      }
+    ]
   },
   {
     "item_id": "MIR-0010",
@@ -795,14 +1211,22 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "readiness_status": "import validation",
+      "readiness_status": "runChecks",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 12",
       "donor_vehicle.model": "spreadsheet row 12",
       "donor_vehicle.year": "spreadsheet row 12",
       "donor_vehicle.drive_side": "vehicle registration photo",
-      "photos": "yard photo log",
-      "notes_ar": "Arabic yard note"
+      "photos": "synthetic demo label",
+      "notes_ar": "Arabic yard note",
+      "history": "demo label",
+      "ocr": "build-time Tesseract",
+      "ai_reads": "CodeBuddy AI (build-time)",
+      "ai_reads.0": "CodeBuddy AI (build-time)",
+      "gaps_and_conflicts": "runChecks",
+      "questions": "runChecks",
+      "draft": "runChecks",
+      "corridor": "runChecks"
     },
     "questions": [
       {
@@ -839,16 +1263,54 @@
     "photos": [
       "uploads/mir-0010-01.jpg",
       "uploads/mir-0010-02.jpg",
-      "uploads/mir-0010-03.jpg"
+      "uploads/mir-0010-03.jpg",
+      "/demo/labels/MIR-0010.png"
     ],
     "notes_ar": "مرآة يمين كهربائية بكاميرا من بي إم دبليو إكس 5، 2019، أطراف الموصل منحنية، لم يتم فحصها.",
-    "ocr": null,
+    "ocr": [
+      {
+        "engine": "tesseract.js (local)",
+        "photo": "/demo/labels/MIR-0010.png",
+        "text": "SBM-7946-PX\n",
+        "confidence": 91,
+        "unclear": false,
+        "quality": {
+          "sharpness": 1727.26,
+          "blurry": false
+        },
+        "part_number_candidate": "SBM-7946-PX",
+        "read_at": "2026-10-27T15:34:04.075Z"
+      }
+    ],
     "draft": null,
     "corridor": null,
     "seller_approval": {
       "approved": false,
       "approved_at": null
     },
-    "history": []
+    "history": [
+      {
+        "at": "2026-10-27T15:34:07.841Z",
+        "field": "photos",
+        "old": null,
+        "new": "/demo/labels/MIR-0010.png",
+        "by": "demo label"
+      }
+    ],
+    "ai_reads": [
+      {
+        "engine": "CodeBuddy AI",
+        "mode": "build-time",
+        "photo": "/demo/labels/MIR-0010.png",
+        "result": {
+          "part_number": "SBM-7946-PX",
+          "visible_text": "PART NUMBER SBM-7946-PX",
+          "damage_notes": [],
+          "readable": true
+        },
+        "agreement": "agree",
+        "read_at": "2026-10-27T15:34:07.840Z"
+      }
+    ]
   }
 ]
