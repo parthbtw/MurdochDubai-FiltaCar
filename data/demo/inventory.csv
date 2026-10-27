@@ -1,0 +1,4 @@
+sku,item_id,make,model,year,side,colour,part_number,testing_status,notes_ar,notes_en,weight_kg
+MIR-0021,MIR-0021,Toyota,Land Cruiser,2019,Right,White,SBM-7950-LC19,Visual inspection only,"مرآة يمين من لاند كروزر 2019، خدش خفيف على الإطار","Right mirror from Land Cruiser 2019, light scuff on housing",2.4
+MIR-0022,MIR-0022,GMC,Acadia,2018,Left,Silver,SBM-7951-AC15,Visual inspection only,"مرآة يسار من أكاديمي 2015، الجسم سليم","Left mirror from Acadia, housing intact",2.1
+MIR-0023,MIR-0023,Hyundai,Tucson,2016,Right,Black,,Untested,"مرآة يمين من توسان 2016، بدون رقم قطعة","Right mirror from Tucson 2016, no part number",1.9

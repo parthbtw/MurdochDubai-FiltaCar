@@ -17,7 +17,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["light scuff on housing edge"],
+      "cosmetic_damage": [
+        "light scuff on housing edge"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "ready_for_review",
@@ -85,7 +87,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["small crack on mirror glass"],
+      "cosmetic_damage": [
+        "small crack on mirror glass"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "ready_for_review",
@@ -100,7 +104,7 @@
       "item_id": "seller SKU label",
       "seller_id": "seller register",
       "original_title_ar": "Arabic yard note",
-      "original_title_en": "translation of Arabic title",
+      "original_title_en": "Arabic yard note",
       "part_details.category": "spreadsheet row 4",
       "part_details.subcategory": "spreadsheet row 4",
       "part_details.brand": "spreadsheet row 4",
@@ -110,7 +114,6 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
-      "original_title_en": "Arabic yard note",
       "readiness_status": "import validation",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 4",
@@ -221,7 +224,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["housing scratched on outer edge"],
+      "cosmetic_damage": [
+        "housing scratched on outer edge"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "information_missing",
@@ -269,7 +274,11 @@
         "field": "part_details.part_number.extracted_value",
         "type": "missing",
         "detail": "no part number found in spreadsheet, yard note or photos",
-        "sources": ["spreadsheet row 6", "Arabic yard note", "yard photo log"]
+        "sources": [
+          "spreadsheet row 6",
+          "Arabic yard note",
+          "yard photo log"
+        ]
       }
     ],
     "photos": [
@@ -303,7 +312,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["scratch across glass, housing intact"],
+      "cosmetic_damage": [
+        "scratch across glass, housing intact"
+      ],
       "testing_status": "Untested"
     },
     "readiness_status": "information_missing",
@@ -356,13 +367,18 @@
         "field": "condition.testing_status",
         "type": "missing",
         "detail": "mirror has not been tested, function unknown",
-        "sources": ["Arabic yard note"]
+        "sources": [
+          "Arabic yard note"
+        ]
       },
       {
         "field": "part_details.part_number.extracted_value",
         "type": "missing",
         "detail": "no part number recorded in any source",
-        "sources": ["spreadsheet row 7", "Arabic yard note"]
+        "sources": [
+          "spreadsheet row 7",
+          "Arabic yard note"
+        ]
       }
     ],
     "photos": [
@@ -396,7 +412,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["paint faded on top face"],
+      "cosmetic_damage": [
+        "paint faded on top face"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "information_missing",
@@ -444,7 +462,10 @@
         "field": "part_details.colour_code",
         "type": "missing",
         "detail": "housing colour code not recorded, photos show a faded finish",
-        "sources": ["spreadsheet row 8", "yard photo log"]
+        "sources": [
+          "spreadsheet row 8",
+          "yard photo log"
+        ]
       }
     ],
     "photos": [
@@ -479,7 +500,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["minor parking scrape on lower housing"],
+      "cosmetic_damage": [
+        "minor parking scrape on lower housing"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "information_missing",
@@ -527,7 +550,10 @@
         "field": "donor_vehicle.year",
         "type": "conflict",
         "detail": "spreadsheet lists donor year as 2018, Arabic yard note states 2015",
-        "sources": ["spreadsheet row 9", "Arabic yard note"]
+        "sources": [
+          "spreadsheet row 9",
+          "Arabic yard note"
+        ]
       }
     ],
     "photos": [
@@ -561,7 +587,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["housing crack near mounting base"],
+      "cosmetic_damage": [
+        "housing crack near mounting base"
+      ],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "information_missing",
@@ -609,7 +637,11 @@
         "field": "part_details.placement",
         "type": "conflict",
         "detail": "mirror side unclear: UAE donor is left-hand drive and UK cars are right-hand drive, yard note does not state the side",
-        "sources": ["Arabic yard note", "vehicle registration photo", "yard photo log"]
+        "sources": [
+          "Arabic yard note",
+          "vehicle registration photo",
+          "yard photo log"
+        ]
       }
     ],
     "photos": [
@@ -643,7 +675,9 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["two wires cut at connector"],
+      "cosmetic_damage": [
+        "two wires cut at connector"
+      ],
       "testing_status": "Untested"
     },
     "readiness_status": "specialist_review_required",
@@ -692,7 +726,10 @@
         "field": "condition.testing_status",
         "type": "cannot_claim",
         "detail": "heated mirror with cut connector wires, heating function cannot be claimed without specialist testing",
-        "sources": ["Arabic yard note", "yard photo log"]
+        "sources": [
+          "Arabic yard note",
+          "yard photo log"
+        ]
       }
     ],
     "photos": [
@@ -727,7 +764,10 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["camera lens scratched", "connector pins bent"],
+      "cosmetic_damage": [
+        "camera lens scratched",
+        "connector pins bent"
+      ],
       "testing_status": "Untested"
     },
     "readiness_status": "specialist_review_required",
@@ -781,13 +821,19 @@
         "field": "condition.testing_status",
         "type": "cannot_claim",
         "detail": "power-fold and camera functions cannot be claimed, connector pins are bent and mirror is untested",
-        "sources": ["Arabic yard note", "yard photo log"]
+        "sources": [
+          "Arabic yard note",
+          "yard photo log"
+        ]
       },
       {
         "field": "part_details.part_number.extracted_value",
         "type": "conflict",
         "detail": "part number came from low-confidence OCR and does not match the spreadsheet, which lists no number for this row",
-        "sources": ["OCR photo 1", "spreadsheet row 12"]
+        "sources": [
+          "OCR photo 1",
+          "spreadsheet row 12"
+        ]
       }
     ],
     "photos": [

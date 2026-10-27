@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Uploaded yard photos (runtime data, not committed)
+data/uploads/*
+!data/uploads/.gitkeep
