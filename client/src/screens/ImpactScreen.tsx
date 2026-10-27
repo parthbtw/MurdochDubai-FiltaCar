@@ -1,3 +1,4 @@
+import { formatTime } from '@/domain/time'
 import { useMetrics } from '@/api/queries'
 import type { Agreement, Metrics } from '@/api/types'
 import { PhoneScreen } from '@/components/PhoneScreen'
@@ -13,7 +14,7 @@ function TimeEvidence({ metrics }: { metrics: Metrics }) {
     <p className="text-footnote text-muted-foreground">Source: {time.source === 'assumption' ? 'assumption' : 'measured'}</p>
     {time.source === 'assumption' ? <p className="mt-2">Assumption for illustration, not measured: about {time.manual_minutes_per_listing} minutes by hand and {time.filtacar_minutes_per_listing} minutes with FiltaCar per listing.</p> : <><p className="mt-2">Manual baseline: {time.manual_minutes_per_listing} minutes per listing. Median elapsed creation to approval: {time.filtacar_minutes_per_listing} minutes per listing.</p><p className="mt-2 text-footnote">Elapsed time is not active working time.</p></>}
     <RecordedText text={time.basis} className="mt-2 text-footnote text-muted-foreground" />
-    {metrics.baseline && <div className="mt-4"><p>Manual baseline: {metrics.baseline.minutes_per_listing} minutes per listing.</p><RecordedText text={`Method: ${metrics.baseline.method}`} className="mt-2 text-footnote" /><p className="mt-1 text-footnote">Measured on {metrics.baseline.measured_on}</p></div>}
+    {metrics.baseline && <div className="mt-4"><p>Manual baseline: {metrics.baseline.minutes_per_listing} minutes per listing.</p><RecordedText text={`Method: ${metrics.baseline.method}`} className="mt-2 text-footnote" /><p className="mt-1 text-footnote">Measured on {formatTime(metrics.baseline.measured_on)}</p></div>}
     <p className="mt-3 text-footnote">Approvals with timing: {metrics.measured.approved_with_timing}</p><p className="mt-1 text-footnote">Median elapsed creation to approval: {metrics.measured.median_minutes_to_approval == null ? 'Not measured' : `${metrics.measured.median_minutes_to_approval} minutes`}</p>
   </div></section>
 }

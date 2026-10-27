@@ -1,3 +1,4 @@
+import { formatTime } from '@/domain/time'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -19,8 +20,13 @@ beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock)
   vi.stubGlobal('URL', Object.assign(class extends URL {}, { createObjectURL: vi.fn(() => 'blob:selection'), revokeObjectURL: vi.fn() }))
   fetchMock.mockReset().mockImplementation(async (url: string, init: RequestInit = {}) => {
+    if (init.method === 'PUT' && JSON.parse(String(init.body)).seller_id) {
+      const uploaded = postBody as typeof uploadNewPart
+      const record = uploaded.parts.find(record => url === `/api/parts/${record.item_id}`)!
+      return new Response(JSON.stringify({ ...record, seller_id: JSON.parse(String(init.body)).seller_id }))
+    }
     if (init.method === 'POST' || init.method === 'PUT') return new Response(JSON.stringify(postBody), { status: postStatus })
-    const body = url === '/api/parts' ? partsResponse : url === '/api/metrics' ? metricsBody : url === '/api/export/preview' ? previewBody : url === '/api/ai/status' ? aiStatusNow : url === '/api/parts/MIR-0004' ? part0004 : approvedPart
+    const body = url === '/api/parts?seller_id=DXB-SLV-014' ? partsResponse : url === '/api/metrics?seller_id=DXB-SLV-014' ? metricsBody : url === '/api/export/preview' ? previewBody : url === '/api/ai/status' ? aiStatusNow : url === '/api/parts/MIR-0004' ? part0004 : approvedPart
     return new Response(JSON.stringify(body))
   })
 })
@@ -236,7 +242,7 @@ it('keeps inputs and Upload disabled while waiting and reports indeterminate pro
   expect(screen.getByRole('progressbar', { name: 'Upload in progress' })).not.toHaveAttribute('aria-valuenow')
   await act(async () => resolve(new Response(JSON.stringify(uploadNewPart))))
   await screen.findByRole('region', { name: 'Upload results' })
-  expect(mutations()).toHaveLength(1)
+  expect(mutations()).toHaveLength(1 + uploadNewPart.created.length)
 })
 it.each([[400, uploadBadType], [404, uploadUnknownItem]] as const)('shows the %s server error without replacing it', async (status, body) => {
   postStatus = status; postBody = body
@@ -266,7 +272,7 @@ it('enables a real CSV download and previews the returned stored draft and appro
   expect(download).toHaveAttribute('download')
   const included = screen.getByRole('region', { name: 'Included parts' })
   expect(within(included).getByRole('link', { name: /MIR-0001/ })).toHaveAttribute('href', '/parts/MIR-0001')
-  expect(await within(included).findByText(approvedPart.seller_approval.approved_at!)).toBeInTheDocument()
+  expect(await within(included).findByText(formatTime(approvedPart.seller_approval.approved_at))).toBeInTheDocument()
   for (const [label, value] of [['Title', approvedPart.draft!.title.slice(0, 80)], ['Condition', 'Used'], ['Category', 'Car Mirrors'], ['Placement', approvedPart.draft!.item_specifics['Placement on Vehicle']], ['Manufacturer part number', approvedPart.draft!.item_specifics['Manufacturer Part Number']], ['Price', 'seller to set']]) {
     expect(within(included).getByText(label, { selector: 'dt' }).nextElementSibling).toHaveTextContent(value)
   }
@@ -333,7 +339,7 @@ it('displays a returned baseline method and date, with measured elapsed timing k
   mount('/impact')
   expect(await screen.findByText('Source: measured')).toBeInTheDocument()
   expect(screen.getByText('Method: Fixture timing method')).toBeInTheDocument()
-  expect(screen.getByText(`Measured on ${approvedPart.seller_approval.approved_at!.slice(0, 10)}`)).toBeInTheDocument()
+  expect(screen.getByText(`Measured on ${formatTime(approvedPart.seller_approval.approved_at!.slice(0, 10))}`)).toBeInTheDocument()
   expect(screen.getByText('Elapsed time is not active working time.')).toBeInTheDocument()
   expect(screen.getByText('Median elapsed creation to approval: 3 minutes')).toBeInTheDocument()
   expect(screen.queryByText(/Assumption for illustration, not measured:/)).not.toBeInTheDocument()

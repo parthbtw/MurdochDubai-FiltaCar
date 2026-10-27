@@ -1,3 +1,4 @@
+import { formatRecordedTimes } from './time'
 export type SourceKind = 'spreadsheet' | 'arabic_note' | 'translation' | 'seller_record' | 'document_photo' | 'ocr' | 'ai' | 'readers_agree' | 'ai_confirmed' | 'seller_edit' | 'computed' | 'reference' | 'demo' | 'other'
 export interface ClassifiedSource { kind: SourceKind; title: string; explanation: string; photoNumber?: number; row?: number; file?: string }
 export function classifySource(label: string): ClassifiedSource {
@@ -22,4 +23,4 @@ export function classifySource(label: string): ClassifiedSource {
   return result('other', label)
 }
 
-export const sourceTitle = (source: string | null | undefined) => source ? classifySource(source).title : 'No source recorded'
+export const sourceTitle = (source: string | null | undefined) => source ? formatRecordedTimes(classifySource(source).title) : 'No source recorded'

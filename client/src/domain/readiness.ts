@@ -1,3 +1,4 @@
+import { formatTime } from './time'
 import type { PartRecord, Readiness } from '@/api/types'
 export const readiness: Record<Readiness, { label: string; short: string; tone: 'ready' | 'warning' | 'danger' }> = {
   ready_for_review: { label: 'Ready for review', short: 'Ready', tone: 'ready' },
@@ -24,5 +25,5 @@ export function queueFinding(parts: PartRecord[]): string {
 export function approvalText(part: PartRecord): string {
   if (!part.seller_approval.approved) return 'Not approved yet'
   const date = part.seller_approval.approved_at
-  return date ? `Approved by the seller on ${new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(date))}` : 'Approved by the seller. Date not recorded'
+  return date ? `Approved by the seller on ${formatTime(date)}` : 'Approved by the seller. Date not recorded'
 }

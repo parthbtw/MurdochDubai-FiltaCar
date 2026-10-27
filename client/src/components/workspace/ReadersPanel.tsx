@@ -1,3 +1,4 @@
+import { formatTime } from '@/domain/time'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import type { AiRead, OcrRead, PartRecord } from '@/api/types'
@@ -30,12 +31,12 @@ function ReaderEvidence({ record, ocr, ai, earlier = false }: { record: PartReco
   return <div className="reader-columns mt-3"><div><h4 className="font-semibold">Offline reader (Tesseract)</h4>{ocr ? <>
           <RecordedText text={ocr.text || 'No text recorded'} className="mt-2 whitespace-pre-wrap" />
           <dl className="reader-values"><div><dt>Confidence</dt><dd>{ocr.confidence}</dd></div><div><dt>Sharpness</dt><dd>{ocr.quality.sharpness}</dd></div><div><dt>Blurry</dt><dd>{ocr.quality.blurry ? 'Yes' : 'No'}</dd></div><div><dt>Candidate</dt><dd className="font-mono">{displayValue(ocr.part_number_candidate)}</dd></div></dl>
-          <p className="mt-2 text-footnote">Read at {ocr.read_at}</p><SourceLine record={record} path={`ocr.${record.ocr?.indexOf(ocr)}`} />
+          <p className="mt-2 text-footnote">Read at {formatTime(ocr.read_at)}</p><SourceLine record={record} path={`ocr.${record.ocr?.indexOf(ocr)}`} />
         </> : <p className="mt-2 text-sm">No offline reading recorded.</p>}</div>
           <div><h4 className="font-semibold">CodeBuddy AI</h4>{ai ? <><p className="mt-2 text-footnote">Mode: {ai.mode}</p><p className={ai.result.part_number ? "mt-2 font-mono" : "mt-2"}>{ai.result.part_number ?? (earlier ? 'Earlier reading declined to guess' : 'Declined to guess')}</p>
             <h5 className="mt-2 text-footnote text-muted-foreground">Visible text</h5><RecordedText text={ai.result.visible_text || 'No text recorded'} className="mt-1 whitespace-pre-wrap" />
             <h5 className="mt-2 text-footnote text-muted-foreground">Damage notes</h5>{ai.result.damage_notes.length ? ai.result.damage_notes.map((text, index) => <RecordedText key={index} text={text} className="mt-1 text-sm" />) : <p className="mt-1 text-sm">None recorded</p>}
-            <p className="mt-2 text-sm">Readable: {ai.result.readable ? 'Yes' : 'No'}</p><p className="mt-2 text-footnote">Read at {ai.read_at}</p><SourceLine record={record} path={`ai_reads.${record.ai_reads?.indexOf(ai)}`} />
+            <p className="mt-2 text-sm">Readable: {ai.result.readable ? 'Yes' : 'No'}</p><p className="mt-2 text-footnote">Read at {formatTime(ai.read_at)}</p><SourceLine record={record} path={`ai_reads.${record.ai_reads?.indexOf(ai)}`} />
           </> : <p className="mt-2 text-sm">No AI reading recorded.</p>}</div>
         </div>
 }

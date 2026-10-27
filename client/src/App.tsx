@@ -10,9 +10,20 @@ import { AddScreen } from '@/screens/AddScreen'
 import { ExportScreen } from '@/screens/ExportScreen'
 import { ImpactScreen } from '@/screens/ImpactScreen'
 
+import { SellerProvider } from '@/components/SellerProvider'
+import { useSeller } from '@/domain/seller'
+import { SellScreen } from '@/screens/SellScreen'
+import { MyPartsScreen } from '@/screens/MyPartsScreen'
+
 export default function App() {
-  return <div className="phone-app"><Routes>
-    <Route path="/" element={<QueueScreen />} />
+  return <SellerProvider><SellerApp /></SellerProvider>
+}
+function SellerApp() {
+  const { mode, revision } = useSeller()
+  return <div className="phone-app" key={`${mode}-${revision}`}><Routes>
+    <Route path="/" element={mode === 'individual' ? <MyPartsScreen /> : <QueueScreen />} />
+    <Route path="/sell" element={<SellScreen />} />
+    <Route path="/sell/:id/:step" element={<SellScreen />} />
     <Route path="/add" element={<AddScreen />} />
     <Route path="/export" element={<ExportScreen />} />
     <Route path="/impact" element={<ImpactScreen />} />

@@ -10,7 +10,7 @@ const fetchMock = vi.fn()
 beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock)
   fetchMock.mockReset().mockImplementation(async (url: string) => {
-    const body = url === '/api/parts' ? parts : url === '/api/metrics' ? metrics : url === '/api/parts/MIR-0010' ? specialist : part
+    const body = url === '/api/parts?seller_id=DXB-SLV-014' ? parts : url === '/api/metrics?seller_id=DXB-SLV-014' ? metrics : url === '/api/parts/MIR-0010' ? specialist : part
     return new Response(JSON.stringify(body), { status: 200 })
   })
 })
@@ -29,7 +29,7 @@ it('shows real lane counts, defaults to Ready and fetches parts once', async () 
   expect(screen.getByRole('tab', { name: 'Missing 5' })).toBeInTheDocument()
   expect(screen.getByRole('tab', { name: 'Specialist 2' })).toBeInTheDocument()
   expect(screen.getAllByRole('link', { name: /^Review MIR-/ })).toHaveLength(3)
-  expect(fetchMock.mock.calls.filter(([url]) => url === '/api/parts')).toHaveLength(1)
+  expect(fetchMock.mock.calls.filter(([url]) => url === '/api/parts?seller_id=DXB-SLV-014')).toHaveLength(1)
 })
 it('choosing Missing shows MIR-0004 to MIR-0008 and changes the URL', async () => {
   mount()
@@ -60,7 +60,7 @@ it('explains a failed queue fetch and offers retry', async () => {
   expect(screen.getAllByRole('button', { name: 'Try again' })).toHaveLength(2)
 })
 it('renders an empty lane honestly', async () => {
-  fetchMock.mockImplementation(async (url: string) => new Response(JSON.stringify(url === '/api/parts' ? { parts: [] } : metrics)))
+  fetchMock.mockImplementation(async (url: string) => new Response(JSON.stringify(url === '/api/parts?seller_id=DXB-SLV-014' ? { parts: [] } : metrics)))
   mount()
   expect(await screen.findByText('No parts in this lane.')).toBeInTheDocument()
   expect(screen.getByRole('tab', { name: 'Ready 0' })).toBeInTheDocument()

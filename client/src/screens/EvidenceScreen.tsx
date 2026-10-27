@@ -1,4 +1,5 @@
-import { fieldLabel, formatTime } from '@/domain/fields'
+import { fieldLabel } from '@/domain/fields'
+import { formatTime } from '@/domain/time'
 import { sourceTitle } from '@/domain/sources'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'

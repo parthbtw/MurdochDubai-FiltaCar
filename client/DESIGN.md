@@ -313,3 +313,43 @@ App source lint reports zero failures and 15 warnings: 14 identifier monospace w
 by the explicit brief, plus one warning on the existing print rule that removes shadows.
 Browser inspection is unavailable: the bundled Playwright browser is absent and installed Chrome
 aborts under this sandbox. No visual measurements or screenshots are claimed for F4.
+
+### F5 seller modes, guided selling and timestamp polish
+
+The existing Framed sheet direction, seed 407422327, mirror glass ground, native faces,
+16 px insets and 44 px controls continue. No redraw or new packages.
+
+The workspace button opens a compact bottom sheet with a single seller choice. Business
+uses DXB-SLV-014; Individual uses IND-DXB-001. The selection is stored on this device when
+storage is available. A storage error keeps the selection usable for the current session.
+Switching modes resets remembered tab routes and scroll positions, and marks cached data
+stale before the new seller's view fetches it. Parts and metrics use the current seller ID.
+Uploaded records are assigned through PUT before completed results or the next step appear.
+
+Individual mode has My parts, Sell a part and Export. My parts leads with the recorded photo,
+draft title or New part, status and next action. Export intersects both preview lists with the
+seller's returned part IDs. The CSV route remains global, with the required notice explaining
+that the mock file contains every approved part on this device. Nothing is published.
+
+The selling route carries the part ID and step. Label correction and acceptance of a blurry
+photo also use URL parameters. Each screen has one main decision: choose a photo, confirm
+the label, answer the next blocking question, review the stored draft, then approve inline.
+Retakes attach to the existing record. The Questions screen reuses the fact editor, takes
+its next question from the returned actions, and reports the saved change through ripple.ts.
+Package dimensions move through missing measurements within that one required question.
+Non-blocking notes appear at the end. Draft wording, removed claims and evidence remain
+traceable to the API. Approval errors retain the returned blockers and a route to Questions.
+
+One shared formatter presents timestamps in Dubai time, including nested evidence, history,
+reader times, source labels and export approval times. Raw API timestamps remain unchanged.
+Camera, library and CSV choices use visible buttons and accessible, visually hidden inputs.
+The shared progress component now exposes determinate values to assistive technology.
+
+F5 verification uses captured fixtures and mocked fetch. The five new sell JSON fixtures are
+included in the typed index. The original tests retain their assertions, updated for scoped
+request URLs, the new editable condition field, seller assignment and formatted timestamps.
+Client tests: 184 passing. Server tests: 278 passing. Typecheck and production build pass.
+ESLint has no errors and the same three component refresh warnings. Source design lint has
+zero failures and 16 warnings: 15 permitted identifier monospace uses and the existing print
+rule that removes shadows. Phone screenshots and the browser inspector are deferred because
+this task prohibits starting a server; no visual inspection is claimed.

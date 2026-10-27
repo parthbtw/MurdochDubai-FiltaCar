@@ -169,3 +169,10 @@
 @media (prefers-reduced-motion: reduce) { .upload-progress > div { animation: none; } }
 @keyframes fact-feedback { from { background: hsl(var(--warning-soft)); } to { background: hsl(var(--background)); } }
 @media (prefers-reduced-motion: reduce) { .fact-changed { background: hsl(var(--warning-soft)); } }
+
+@layer components {
+  .sell-step-names { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; font-size: 11px; text-align: center; color: hsl(var(--muted-foreground)); }
+  .sell-step-names [aria-current='step'] { font-weight: 600; color: hsl(var(--foreground)); }
+  .my-part-photo { max-block-size: 180px; overflow: hidden; border-radius: 8px; }
+  .my-part-photo img { max-block-size: 140px; margin-inline: auto; object-fit: contain; }
+}

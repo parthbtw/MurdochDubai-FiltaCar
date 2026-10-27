@@ -25,6 +25,7 @@ export function ClaimGuard({ record }: { record: PartRecord }) {
   const claims = record.draft?.blocked_claims ?? []
   const gaps = record.gaps_and_conflicts.filter(gap => gap.type === 'cannot_claim')
   return <div className="p-4 border-t"><h3 className="font-semibold">Claim guard</h3>
+    {(claims.length > 0 || gaps.length > 0) && <p className="mt-2 text-sm">We removed these words because they cannot be claimed</p>}
     {claims.length || gaps.length ? <ul className="mt-3 space-y-4">{claims.map((claim, index) => <li key={index}>
       {isArabic(claim.phrase) ? <ArabicText><del aria-describedby={`claim-${record.item_id}-${index}`}>{claim.phrase}</del></ArabicText> : <p><del aria-describedby={`claim-${record.item_id}-${index}`}>{claim.phrase}</del></p>}
       <RecordedText text={claim.reason} className="mt-1 text-sm text-muted-foreground" /><span id={`claim-${record.item_id}-${index}`} className="sr-only">{claim.reason}</span>

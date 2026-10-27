@@ -20,8 +20,8 @@ const fetchMock = vi.fn()
 beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock)
   fetchMock.mockReset().mockImplementation(async (url: string) => {
-    if (url === '/api/parts') return new Response(JSON.stringify(partsResponse))
-    if (url === '/api/metrics') return new Response(JSON.stringify(metrics))
+    if (url === '/api/parts?seller_id=DXB-SLV-014') return new Response(JSON.stringify(partsResponse))
+    if (url === '/api/metrics?seller_id=DXB-SLV-014') return new Response(JSON.stringify(metrics))
     if (url.endsWith('/question-pack')) return new Response(JSON.stringify(url.includes('MIR-0001') ? questionPack0001 : questionPack))
     if (url.startsWith('/api/compatibility/')) return url.endsWith('SBM-7940-LC17') ? new Response(JSON.stringify(compatibility)) : new Response(JSON.stringify({ error: 'no compatibility entry' }), { status: 404 })
     return new Response(JSON.stringify(part))

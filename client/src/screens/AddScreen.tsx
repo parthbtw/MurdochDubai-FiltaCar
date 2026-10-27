@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { assignUpload } from '@/api/assignUpload'
+import { useSeller } from '@/domain/seller'
+import { FilePicker } from '@/components/FilePicker'
 import { uploadFiles } from '@/api/endpoints'
 import { queryKeys, useParts } from '@/api/queries'
 import type { UploadResult } from '@/api/types'
@@ -8,7 +11,6 @@ import { PhoneScreen } from '@/components/PhoneScreen'
 import { ErrorBlock } from '@/components/BlockState'
 import { RecordedText } from '@/components/ArabicText'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { fileName } from '@/domain/photos'
@@ -27,6 +29,7 @@ function PhotoSelection({ file }: { file: File }) {
 }
 interface UploadOutcome { result: UploadResult; processedPhotos: Set<string> }
 export function AddScreen() {
+  const { sellerId } = useSeller()
   const parts = useParts()
   const client = useQueryClient()
   const [photos, setPhotos] = useState<File[]>([])
@@ -39,6 +42,14 @@ export function AddScreen() {
   const inFlight = useRef(false)
   const formRef = useRef<HTMLFormElement>(null)
   const [outcome, setOutcome] = useState<UploadOutcome | null>(null)
+  function selectPhotos(event: React.ChangeEvent<HTMLInputElement>) {
+    const selected = Array.from(event.target.files ?? [])
+    if (!selected.length) return
+    const problems = selected.flatMap(file => !photoTypes.includes(file.type) ? [`${file.name}: choose a JPEG, PNG or WebP image.`] : file.size > 8 * mb ? [`${file.name}: exceeds the 8 MB photo limit.`] : [])
+    if (selected.length > 6) problems.unshift('Choose up to 6 photos at a time.')
+    setPhotoErrors(problems); setPhotos(problems.length ? [] : selected); setError('')
+    if (problems.length) event.target.value = ''
+  }
   async function upload(event: FormEvent) {
     event.preventDefault()
     if (inFlight.current || photoErrors.length || sheetError || (!photos.length && !sheet)) return
@@ -49,7 +60,7 @@ export function AddScreen() {
     if (sheet) form.append('sheet', sheet)
     if (itemId) form.append('item_id', itemId)
     try {
-      const result = await uploadFiles(form)
+      const result = await assignUpload(await uploadFiles(form), sellerId)
       const processedPhotos = new Set(photos.length ? result.parts.flatMap(record => record.photos.filter(photo => !knownPhotos.has(photo))) : [])
       setOutcome({ result, processedPhotos })
       setPhotos([]); setSheet(null); formRef.current?.reset()
@@ -65,14 +76,10 @@ export function AddScreen() {
     <p className="mt-2 text-muted-foreground">Add photos and a spreadsheet, then confirm the returned facts.</p>
     <form ref={formRef} onSubmit={event => void upload(event)} className="mt-5" aria-busy={busy}>
       <section className="group p-4" aria-labelledby="photos-heading"><h2 id="photos-heading" className="text-title-3 font-semibold">Photos</h2>
-        <Label htmlFor="intake-photos" className="mt-3 block">Choose photos</Label>
-        <Input id="intake-photos" className="mt-2" type="file" accept="image/jpeg,image/png,image/webp" multiple capture="environment" disabled={busy} aria-describedby="photos-help" onChange={event => {
-          const selected = Array.from(event.target.files ?? [])
-          const problems = selected.flatMap(file => !photoTypes.includes(file.type) ? [`${file.name}: choose a JPEG, PNG or WebP image.`] : file.size > 8 * mb ? [`${file.name}: exceeds the 8 MB photo limit.`] : [])
-          if (selected.length > 6) problems.unshift('Choose up to 6 photos at a time.')
-          setPhotoErrors(problems); setPhotos(problems.length ? [] : selected); setError('')
-          if (problems.length) event.target.value = ''
-        }} />
+        <div className="grid grid-cols-1">
+          <FilePicker label="Take photo" inputLabel="Choose photos" capture="environment" accept="image/jpeg,image/png,image/webp" multiple disabled={busy} describedBy="photos-help" onChange={selectPhotos} />
+          <FilePicker label="Choose from library" accept="image/jpeg,image/png,image/webp" multiple disabled={busy} describedBy="photos-help" onChange={selectPhotos} />
+        </div>
         <p id="photos-help" className="mt-2 text-footnote text-muted-foreground">Up to 6 photos. JPEG, PNG or WebP, up to 8 MB each.</p>
         {photoErrors.length > 0 && <ul role="alert" className="mt-2 space-y-2 text-danger">{photoErrors.map((message, index) => <li key={index}><RecordedText text={message} /></li>)}</ul>}
         {photos.length > 0 && <ul aria-label="Selected photos">{photos.map((file, index) => <PhotoSelection key={`${index}-${file.name}`} file={file} />)}</ul>}
@@ -81,7 +88,7 @@ export function AddScreen() {
         {parts.isError && <div className="mt-2"><ErrorBlock error={parts.error} retry={() => void parts.refetch()} /></div>}
       </section>
       <section className="group p-4" aria-labelledby="sheet-heading"><h2 id="sheet-heading" className="text-title-3 font-semibold">Spreadsheet</h2>
-        <Label htmlFor="intake-sheet" className="mt-3 block">Choose CSV</Label><Input id="intake-sheet" type="file" accept=".csv,text/csv" className="mt-2" disabled={busy} aria-describedby="sheet-help" onChange={event => {
+        <FilePicker label="Choose CSV" inputLabel="Choose CSV" accept=".csv,text/csv" disabled={busy} describedBy="sheet-help" onChange={event => {
           const file = event.target.files?.[0] ?? null
           const problem = file && !/\.csv$/i.test(file.name) ? 'Choose a CSV file.' : file && file.size > 2 * mb ? 'The CSV exceeds the 2 MB spreadsheet limit.' : ''
           setSheetError(problem); setSheet(problem ? null : file); setError('')

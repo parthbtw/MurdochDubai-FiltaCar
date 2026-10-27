@@ -23,8 +23,8 @@ beforeEach(() => {
   fetchMock.mockReset().mockImplementation(async (url: string, init: RequestInit = {}) => {
     if (init.method === 'PUT' || init.method === 'POST') return new Response(JSON.stringify(response), { status: responseStatus })
     if (url === '/api/ai/status') return new Response(JSON.stringify(aiStatusNow))
-    if (url === '/api/parts') return new Response(JSON.stringify(partsResponse))
-    if (url === '/api/metrics') return new Response(JSON.stringify(metrics))
+    if (url === '/api/parts?seller_id=DXB-SLV-014') return new Response(JSON.stringify(partsResponse))
+    if (url === '/api/metrics?seller_id=DXB-SLV-014') return new Response(JSON.stringify(metrics))
     if (url.startsWith('/api/compatibility/')) return new Response(JSON.stringify(compatibility))
     return new Response(JSON.stringify(current))
   })

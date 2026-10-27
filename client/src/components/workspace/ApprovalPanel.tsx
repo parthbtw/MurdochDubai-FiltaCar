@@ -1,6 +1,7 @@
 import { LockKeyhole } from 'lucide-react'
 import { ApprovalAction } from '@/components/ApprovalAction'
-import { fieldLabel, formatTime } from '@/domain/fields'
+import { fieldLabel } from '@/domain/fields'
+import { formatTime } from '@/domain/time'
 import type { PartRecord } from '@/api/types'
 import { RecordedText } from '@/components/ArabicText'
 import { approvalText } from '@/domain/readiness'

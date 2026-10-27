@@ -74,7 +74,8 @@ it('validates years, numeric measurements, choices, lists and part number groups
   expect(validateField(editorFor('part_details.placement')!, 'Front')).toBeTruthy()
   expect(validateField(editorFor('included_components')!, '')).toBeTruthy()
   expect(fieldPatch(editorFor('condition.cosmetic_damage')!, ' scratch\n crack ')).toEqual({ condition: { cosmetic_damage: ['scratch', 'crack'] } })
-  expect(editableFields).toHaveLength(15)
+  expect(editableFields).toHaveLength(16)
+  expect(editorFor('condition.state')).toMatchObject({ path: 'condition.state', kind: 'text' })
 })
 it('uses shared human field and computed source titles', () => {
   expect(fieldLabel('item_id')).toBe('Item ID')

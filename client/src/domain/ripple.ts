@@ -1,5 +1,5 @@
 import type { PartRecord } from '@/api/types'
-import { editableFields, valueAt } from './fields'
+import { editableFields, fieldLabel, valueAt } from './fields'
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 function difference<T>(before: T[], after: T[], key: (item: T) => string) {
@@ -27,3 +27,9 @@ export function compareRecords(before: PartRecord, after: PartRecord) {
   }
 }
 export type Ripple = ReturnType<typeof compareRecords>
+
+export function rippleSummary(ripple: Ripple): string {
+  const fields = ripple.changedFields.map(fieldLabel).join(', ')
+  const resolved = ripple.actions.resolved.filter(action => action.blocking).length
+  return `${fields ? `${fields} saved.` : 'Record saved.'}${resolved ? ` ${resolved} required ${resolved === 1 ? 'question' : 'questions'} resolved.` : ' The returned record has been checked.'}${ripple.approvalWithdrawn ? ' Approval withdrawn.' : ''}`
+}

@@ -74,7 +74,7 @@ export interface SellerApproval { approved: boolean; approved_at: string | null 
 export interface HistoryEntry { at: string; field: string; old: JsonValue; new: JsonValue; by: string }
 export interface PartRecord {
   item_id: string
-  seller_id: string
+  seller_id: string | null
   original_title_ar: string | null
   original_title_en: string | null
   part_details: PartDetails

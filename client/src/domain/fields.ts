@@ -22,7 +22,7 @@ export interface EditableField { path: string; kind: FieldKind; help: string; ch
 const text = (path: string): EditableField => ({ path, kind: 'text', help: 'Enter the value you have recorded. Do not guess.' })
 export const editableFields: EditableField[] = [
   { path: 'part_details.part_number.extracted_value', kind: 'partNumber', help: 'Letters and digits in groups joined by hyphens, for example SBM-7943-AC15. Spaces and underscores become hyphens; repeated hyphens collapse and letters are uppercased.' },
-  { path: 'part_details.placement', kind: 'choice', choices: ['Left', 'Right'], help: 'Choose Left or Right.' }, text('part_details.colour_code'), text('condition.testing_status'),
+  { path: 'part_details.placement', kind: 'choice', choices: ['Left', 'Right'], help: 'Choose Left or Right.' }, text('part_details.colour_code'), text('condition.state'), text('condition.testing_status'),
   { path: 'condition.cosmetic_damage', kind: 'list', help: 'One recorded defect per line. Leave empty if none reported.' },
   text('donor_vehicle.make'), text('donor_vehicle.model'),
   { path: 'donor_vehicle.year', kind: 'year', help: 'Enter a four-digit year from 1950 to next year.' },
@@ -48,4 +48,3 @@ export function fieldPatch(field: EditableField, input: string): PartPatch {
   const value = field.kind === 'partNumber' ? normalizePartNumber(input) : field.kind === 'number' || field.kind === 'year' ? Number(input) : field.kind === 'list' ? input.split('\n').map(line => line.trim()).filter(Boolean) : input.trim()
   return field.path.split('.').reverse().reduce<unknown>((child, key) => ({ [key]: child }), value) as PartPatch
 }
-export const formatTime = (value: string) => Number.isNaN(Date.parse(value)) ? value : new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Dubai' }).format(new Date(value))

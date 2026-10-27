@@ -70,3 +70,14 @@ export const metricsAfter = metricsAfterJson as Metrics
 export const exportOneCsv: string = exportOneText
 // Documented unknown-item response from docs/CONTRACT.md.
 export const uploadUnknownItem = uploadUnknownItemJson as ApiErrorBody
+
+import sellUploadJson from './sell-upload-new.json'
+import sellPutSellerJson from './sell-put-seller.json'
+import sellPartsIndividualJson from './sell-parts-individual.json'
+import sellPartsBusinessJson from './sell-parts-business.json'
+import sellMetricsIndividualJson from './sell-metrics-individual.json'
+export const sellUpload = sellUploadJson as unknown as UploadResult
+export const sellPutSeller = sellPutSellerJson as unknown as PartRecord
+export const sellPartsIndividual = sellPartsIndividualJson as unknown as PartsResponse
+export const sellPartsBusiness = sellPartsBusinessJson as unknown as PartsResponse
+export const sellMetricsIndividual = sellMetricsIndividualJson as unknown as Metrics

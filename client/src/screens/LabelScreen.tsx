@@ -9,6 +9,7 @@ import type { PartRecord } from '@/api/types'
 import { PhoneScreen } from '@/components/PhoneScreen'
 import { ErrorBlock, LoadingRows } from '@/components/BlockState'
 import { RecordedText } from '@/components/ArabicText'
+import { FilePicker } from '@/components/FilePicker'
 import { LabelPhoto } from '@/components/LabelPhoto'
 import { ReadersPanel } from '@/components/workspace/ReadersPanel'
 import { SourceLine } from '@/components/workspace/SourceLine'
@@ -28,7 +29,7 @@ function newestLabelPhoto(record: PartRecord) {
     return timestamp(b) - timestamp(a)
   })[0] ?? record.photos.at(-1) ?? ''
 }
-export function LabelScreen() {
+export function LabelScreen({ embedded = false }: { embedded?: boolean }) {
   const { id = '' } = useParams()
   const [search, setSearch] = useSearchParams()
   const part = usePart(id)
@@ -66,7 +67,7 @@ export function LabelScreen() {
     if (invalid) { setError(invalid); manualRef.current?.focus(); return }
     if (record) void mutate('Saving number', () => updatePart(id, fieldPatch(field, manual)), record)
   }
-  return <PhoneScreen title="Check label" detail monoTitle={false} backTo={`/parts/${encodeURIComponent(id)}`} backLabel={id}>
+  const content = <>
     {part.isPending ? <LoadingRows label="Loading label" /> : part.isError ? <ErrorBlock error={part.error} retry={() => void part.refetch()} /> : record && <>
       <p className="mt-2 font-mono">{id}</p>
       {photo ? <section className="group mt-4 p-4" aria-label="Recorded label photo"><LabelPhoto key={photo} photo={photo} /><p className="mt-3 text-footnote">{ocr ? `Sharpness ${ocr.quality.sharpness}` : 'Quality not recorded'}</p>{ocr?.quality.blurry && <p className="status-tag tone-warning mt-2">Blurry, retake</p>}{ocr?.unclear && <p className="mt-2">OCR unclear</p>}<SourceLine record={record} path="photos" />
@@ -81,12 +82,13 @@ export function LabelScreen() {
       {error && <div role="alert" id="number-error" className="group mt-4 p-4 text-danger"><RecordedText text={error} /></div>}
       {note && <div role="status" className="group mt-4 p-4"><RecordedText text={note} /></div>}
       <form onSubmit={saveNumber} noValidate className="group mt-4 p-4"><Label htmlFor="manual-number">Part number from the photo</Label><Input ref={manualRef} className="mt-2 font-mono" id="manual-number" value={manual} onChange={event => { setManual(event.target.value); setError('') }} readOnly={Boolean(busy)} aria-describedby={`number-help${error ? ' number-error' : ''}`} aria-invalid={Boolean(error)} /><p id="number-help" className="mt-2 text-footnote text-muted-foreground">{field.help}</p>{record.seller_approval.approved && <p className="mt-3">Saving withdraws your approval.</p>}<Button className="mt-4 w-full" type="submit" disabled={Boolean(busy)}>Use this number</Button></form>
-      <div className="group mt-4 p-4"><Label htmlFor="retake-photo">Retake photo</Label><Input className="mt-2" id="retake-photo" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" disabled={Boolean(busy)} onChange={event => {
+      <div className="group mt-4 p-4"><FilePicker label="Retake photo" inputLabel="Retake photo" accept="image/jpeg,image/png,image/webp" capture="environment" disabled={Boolean(busy)} onChange={event => {
         const file = event.target.files?.[0]; event.target.value = ''; if (!file) return
         const form = new FormData(); form.append('item_id', id); form.append('photos', file)
         void mutate('Uploading photo', async () => { const uploaded = await uploadFiles(form); const after = uploaded.parts.find(candidate => candidate.item_id === id); if (!after) throw new Error('The upload response did not include this part.'); if (uploaded.warnings.length) setNote(uploaded.warnings.join('\n')); return after }, record)
       }} />{record.seller_approval.approved && <p className="mt-3">Saving withdraws your approval.</p>}</div>
       {ripple && <RippleBanner ripple={ripple} onClose={() => setRipple(null)} />}
     </>}
-  </PhoneScreen>
+  </>
+  return embedded ? content : <PhoneScreen title="Check label" detail monoTitle={false} backTo={`/parts/${encodeURIComponent(id)}`} backLabel={id}>{content}</PhoneScreen>
 }
