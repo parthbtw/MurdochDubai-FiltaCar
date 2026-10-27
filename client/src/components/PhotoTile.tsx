@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { PartRecord } from '@/api/types'
-import { fileName, photoUrl, qualityFor } from '@/domain/photos'
+import { fileName, newestOcrFor, photoUrl, qualityFor } from '@/domain/photos'
 import { cn } from '@/lib/utils'
 import { sourceFor } from '@/domain/fieldSource'
 
@@ -16,7 +16,8 @@ export function PhotoTile({ path, record, compact = false }: { path: string; rec
     {!compact && <figcaption className="border-t p-3 text-footnote text-muted-foreground">
       {!failed && url && <p className="break-all">{fileName(path)}</p>}
       <p className="mt-1">Source: {sourceFor(record, 'photos') ?? 'No source recorded'}</p>
-      {quality ? <p className="mt-1">Sharpness {quality.sharpness.toLocaleString('en-GB', { maximumFractionDigits: 2 })}{quality.blurry ? '. Blurry, retake' : '. Not marked blurry'}</p> : <p className="mt-1">Quality not recorded</p>}
+      {quality ? <><p className="mt-1">Sharpness {quality.sharpness.toLocaleString('en-GB', { maximumFractionDigits: 2 })}</p>{quality.blurry && <span className="status-tag tone-warning mt-2">Blurry, retake</span>}</> : <p className="mt-1">Quality not recorded</p>}
+      {newestOcrFor(record, path)?.unclear && <span className="status-tag tone-warning mt-2">OCR unclear</span>}
     </figcaption>}
   </figure>
 }

@@ -178,6 +178,41 @@ The chip and the whole fact cell remain tappable with their field-specific acces
 
 ## Inspection log
 
+### F2 workspace update
+
+Queue thumbnail choice: removed the 64 px label thumbnails. The existing part-number text
+is legible without requiring a seller to decipher a reduced white label. Photos remain in
+the part workspace with their original sources and recorded quality.
+
+Corridor values and their guidance labels are separate elements everywhere, including the
+stored draft description and evidence facts. Labels use a small neutral tag. The API values
+and stored draft are not edited. Listing drafts remain explicitly unpublished.
+
+Below Next step, the workspace presents Needs your answer, Questions for the yard, Listing
+draft, UAE to UK corridor, Label readers, Photo quality, then Approval and history. The first
+answer is visible immediately; remaining answers and long panels use native Show all
+disclosures. The short photo strip stays visible. Facts and original seller notes follow,
+retaining their source sheets. Answer links reveal, focus and briefly mark the related fact;
+reduced motion removes animated travel. Original Arabic evidence stays intact with blocked
+phrases struck and their reasons accessible. Copy only reads a question pack and uses the
+clipboard, with a selected read-only fallback when the clipboard is unavailable.
+
+Checklist requirements are imported directly from the versioned definition JSON in data.
+The client never edits that file. An unknown checklist version displays returned IDs and
+details without assigning requirements from a different version. Reference verification
+instructions are plain text. Reader panels compare the newest stored readings per photo,
+while the evidence page also includes all saved readings and every returned fact with its
+source or an explicit missing-source label. Print layout expands the evidence, removes
+navigation and controls, uses black on white and starts each later section on a new page.
+
+F2 visual inspection: deferred by request because this sandbox cannot start the API or
+preview. No screenshots or three visual fixes are claimed. The planner will inspect the
+phone screens after Parth pushes. No taste inspector was run; Node remains 18.20.8.
+
+F2 validation: all 266 server tests and 90 client tests pass, including the original 66
+client tests and 24 new fixture tests. Typecheck and production build pass. Lint has
+0 errors and the same 3 existing component refresh warnings. No packages were installed.
+
 Style: Framed sheet, seed 407422327. Face: mirror glass tint, Apple system faces and supplied mark.
 Signature: traceable source chips. No redraw, stock assets, service worker or remote fonts.
 Node 18.20.8 was retained. The browser inspector requires Node 22, so its FAIL and WARN
