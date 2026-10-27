@@ -1,0 +1,10 @@
+{
+  "name": "@filtacar/checks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./runChecks.js",
+  "exports": {
+    ".": "./runChecks.js"
+  }
+}
