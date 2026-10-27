@@ -6,6 +6,7 @@ import { spawn } from 'node:child_process'
 import dotenv from 'dotenv'
 
 const ENV_PATH = fileURLToPath(new URL('../../.env', import.meta.url))
+export const AI_SANDBOX_DIR = fileURLToPath(new URL('../../.ai-sandbox/', import.meta.url))
 const DISALLOWED_TOOLS = 'Bash,Write,Edit,Read,Glob,Grep,WebFetch,WebSearch'
 const INSTRUCTION = 'Read only text physically visible on this label. Reply with ONLY a JSON object: {"part_number": string or null, "visible_text": string, "damage_notes": [strings], "readable": boolean}. part_number must be null unless clearly readable. Never guess brand, fitment, model, year, side or condition. damage_notes only for damage you can actually see.'
 const MEDIA_TYPES = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' }
@@ -65,8 +66,57 @@ function withStderr(message, stderr, key) {
   return new Error(sanitizeAiError(`${message}; stderr: ${snippet || '(empty)'}`, key))
 }
 
-// The verified CLI format is an array, with the answer in result.result.
-export function parseCodebuddyOutput(stdout, { stderr = '', key = '' } = {}) {
+function scanResultMessage(stdout) {
+  const stack = []
+  let quoted = false
+  let escaped = false
+  let answer
+  let answerStart = -1
+  for (let index = 0; index < stdout.length; index++) {
+    const char = stdout[index]
+    if (quoted) {
+      if (escaped) escaped = false
+      else if (char === '\\') escaped = true
+      else if (char === '"') quoted = false
+      continue
+    }
+    if (char === '"') {
+      quoted = true
+    } else if (char === '{' || char === '[') {
+      const envelope = char === '{' && (stack.length === 0 || (stack.length === 1 && stack[0].char === '['))
+      stack.push({ char, start: index, envelope })
+    } else if (char === '}' || char === ']') {
+      const frame = stack.pop()
+      if (!frame || (char === '}' ? frame.char !== '{' : frame.char !== '[')) {
+        stack.length = 0
+        continue
+      }
+      if (!frame.envelope) continue
+      try {
+        const message = JSON.parse(stdout.slice(frame.start, index + 1))
+        if (message.type === 'result') {
+          answer = message
+          answerStart = frame.start
+        }
+      } catch {
+        // An incomplete object is never used as a reading.
+      }
+    }
+  }
+  // A standalone JSONL result can follow a malformed or non-JSON log line.
+  for (const line of [...stdout.matchAll(/[^\r\n]+/g)].reverse()) {
+    if (line.index <= answerStart) break
+    try {
+      const message = JSON.parse(line[0])
+      if (message?.type === 'result') return message
+    } catch {
+      // Keep scanning earlier lines; raw output is saved if none parse.
+    }
+  }
+  return answer || null
+}
+
+function parseResult(stdout, stderr, key) {
   if (typeof stdout !== 'string' || !stdout.trim()) {
     throw withStderr('CodeBuddy AI returned empty stdout', stderr, key)
   }
@@ -74,7 +124,9 @@ export function parseCodebuddyOutput(stdout, { stderr = '', key = '' } = {}) {
   try {
     messages = JSON.parse(stdout)
   } catch {
-    throw withStderr('CodeBuddy AI returned invalid stdout JSON', stderr, key)
+    const recovered = scanResultMessage(stdout)
+    if (!recovered) throw withStderr('CodeBuddy AI returned truncated or invalid stdout JSON; no complete result message', stderr, key)
+    messages = [recovered]
   }
   if (!Array.isArray(messages)) {
     throw withStderr('CodeBuddy AI stdout must be a JSON array of messages', stderr, key)
@@ -101,22 +153,51 @@ export function parseCodebuddyOutput(stdout, { stderr = '', key = '' } = {}) {
   return result
 }
 
+// The verified CLI format is an array, with the answer in result.result.
+export function parseCodebuddyOutput(stdout, { stderr = '', key = '', sandboxDir = AI_SANDBOX_DIR } = {}) {
+  try {
+    return parseResult(stdout, stderr, key)
+  } catch (error) {
+    const debugFile = path.join(sandboxDir, 'last_failed_output.txt')
+    const raw = typeof stdout === 'string' ? stdout : String(stdout ?? '')
+    try {
+      fs.mkdirSync(sandboxDir, { recursive: true })
+      fs.writeFileSync(debugFile, key ? raw.split(key).join('[REDACTED]') : raw, { mode: 0o600 })
+    } catch {
+      throw new Error(`${sanitizeAiError(error, key).slice(0, 350)}; could not write redacted debug output to ${sanitizeAiError(debugFile, key)}`)
+    }
+    throw new Error(`${sanitizeAiError(error, key).slice(0, 350)}; redacted debug output: ${sanitizeAiError(debugFile, key)}`)
+  }
+}
+
 export function createCodebuddyReader({
   config = loadAiConfig(),
   command = 'codebuddy',
   spawnImpl = spawn,
   timeoutMs = 45000,
+  sandboxDir = AI_SANDBOX_DIR,
 } = {}) {
   return async function readLabel(imagePath) {
     const key = config.apiKey || ''
-    let cwd
+    let outputDir
+    let outputFd
+    const closeOutput = () => {
+      if (outputFd !== undefined) {
+        const fd = outputFd
+        outputFd = undefined
+        fs.closeSync(fd)
+      }
+    }
     try {
       if (!key) throw new Error('CodeBuddy AI key is not configured')
       const mediaType = MEDIA_TYPES[path.extname(imagePath).toLowerCase()]
       if (!mediaType) throw new Error('CodeBuddy AI requires a png, jpeg or webp image')
       const bytes = fs.readFileSync(imagePath)
       if (bytes.length > 8 * 1024 * 1024) throw new Error('CodeBuddy AI image exceeds 8 MB')
-      cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'filtacar-label-'))
+      fs.mkdirSync(sandboxDir, { recursive: true })
+      outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'filtacar-label-output-'))
+      const outputFile = path.join(outputDir, 'stdout.json')
+      outputFd = fs.openSync(outputFile, 'w')
       const args = [
         '-p', '--input-format', 'stream-json', '--output-format', 'json',
         '--disallowedTools', DISALLOWED_TOOLS, '--tools', '',
@@ -134,36 +215,32 @@ export function createCodebuddyReader({
         },
       }) + '\n'
       const { stdout, stderr } = await new Promise((resolve, reject) => {
-        let child, timer, finished = false, stdout = '', stderr = ''
+        let child, timer, finished = false, stderr = ''
         const finish = (error) => {
           if (finished) return
           finished = true
           clearTimeout(timer)
-          if (error) reject(withStderr(error, stderr, key))
-          else resolve({ stdout, stderr })
+          try {
+            closeOutput()
+            if (error) throw new Error(error)
+            if (fs.statSync(outputFile).size > 1024 * 1024) {
+              throw new Error('CodeBuddy AI stdout exceeded 1 MB')
+            }
+            resolve({ stdout: fs.readFileSync(outputFile, 'utf8'), stderr })
+          } catch (failure) {
+            reject(withStderr(sanitizeAiError(failure, key), stderr, key))
+          }
         }
         try {
           child = spawnImpl(command, args, {
-            cwd,
-            env: {
-              PATH: process.env.PATH,
-              HOME: process.env.HOME,
-              TMPDIR: process.env.TMPDIR || os.tmpdir(),
-              CODEBUDDY_API_KEY: key,
-            },
-            stdio: ['pipe', 'pipe', 'pipe'],
+            cwd: sandboxDir,
+            env: { ...process.env, CODEBUDDY_API_KEY: key },
+            stdio: ['pipe', outputFd, 'pipe'],
           })
           timer = setTimeout(() => {
             child.kill('SIGKILL')
             finish(`CodeBuddy AI timed out after ${timeoutMs} ms`)
           }, timeoutMs)
-          child.stdout.on('data', (chunk) => {
-            stdout += chunk.toString()
-            if (stdout.length > 1024 * 1024) {
-              child.kill('SIGKILL')
-              finish('CodeBuddy AI stdout exceeded 1 MB')
-            }
-          })
           child.stderr.on('data', (chunk) => { stderr = (stderr + chunk.toString()).slice(0, 65536) })
           child.on('error', (error) => {
             finish(error.code === 'ENOENT' ? 'CodeBuddy CLI not found on PATH' : `CodeBuddy CLI failed: ${sanitizeAiError(error, key)}`)
@@ -179,11 +256,12 @@ export function createCodebuddyReader({
           finish(`CodeBuddy CLI failed: ${sanitizeAiError(error, key)}`)
         }
       })
-      return parseCodebuddyOutput(stdout, { stderr, key })
+      return parseCodebuddyOutput(stdout, { stderr, key, sandboxDir })
     } catch (error) {
       throw new Error(sanitizeAiError(error, key))
     } finally {
-      if (cwd) fs.rmSync(cwd, { recursive: true, force: true })
+      closeOutput()
+      if (outputDir) fs.rmSync(outputDir, { recursive: true, force: true })
     }
   }
 }

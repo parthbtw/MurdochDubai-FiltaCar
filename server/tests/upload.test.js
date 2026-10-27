@@ -32,6 +32,8 @@ after(async () => {
 })
 
 test('clear fixture: unclear false, candidate SBM-7941-NP16, part number set', async () => {
+  const before = (await request(app).get('/api/parts/MIR-0004')).body
+  const photoNumber = before.photos.length + 1
   const res = await request(app)
     .post('/api/upload')
     .field('item_id', 'MIR-0004')
@@ -43,10 +45,9 @@ test('clear fixture: unclear false, candidate SBM-7941-NP16, part number set', a
   const record = res.body.parts[0]
   assert.equal(record.item_id, 'MIR-0004')
   assert.equal(record.part_details.part_number.extracted_value, 'SBM-7941-NP16')
-  // MIR-0004 has one seed photo, so the uploaded photo is photo 2.
-  assert.equal(record.part_details.part_number.extraction_method, 'OCR photo 2')
+  assert.equal(record.part_details.part_number.extraction_method, `OCR photo ${photoNumber}`)
   assert.equal(record.part_details.part_number.requires_manual_verification, false)
-  assert.equal(record.field_sources['part_details.part_number.extracted_value'], 'OCR photo 2')
+  assert.equal(record.field_sources['part_details.part_number.extracted_value'], `OCR photo ${photoNumber}`)
 
   assert.ok(Array.isArray(record.ocr))
   const ocr = record.ocr[record.ocr.length - 1]
@@ -56,7 +57,8 @@ test('clear fixture: unclear false, candidate SBM-7941-NP16, part number set', a
   assert.equal(ocr.quality.blurry, false)
   assert.ok(ocr.confidence >= 70)
   assert.ok(ocr.photo.startsWith('uploads/MIR-0004/'))
-  assert.equal(record.photos.length, 2)
+  assert.equal(record.photos.length, photoNumber)
+  assert.deepEqual(record.photos.slice(0, -1), before.photos)
   assert.ok(record.history.some((h) => h.field === 'part_details.part_number.extracted_value'))
 })
 
