@@ -1,68 +1,86 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-sans-arabic/arabic-400.css';
+@import '@fontsource/ibm-plex-sans-arabic/arabic-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --ground: 205.7143 33.3333% 95.8824%;
+    --background: 0 0% 100%;
+    --foreground: 221.5385 49.3671% 15.4902%;
+    --primary: 221.5385 49.3671% 15.4902%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 213.3333 25.7143% 93.1373%;
+    --secondary-foreground: 217.5 17.3913% 36.0784%;
+    --muted: 213.3333 25.7143% 93.1373%;
+    --muted-foreground: 217.2973 18.4080% 39.4118%;
+    --accent: 209.3814 92.3810% 41.1765%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 358 72.2892% 32.5490%;
+    --destructive-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221.5385 49.3671% 15.4902%;
+    --border: 212.3077 28.8889% 91.1765%;
+    --input: 213.3333 20% 73.5294%;
+    --ring: 209.3814 92.3810% 41.1765%;
+    --ready: 142.3729 47.9675% 24.1176%;
+    --ready-soft: 140 33.3333% 92.9412%;
+    --warning: 42.4779 100% 22.1569%;
+    --warning-soft: 42.6316 100% 92.5490%;
+    --danger: 358 72.2892% 32.5490%;
+    --danger-soft: 356.4706 73.9130% 95.4902%;
+    --radius: 16px;
+    color-scheme: light;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  * { @apply border-border; -webkit-tap-highlight-color: transparent; }
+  body { @apply m-0 bg-ground font-sans text-base text-foreground; }
+  button, a, input, textarea { touch-action: manipulation; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+  [dir='rtl'] { text-align: start; }
+  [data-state='on'] { background-color: hsl(var(--muted)); color: hsl(var(--foreground)); }
+}
+
+@layer components {
+  .phone-app { inline-size: 100%; block-size: 100dvh; margin-inline: auto; overflow: hidden; background: hsl(var(--ground)); }
+  .app-scroll { block-size: 100%; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none; scroll-padding-block-start: calc(64px + env(safe-area-inset-top)); }
+  .app-scroll::-webkit-scrollbar, .photo-strip::-webkit-scrollbar { display: none; }
+  .safe-inline { padding-inline-start: max(16px, env(safe-area-inset-left)); padding-inline-end: max(16px, env(safe-area-inset-right)); }
+  .safe-bottom { padding-block-end: max(24px, env(safe-area-inset-bottom)); }
+  .top-bar { position: sticky; inset-block-start: 0; z-index: 20; padding-block-start: env(safe-area-inset-top); background: hsl(var(--ground)); border-block-end: 1px solid hsl(var(--border)); }
+  .top-bar-row { min-block-size: 48px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .large-title { @apply text-large-title font-semibold; letter-spacing: -0.02em; }
+  .group { @apply overflow-hidden rounded-lg bg-background; }
+  .group-heading { @apply mb-2 text-base font-semibold; }
+  .group + .group { margin-block-start: 16px; }
+  .fact-cell + .fact-cell, .part-cell + .part-cell { border-block-start: 1px solid hsl(var(--border)); }
+  .pressable { transition: background-color 100ms; }
+  .pressable:active { background-color: hsl(var(--muted)); }
+  .source-chip { @apply inline-flex min-h-11 max-w-full items-center gap-1.5 rounded-md text-footnote text-muted-foreground; overflow-wrap: anywhere; }
+  .source-chip-label { @apply rounded-full bg-secondary px-2.5 py-1; }
+  .arabic-text { @apply font-arabic; font-size: 18px; line-height: 1.65; text-align: start; overflow-wrap: anywhere; }
+  .photo-strip { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .photo-strip > * { flex: 0 0 78%; scroll-snap-align: start; }
+  .photo-frame { @apply overflow-hidden rounded-md bg-background; }
+  .evidence-drawer { max-inline-size: 430px; margin-inline: auto; }
+  .evidence-drawer [data-vaul-handle-hitarea] { display: flex; align-items: center; justify-content: center; }
+  .dialog-position { inset-inline-start: 50%; inset-block-start: 50%; transform: translate(-50%, -50%); }
+  .route-push { animation: route-push 250ms ease-out; }
+  .route-back { animation: route-back 250ms ease-out; }
+}
+
+@keyframes route-push { from { transform: translateX(24%); } to { transform: translateX(0); } }
+@keyframes route-back { from { transform: translateX(-16%); } to { transform: translateX(0); } }
+@media (min-width: 601px) { .phone-app { inline-size: 430px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

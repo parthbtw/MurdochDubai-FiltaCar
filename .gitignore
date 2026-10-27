@@ -157,3 +157,8 @@ data/uploads/*
 
 # Local manual timing measurements
 data/manual_baseline.json
+
+.taste-skill/
+.DS_Store
+client/test-results/
+client/playwright-report/

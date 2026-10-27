@@ -1,0 +1,13 @@
+{
+  "name": "FiltaCar",
+  "short_name": "FiltaCar",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "background_color": "#F1F5F8",
+  "theme_color": "#F1F5F8",
+  "icons": [
+    { "src": "/favicon-64.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
