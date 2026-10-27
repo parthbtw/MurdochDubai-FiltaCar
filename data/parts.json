@@ -1,0 +1,807 @@
+[
+  {
+    "item_id": "MIR-0001",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة جانبية يمين لاند كروزر، مستعملة، حالة جيدة",
+    "original_title_en": "Right side door mirror, Land Cruiser, used, good condition",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7940-LC17",
+        "extraction_method": "spreadsheet",
+        "requires_manual_verification": false
+      },
+      "placement": "Right"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["light scuff on housing edge"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "ready_for_review",
+    "actions_required": [],
+    "donor_vehicle": {
+      "make": "Toyota",
+      "model": "Land Cruiser",
+      "year": 2017,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 3",
+      "part_details.subcategory": "spreadsheet row 3",
+      "part_details.brand": "spreadsheet row 3",
+      "part_details.part_number.extracted_value": "spreadsheet row 3",
+      "part_details.part_number.extraction_method": "spreadsheet row 3",
+      "part_details.placement": "spreadsheet row 3",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 3",
+      "donor_vehicle.model": "spreadsheet row 3",
+      "donor_vehicle.year": "spreadsheet row 3",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [],
+    "gaps_and_conflicts": [],
+    "photos": [
+      "uploads/mir-0001-01.jpg",
+      "uploads/mir-0001-02.jpg"
+    ],
+    "notes_ar": "مرآة جانبية يمين من لاند كروزر 2017، خدوش خفيفة على الإطار فقط، مرفقة صور للمرآة.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0002",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة جانبية يسار نيسان باترول مستعملة نظيفة",
+    "original_title_en": "Left side door mirror, Nissan Patrol, used, clean",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7941-NP16",
+        "extraction_method": "OCR photo",
+        "requires_manual_verification": false
+      },
+      "placement": "Left"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["small stone chip on glass"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "ready_for_review",
+    "actions_required": [],
+    "donor_vehicle": {
+      "make": "Nissan",
+      "model": "Patrol",
+      "year": 2016,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 4",
+      "part_details.subcategory": "spreadsheet row 4",
+      "part_details.brand": "spreadsheet row 4",
+      "part_details.part_number.extracted_value": "OCR photo 2",
+      "part_details.part_number.extraction_method": "OCR photo 2",
+      "part_details.placement": "spreadsheet row 4",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 4",
+      "donor_vehicle.model": "spreadsheet row 4",
+      "donor_vehicle.year": "spreadsheet row 4",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [],
+    "gaps_and_conflicts": [],
+    "photos": [
+      "uploads/mir-0002-01.jpg"
+    ],
+    "notes_ar": "مرآة يسار من نيسان باترول 2016، شرخ صغير على الزجاج فقط، الجسم سليم.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0003",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة باب يمين برادو 2018 بحالة ممتازة",
+    "original_title_en": "Right door mirror, Prado 2018, excellent condition",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7942-PR18",
+        "extraction_method": "photo label",
+        "requires_manual_verification": false
+      },
+      "placement": "Right"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": [],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "ready_for_review",
+    "actions_required": [],
+    "donor_vehicle": {
+      "make": "Toyota",
+      "model": "Prado",
+      "year": 2018,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 5",
+      "part_details.subcategory": "spreadsheet row 5",
+      "part_details.brand": "spreadsheet row 5",
+      "part_details.part_number.extracted_value": "photo label",
+      "part_details.part_number.extraction_method": "photo label",
+      "part_details.placement": "spreadsheet row 5",
+      "condition.state": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 5",
+      "donor_vehicle.model": "spreadsheet row 5",
+      "donor_vehicle.year": "spreadsheet row 5",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [],
+    "gaps_and_conflicts": [],
+    "photos": [
+      "uploads/mir-0003-01.jpg",
+      "uploads/mir-0003-02.jpg",
+      "uploads/mir-0003-03.jpg"
+    ],
+    "notes_ar": "مرآة يمين من برادو 2018، لا يوجد ضرر ظاهر، الزجاج والجسم سليمان.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0004",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة جانبية بدون رقم قطعة، تحتاج تحقق",
+    "original_title_en": "Side mirror without part number, needs verification",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": null,
+        "extraction_method": "none",
+        "requires_manual_verification": true
+      },
+      "placement": "Left"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["housing scratched on outer edge"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "information_missing",
+    "actions_required": [
+      "locate or photograph the part number stamp",
+      "confirm mirror side before listing"
+    ],
+    "donor_vehicle": {
+      "make": "Mitsubishi",
+      "model": "Pajero",
+      "year": 2014,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 6",
+      "part_details.subcategory": "spreadsheet row 6",
+      "part_details.brand": "spreadsheet row 6",
+      "part_details.part_number.extraction_method": "import validation",
+      "part_details.placement": "spreadsheet row 6",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 6",
+      "donor_vehicle.model": "spreadsheet row 6",
+      "donor_vehicle.year": "spreadsheet row 6",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "part_details.part_number.extracted_value",
+        "question_en": "Can you provide the part number stamped on the mirror housing?",
+        "question_ar": "هل يمكنك تزويدنا برقم القطعة المكتوب على جسم المرآة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "part_details.part_number.extracted_value",
+        "type": "missing",
+        "detail": "no part number found in spreadsheet, yard note or photos",
+        "sources": ["spreadsheet row 6", "Arabic yard note", "yard photo log"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0004-01.jpg"
+    ],
+    "notes_ar": "مرآة جانبية من باجيرو 2014، الرقم غير واضح على القطعة، الرجاء التحقق يدويا.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0005",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة جانبية لم يتم فحصها، بدون رقم قطعة",
+    "original_title_en": "Side mirror, untested, no part number",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": null,
+        "extraction_method": "none",
+        "requires_manual_verification": true
+      },
+      "placement": "Right"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["scratch across glass, housing intact"],
+      "testing_status": "Untested"
+    },
+    "readiness_status": "information_missing",
+    "actions_required": [
+      "test mirror adjustment before listing",
+      "locate part number"
+    ],
+    "donor_vehicle": {
+      "make": "Hyundai",
+      "model": "Tucson",
+      "year": 2015,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 7",
+      "part_details.subcategory": "spreadsheet row 7",
+      "part_details.brand": "spreadsheet row 7",
+      "part_details.part_number.extraction_method": "import validation",
+      "part_details.placement": "spreadsheet row 7",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 7",
+      "donor_vehicle.model": "spreadsheet row 7",
+      "donor_vehicle.year": "spreadsheet row 7",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "condition.testing_status",
+        "question_en": "Can the mirror be tested before it is listed?",
+        "question_ar": "هل يمكن فحص المرآة قبل عرضها للبيع؟"
+      },
+      {
+        "field": "part_details.part_number.extracted_value",
+        "question_en": "What is the part number for this mirror?",
+        "question_ar": "ما هو رقم القطعة لهذه المرآة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "condition.testing_status",
+        "type": "missing",
+        "detail": "mirror has not been tested, function unknown",
+        "sources": ["Arabic yard note"]
+      },
+      {
+        "field": "part_details.part_number.extracted_value",
+        "type": "missing",
+        "detail": "no part number recorded in any source",
+        "sources": ["spreadsheet row 7", "Arabic yard note"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0005-01.jpg"
+    ],
+    "notes_ar": "مرآة جانبية من هيونداي توسان 2015، لم يتم فحصها، خدش على الزجاج.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0006",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة يمين، اللون غير مؤكد، بدون كود لون",
+    "original_title_en": "Right mirror, colour uncertain, no colour code",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7942-PR18",
+        "extraction_method": "photo label",
+        "requires_manual_verification": false
+      },
+      "placement": "Right"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["paint faded on top face"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "information_missing",
+    "actions_required": [
+      "confirm housing colour code with seller"
+    ],
+    "donor_vehicle": {
+      "make": "Toyota",
+      "model": "Prado",
+      "year": 2018,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 8",
+      "part_details.subcategory": "spreadsheet row 8",
+      "part_details.brand": "spreadsheet row 8",
+      "part_details.part_number.extracted_value": "photo label",
+      "part_details.part_number.extraction_method": "photo label",
+      "part_details.placement": "spreadsheet row 8",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 8",
+      "donor_vehicle.model": "spreadsheet row 8",
+      "donor_vehicle.year": "spreadsheet row 8",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "part_details.colour_code",
+        "question_en": "What is the paint colour code of the mirror housing?",
+        "question_ar": "ما هو كود لون جسم المرآة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "part_details.colour_code",
+        "type": "missing",
+        "detail": "housing colour code not recorded, photos show a faded finish",
+        "sources": ["spreadsheet row 8", "yard photo log"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0006-01.jpg",
+      "uploads/mir-0006-02.jpg"
+    ],
+    "notes_ar": "مرآة يمين من برادو، اللون باهت ولا يوجد كود لون في السجل.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0007",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة يسار من أكاديمي 2015، حالة جيدة",
+    "original_title_en": "Left mirror, Acadia 2015, good condition",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7943-AC15",
+        "extraction_method": "spreadsheet",
+        "requires_manual_verification": false
+      },
+      "placement": "Left"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["minor parking scrape on lower housing"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "information_missing",
+    "actions_required": [
+      "resolve donor year conflict between spreadsheet and Arabic note"
+    ],
+    "donor_vehicle": {
+      "make": "GMC",
+      "model": "Acadia",
+      "year": 2018,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 9",
+      "part_details.subcategory": "spreadsheet row 9",
+      "part_details.brand": "spreadsheet row 9",
+      "part_details.part_number.extracted_value": "spreadsheet row 9",
+      "part_details.part_number.extraction_method": "spreadsheet row 9",
+      "part_details.placement": "spreadsheet row 9",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 9",
+      "donor_vehicle.model": "spreadsheet row 9",
+      "donor_vehicle.year": "spreadsheet row 9",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "donor_vehicle.year",
+        "question_en": "The spreadsheet says the donor is a 2018 Acadia but the yard note says 2015. Which year is correct?",
+        "question_ar": "الجدول يقول أن السيارة أكاديمي 2018 لكن ملاحظة الساحة تقول 2015. أي سنة صحيحة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "donor_vehicle.year",
+        "type": "conflict",
+        "detail": "spreadsheet lists donor year as 2018, Arabic yard note states 2015",
+        "sources": ["spreadsheet row 9", "Arabic yard note"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0007-01.jpg"
+    ],
+    "notes_ar": "مرآة يسار من أكاديمي 2015 بحالة جيدة، خدش صغير أسفل الجسم.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0008",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة جانبية، الجانب غير مؤكد",
+    "original_title_en": "Side mirror, side uncertain",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7944-LX570",
+        "extraction_method": "OCR photo",
+        "requires_manual_verification": false
+      },
+      "placement": null
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["housing crack near mounting base"],
+      "testing_status": "Visual inspection only"
+    },
+    "readiness_status": "information_missing",
+    "actions_required": [
+      "confirm whether mirror is left or right side",
+      "explain UK right-hand drive implications to buyer"
+    ],
+    "donor_vehicle": {
+      "make": "Lexus",
+      "model": "LX570",
+      "year": 2016,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 10",
+      "part_details.subcategory": "spreadsheet row 10",
+      "part_details.brand": "spreadsheet row 10",
+      "part_details.part_number.extracted_value": "OCR photo 2",
+      "part_details.part_number.extraction_method": "OCR photo 2",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 10",
+      "donor_vehicle.model": "spreadsheet row 10",
+      "donor_vehicle.year": "spreadsheet row 10",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "part_details.placement",
+        "question_en": "Is this the left or right side mirror? The UAE donor car is left-hand drive and UK cars are right-hand drive, so the side must be confirmed.",
+        "question_ar": "هل هذه المرآة يسرى أم يمنى؟ السيارة الإماراتية يقودها اليسار والسيارات البريطانية يقودها اليمين، لذا يجب تأكيد الجانب."
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "part_details.placement",
+        "type": "conflict",
+        "detail": "mirror side unclear: UAE donor is left-hand drive and UK cars are right-hand drive, yard note does not state the side",
+        "sources": ["Arabic yard note", "vehicle registration photo", "yard photo log"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0008-01.jpg"
+    ],
+    "notes_ar": "مرآة جانبية من لكزس، الجانب غير مذكور، شق صغير عند القاعدة.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0009",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة مدفأة، التوصيل غير واضح",
+    "original_title_en": "Heated mirror, wiring unclear",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7945-HT",
+        "extraction_method": "photo label",
+        "requires_manual_verification": false
+      },
+      "placement": "Left"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["two wires cut at connector"],
+      "testing_status": "Untested"
+    },
+    "readiness_status": "specialist_review_required",
+    "actions_required": [
+      "specialist to inspect heated element wiring",
+      "do not list heating function until verified"
+    ],
+    "donor_vehicle": {
+      "make": "Ford",
+      "model": "Explorer",
+      "year": 2017,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 11",
+      "part_details.subcategory": "spreadsheet row 11",
+      "part_details.brand": "spreadsheet row 11",
+      "part_details.part_number.extracted_value": "photo label",
+      "part_details.part_number.extraction_method": "photo label",
+      "part_details.placement": "spreadsheet row 11",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 11",
+      "donor_vehicle.model": "spreadsheet row 11",
+      "donor_vehicle.year": "spreadsheet row 11",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "condition.testing_status",
+        "question_en": "Can a specialist verify whether the heating element still works?",
+        "question_ar": "هل يمكن لأخصائي التحقق من عمل عنصر التدفئة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "condition.testing_status",
+        "type": "cannot_claim",
+        "detail": "heated mirror with cut connector wires, heating function cannot be claimed without specialist testing",
+        "sources": ["Arabic yard note", "yard photo log"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0009-01.jpg",
+      "uploads/mir-0009-02.jpg"
+    ],
+    "notes_ar": "مرآة يسار مدفأة من فورد إكسبلورر 2017، سلكان مقطوعان عند الموصل، تحتاج فحص أخصائي.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  },
+  {
+    "item_id": "MIR-0010",
+    "seller_id": "DXB-SLV-014",
+    "original_title_ar": "مرآة كهربائية بكاميرا، الكهرباء غير مؤكدة",
+    "original_title_en": "Power-fold mirror with camera, electrics unconfirmed",
+    "part_details": {
+      "category": "Exterior",
+      "subcategory": "Side View Mirror",
+      "brand": "Unbranded",
+      "part_number": {
+        "extracted_value": "SBM-7946-PF",
+        "extraction_method": "OCR photo",
+        "requires_manual_verification": true
+      },
+      "placement": "Right"
+    },
+    "condition": {
+      "state": "Used",
+      "cosmetic_damage": ["camera lens scratched", "connector pins bent"],
+      "testing_status": "Untested"
+    },
+    "readiness_status": "specialist_review_required",
+    "actions_required": [
+      "specialist to inspect power-fold motor and camera wiring",
+      "verify OCR part number against physical stamp"
+    ],
+    "donor_vehicle": {
+      "make": "BMW",
+      "model": "X5",
+      "year": 2019,
+      "drive_side": "LHD"
+    },
+    "field_sources": {
+      "item_id": "seller SKU label",
+      "seller_id": "seller register",
+      "original_title_ar": "Arabic yard note",
+      "original_title_en": "translation of Arabic title",
+      "part_details.category": "spreadsheet row 12",
+      "part_details.subcategory": "spreadsheet row 12",
+      "part_details.brand": "spreadsheet row 12",
+      "part_details.part_number.extracted_value": "OCR photo 1",
+      "part_details.part_number.extraction_method": "OCR photo 1",
+      "part_details.placement": "spreadsheet row 12",
+      "condition.state": "Arabic yard note",
+      "condition.cosmetic_damage": "Arabic yard note",
+      "condition.testing_status": "Arabic yard note",
+      "readiness_status": "import validation",
+      "actions_required": "import validation",
+      "donor_vehicle.make": "spreadsheet row 12",
+      "donor_vehicle.model": "spreadsheet row 12",
+      "donor_vehicle.year": "spreadsheet row 12",
+      "donor_vehicle.drive_side": "vehicle registration photo",
+      "photos": "yard photo log",
+      "notes_ar": "Arabic yard note"
+    },
+    "questions": [
+      {
+        "field": "condition.testing_status",
+        "question_en": "Can a specialist test the power-fold mechanism and the side camera before listing?",
+        "question_ar": "هل يمكن لأخصائي فحص آلية الطي الكهربائي والكاميرا الجانبية قبل العرض؟"
+      },
+      {
+        "field": "part_details.part_number.extracted_value",
+        "question_en": "The part number was read by OCR and may be misread. Can you confirm it against the stamp on the part?",
+        "question_ar": "تمت قراءة رقم القطعة بالتعرف الضوئي وقد يكون خاطئا. هل يمكنك تأكيده من الرقم المحفور على القطعة؟"
+      }
+    ],
+    "gaps_and_conflicts": [
+      {
+        "field": "condition.testing_status",
+        "type": "cannot_claim",
+        "detail": "power-fold and camera functions cannot be claimed, connector pins are bent and mirror is untested",
+        "sources": ["Arabic yard note", "yard photo log"]
+      },
+      {
+        "field": "part_details.part_number.extracted_value",
+        "type": "conflict",
+        "detail": "part number came from low-confidence OCR and does not match the spreadsheet, which lists no number for this row",
+        "sources": ["OCR photo 1", "spreadsheet row 12"]
+      }
+    ],
+    "photos": [
+      "uploads/mir-0010-01.jpg",
+      "uploads/mir-0010-02.jpg",
+      "uploads/mir-0010-03.jpg"
+    ],
+    "notes_ar": "مرآة يمين كهربائية بكاميرا من بي إم دبليو إكس 5، 2019، أطراف الموصل منحنية، لم يتم فحصها.",
+    "ocr": null,
+    "draft": null,
+    "corridor": null,
+    "seller_approval": {
+      "approved": false,
+      "approved_at": null
+    },
+    "history": []
+  }
+]
