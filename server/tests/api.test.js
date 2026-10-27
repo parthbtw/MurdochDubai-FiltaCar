@@ -120,6 +120,28 @@ test('PUT /api/parts/:id returns 404 for unknown id', async () => {
   assert.equal(res.status, 404)
 })
 
+test('PUT /api/parts/:id rejects gaps_and_conflicts as computed field', async () => {
+  const res = await request(app)
+    .put('/api/parts/MIR-0001')
+    .send({ gaps_and_conflicts: [] })
+  assert.equal(res.status, 400)
+  assert.ok(res.body.error.includes('gaps_and_conflicts'))
+})
+
+test('PUT /api/parts/:id rejects readiness_status as computed field', async () => {
+  const res = await request(app)
+    .put('/api/parts/MIR-0001')
+    .send({ readiness_status: 'ready_for_review' })
+  assert.equal(res.status, 400)
+  assert.ok(res.body.error.includes('readiness_status'))
+})
+
+test('POST /api/parts/:id/approve blocked when specialist review required', async () => {
+  const res = await request(app).post('/api/parts/MIR-0009/approve')
+  assert.equal(res.status, 409)
+  assert.ok(res.body.error.includes('specialist review required'))
+})
+
 test('POST /api/parts/:id/approve is blocked when gaps exist', async () => {
   const res = await request(app).post('/api/parts/MIR-0004/approve')
   assert.equal(res.status, 409)

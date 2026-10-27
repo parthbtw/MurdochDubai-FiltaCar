@@ -9,7 +9,18 @@ const router = Router()
 // TODO next milestone: GET /api/metrics (pipeline quality metrics).
 
 const VALID_STATUSES = ['ready_for_review', 'information_missing', 'specialist_review_required']
-const PROTECTED_FIELDS = ['item_id', 'seller_approval', 'history']
+const PROTECTED_FIELDS = [
+  'gaps_and_conflicts',
+  'questions',
+  'readiness_status',
+  'field_sources',
+  'draft',
+  'corridor',
+  'ocr',
+  'history',
+  'seller_approval',
+  'item_id',
+]
 
 function findPart(parts, id) {
   return parts.find((p) => p.item_id === id)
@@ -42,20 +53,13 @@ function validatePatch(patch, existing) {
   if (!isPlainObject(patch)) {
     return ['request body must be a JSON object']
   }
+  for (const key of Object.keys(patch)) {
+    if (PROTECTED_FIELDS.includes(key)) {
+      errors.push(`${key} is computed or system-owned and cannot be edited`)
+    }
+  }
   if ('item_id' in patch && patch.item_id !== existing.item_id) {
     errors.push('item_id cannot be changed')
-  }
-  if ('seller_approval' in patch) {
-    errors.push('seller_approval cannot be set here; use POST /api/parts/:id/approve')
-  }
-  if ('history' in patch) {
-    errors.push('history is append-only and cannot be set directly')
-  }
-  if (
-    'readiness_status' in patch &&
-    !VALID_STATUSES.includes(patch.readiness_status)
-  ) {
-    errors.push(`readiness_status must be one of: ${VALID_STATUSES.join(', ')}`)
   }
   return errors
 }
@@ -133,6 +137,12 @@ router.post('/:id/approve', (req, res) => {
   const part = findPart(parts, req.params.id)
   if (!part) {
     return res.status(404).json({ error: `part ${req.params.id} not found` })
+  }
+
+  if (part.readiness_status === 'specialist_review_required') {
+    return res.status(409).json({
+      error: 'cannot approve: specialist review required',
+    })
   }
 
   const blockers = (part.gaps_and_conflicts || []).filter(

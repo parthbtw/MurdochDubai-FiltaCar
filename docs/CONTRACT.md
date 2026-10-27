@@ -101,9 +101,8 @@ curl http://localhost:3001/api/parts/MIR-0007
 
 Merges changed fields into the record. Behaviour:
 
+- The following keys are computed or system-owned and will be rejected with 400 if present in the patch: `gaps_and_conflicts`, `questions`, `readiness_status`, `field_sources`, `draft`, `corridor`, `ocr`, `history`, `seller_approval`, `item_id`.
 - `item_id` cannot be changed (400).
-- `seller_approval` cannot be set here (400). Use the approve endpoint.
-- `history` cannot be set directly (400), it is append-only.
 - For each changed field path, `field_sources[field]` is set to `"seller edit"`.
 - Each change appends `{ "at": "<ISO timestamp>", "field": "<dot path>", "old": ..., "new": ..., "by": "seller" }` to `history`.
 - After the merge the server calls Developer C's `runChecks(record)` and saves every key it returns (`gaps_and_conflicts`, `questions`, `readiness_status`, `draft`, `corridor`).
@@ -139,20 +138,22 @@ curl -X PUT http://localhost:3001/api/parts/MIR-0007 \
 Validation errors (400):
 
 ```json
-{ "error": "item_id cannot be changed" }
+{ "error": "item_id is computed or system-owned and cannot be edited; item_id cannot be changed" }
 ```
 
 ```json
-{ "error": "seller_approval cannot be set here; use POST /api/parts/:id/approve" }
-```
-
-```json
-{ "error": "readiness_status must be one of: ready_for_review, information_missing, specialist_review_required" }
+{ "error": "readiness_status is computed or system-owned and cannot be edited" }
 ```
 
 ## POST /api/parts/:id/approve
 
-Sets `seller_approval.approved` to `true` with an ISO timestamp and returns the full record. Returns 409 if `gaps_and_conflicts` contains any entry with type `"missing"` or `"conflict"`. Type `"cannot_claim"` alone does not block approval.
+Sets `seller_approval.approved` to `true` with an ISO timestamp and returns the full record.
+
+Blocked with 409 when:
+- `readiness_status` is `"specialist_review_required"`.
+- `gaps_and_conflicts` contains any entry with type `"missing"` or `"conflict"`.
+
+Type `"cannot_claim"` alone does not block approval.
 
 ```bash
 curl -X POST http://localhost:3001/api/parts/MIR-0001/approve
@@ -167,6 +168,12 @@ curl -X POST http://localhost:3001/api/parts/MIR-0001/approve
 ```
 
 409 response (blocked by unresolved gaps):
+
+```json
+{
+  "error": "cannot approve: specialist review required"
+}
+```
 
 ```json
 {

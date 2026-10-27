@@ -3,7 +3,7 @@
     "item_id": "MIR-0001",
     "seller_id": "DXB-SLV-014",
     "original_title_ar": "مرآة جانبية يمين لاند كروزر، مستعملة، حالة جيدة",
-    "original_title_en": "Right side door mirror, Land Cruiser, used, good condition",
+    "original_title_en": "Right side door mirror, Toyota Land Cruiser 2017, used, light scuff on housing",
     "part_details": {
       "category": "Exterior",
       "subcategory": "Side View Mirror",
@@ -71,7 +71,7 @@
     "item_id": "MIR-0002",
     "seller_id": "DXB-SLV-014",
     "original_title_ar": "مرآة جانبية يسار نيسان باترول مستعملة نظيفة",
-    "original_title_en": "Left side door mirror, Nissan Patrol, used, clean",
+    "original_title_en": "Left side door mirror, Nissan Patrol 2016, used, small crack on glass",
     "part_details": {
       "category": "Exterior",
       "subcategory": "Side View Mirror",
@@ -85,7 +85,7 @@
     },
     "condition": {
       "state": "Used",
-      "cosmetic_damage": ["small stone chip on glass"],
+      "cosmetic_damage": ["small crack on mirror glass"],
       "testing_status": "Visual inspection only"
     },
     "readiness_status": "ready_for_review",
@@ -110,6 +110,7 @@
       "condition.state": "Arabic yard note",
       "condition.cosmetic_damage": "Arabic yard note",
       "condition.testing_status": "Arabic yard note",
+      "original_title_en": "Arabic yard note",
       "readiness_status": "import validation",
       "actions_required": "import validation",
       "donor_vehicle.make": "spreadsheet row 4",
@@ -138,7 +139,7 @@
     "item_id": "MIR-0003",
     "seller_id": "DXB-SLV-014",
     "original_title_ar": "مرآة باب يمين برادو 2018 بحالة ممتازة",
-    "original_title_en": "Right door mirror, Prado 2018, excellent condition",
+    "original_title_en": "Right side door mirror, Toyota Prado 2018, used, no visible damage reported",
     "part_details": {
       "category": "Exterior",
       "subcategory": "Side View Mirror",
@@ -464,7 +465,7 @@
     "item_id": "MIR-0007",
     "seller_id": "DXB-SLV-014",
     "original_title_ar": "مرآة يسار من أكاديمي 2015، حالة جيدة",
-    "original_title_en": "Left mirror, Acadia 2015, good condition",
+    "original_title_en": "Left side door mirror, GMC Acadia 2015, used, minor parking scrape on lower housing",
     "part_details": {
       "category": "Exterior",
       "subcategory": "Side View Mirror",
