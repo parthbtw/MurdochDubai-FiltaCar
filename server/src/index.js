@@ -4,6 +4,8 @@ import path from 'node:path'
 import partsRouter, { compatibilityLookup } from './routes/parts.js'
 import uploadRouter from './routes/upload.js'
 import { createAiRouter } from './routes/ai.js'
+import exportRouter from './routes/export.js'
+import metricsRouter from './routes/metrics.js'
 import { DATA_DIR } from './store.js'
 
 export function createApp({ ai = {} } = {}) {
@@ -30,6 +32,8 @@ export function createApp({ ai = {} } = {}) {
   app.use('/api', createAiRouter(ai))
   app.use('/api/parts', partsRouter)
   app.use('/api/upload', uploadRouter)
+  app.use('/api/export', exportRouter)
+  app.use('/api/metrics', metricsRouter)
 
   // Static photos from data/uploads, so the frontend can show them at
   // /uploads/<item_id>/<filename>.

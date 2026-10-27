@@ -381,10 +381,113 @@ curl http://localhost:3001/api/compatibility/SBM-7940-LC17
 { "error": "no compatibility entry for part number SBM-0000" }
 ```
 
-## Placeholder routes (next milestone, not built yet)
+## GET /api/export/preview
 
-- `GET /api/export/ebay.csv`: exports approved records as an eBay listing CSV for UK buyers.
-- `GET /api/metrics`: pipeline quality metrics.
+Preview of a mock export only: **MOCK, NOT PUBLISHED**. Both export routes carry `X-Export-Status: MOCK, NOT PUBLISHED`. Nothing is sent to eBay and no approval or listing state changes. Inclusion requires `seller_approval.approved === true` and a non-blank stored `draft.title`. An unapproved part is excluded with `"not approved by seller"`, even if its draft is also absent. An approved part without a title is excluded with `"no draft"`.
+
+Example from the ten unapproved demo records:
+
+```json
+{
+  "included": [],
+  "excluded": [
+    { "item_id": "MIR-0001", "reason": "not approved by seller" },
+    { "item_id": "MIR-0002", "reason": "not approved by seller" },
+    { "item_id": "MIR-0003", "reason": "not approved by seller" },
+    { "item_id": "MIR-0004", "reason": "not approved by seller" },
+    { "item_id": "MIR-0005", "reason": "not approved by seller" },
+    { "item_id": "MIR-0006", "reason": "not approved by seller" },
+    { "item_id": "MIR-0007", "reason": "not approved by seller" },
+    { "item_id": "MIR-0008", "reason": "not approved by seller" },
+    { "item_id": "MIR-0009", "reason": "not approved by seller" },
+    { "item_id": "MIR-0010", "reason": "not approved by seller" }
+  ]
+}
+```
+
+## GET /api/export/ebay.csv
+
+Downloads `filtacar_mock_ebay_export_YYYY-MM-DD.csv` using the current UTC date and `Content-Disposition: attachment`. This is **MOCK, NOT PUBLISHED**, with no eBay connection. The same inclusion rules as preview apply. The response is `text/csv; charset=utf-8`, begins with a UTF-8 BOM for Excel/Arabic, uses CRLF row separators, and quotes commas, quotes and newlines correctly.
+
+| Column, in order | Value |
+| --- | --- |
+| Status | `MOCK, NOT PUBLISHED` on every data row |
+| Custom label | Stored `item_id` |
+| Title | Stored `draft.title`, capped at 80 characters |
+| Description | Stored `draft.description` |
+| Condition | `Used`, the fixed mock template value |
+| Category | `Car Mirrors`, the fixed mock template value |
+| Placement on Vehicle | `draft.item_specifics["Placement on Vehicle"]`, empty if absent |
+| Manufacturer Part Number | `draft.item_specifics["Manufacturer Part Number"]`, empty if absent |
+| Colour | `draft.item_specifics.Colour`, empty if absent |
+| Price | `seller to set`, no price guessed |
+| Approved at | Stored `seller_approval.approved_at` |
+| Sources | Non-empty `field_sources` values for fields represented in the stored draft, joined by `; ` with duplicate labels removed |
+
+Sources include available direct draft provenance and the represented part, condition, donor and corridor input fields. Unrelated audit, seller-register and photo sources are excluded, as are blocked raw fields. No source label is invented. The route uses stored drafts and does not run checks, save records, or approve anything.
+
+With no included parts the response contains the BOM and only this header row:
+
+```csv
+Status,Custom label,Title,Description,Condition,Category,Placement on Vehicle,Manufacturer Part Number,Colour,Price,Approved at,Sources
+```
+
+## GET /api/metrics
+
+Reads `data/parts.json` on every request without changing it. Counts reflect stored records, including every reading in the OCR and AI arrays, not just the newest photo reading. `facts_with_sources` counts non-blank source strings, not an assertion that each source has been independently verified. Open questions and gaps are the current stored arrays; `claims_blocked` counts `cannot_claim` gaps, not `draft.blocked_claims`. `seller_edits` counts history entries whose `by` is exactly `"seller"`, including approval entries.
+
+Example measured from the demo records after startup checks and the agreement relabel:
+
+```json
+{
+  "parts_total": 10,
+  "approved": 0,
+  "by_status": { "ready_for_review": 3, "information_missing": 5, "specialist_review_required": 2 },
+  "facts_with_sources": 288,
+  "questions_open": 10,
+  "missing_open": 5,
+  "conflicts_open": 4,
+  "claims_blocked": 1,
+  "readers": {
+    "ocr_reads": 10,
+    "ai_reads": 10,
+    "by_agreement": { "agree": 8, "disagree": 0, "ai_only": 0, "tesseract_only": 0, "neither": 2 },
+    "ai_declined_to_guess": 2
+  },
+  "seller_edits": 0,
+  "time_estimate": {
+    "manual_minutes_per_listing": 15,
+    "filtacar_minutes_per_listing": 3,
+    "basis": "assumption for illustration, not measured"
+  }
+}
+```
+
+`ai_declined_to_guess` counts only saved AI reads whose `result.part_number` is explicitly null. The two time estimates are constants in `server/src/config.js`; they are illustrative assumptions and are never presented as measured savings. All other counts come from records.
+
+## GET /api/parts/:id/question-pack
+
+Returns copyable WhatsApp text from `buildQuestionPack(record)` in the checks module, using the stored questions. No message is sent anywhere. The text contains the English and Arabic questions, and `questions_count` counts questions, not language lines. A record with no questions returns:
+
+```json
+{
+  "item_id": "MIR-0001",
+  "text": "No open questions.\nلا توجد أسئلة مفتوحة.",
+  "questions_count": 0
+}
+```
+
+MIR-0010's pack after startup includes both `SBM-7946-PF` and `SBM-7946-PX` in the bilingual part-number question. An unknown ID returns 404:
+
+```json
+{ "error": "part MIR-9999 not found" }
+```
+
+## Agreement relabel and tests
+
+Run `node server/scripts/fix-neither.js` from the root to correct legacy `tesseract_only` labels in `data/parts.json` and `data/ai_preread.json` to `neither` only when both recorded numbers are explicitly null for the same photo. Part records use the newest matching OCR entry. Missing evidence is left unchanged. The script prints changed-entry counts, changes no other fields, makes no reader calls, and is idempotent.
+
+Run `npm test` from the repository root for all backend and checks suites. The server test command is exactly `node --test`, with no path arguments, so Node 20, 22 and 24 use default discovery for `tests/*.test.js` and `src/checks/test/`. Route and migration tests use temporary data, and reader tests use fakes without calling the real CLI.
 
 ## Server start
 

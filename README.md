@@ -12,6 +12,10 @@ npm test      # runs the server tests (node:test + supertest)
 
 The API serves on `http://localhost:3001` and the Vite dev server proxies `/api` to it.
 
+- Mock export: `GET /api/export/preview` and `GET /api/export/ebay.csv` include only seller-approved drafts and are marked `MOCK, NOT PUBLISHED`.
+- Evidence metrics: `GET /api/metrics` counts the stored records live and labels the time estimates as assumptions, not measurements.
+- WhatsApp question pack: `GET /api/parts/:id/question-pack` returns copyable English and Arabic questions without sending a message.
+
 ## CodeBuddy AI setup
 
 Tesseract remains the offline label reader. CodeBuddy AI is an optional second reader; the app works without the CLI, key or internet.

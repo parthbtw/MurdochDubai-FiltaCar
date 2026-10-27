@@ -6,7 +6,7 @@ import { spawn } from 'node:child_process'
 import dotenv from 'dotenv'
 
 const ENV_PATH = fileURLToPath(new URL('../../.env', import.meta.url))
-export const AI_SANDBOX_DIR = fileURLToPath(new URL('../../.ai-sandbox/', import.meta.url))
+export const AI_SANDBOX_DIR = path.resolve(fileURLToPath(new URL('../../.ai-sandbox/', import.meta.url)))
 const DISALLOWED_TOOLS = 'Bash,Write,Edit,Read,Glob,Grep,WebFetch,WebSearch'
 const INSTRUCTION = 'Read only text physically visible on this label. Reply with ONLY a JSON object: {"part_number": string or null, "visible_text": string, "damage_notes": [strings], "readable": boolean}. part_number must be null unless clearly readable. Never guess brand, fitment, model, year, side or condition. damage_notes only for damage you can actually see.'
 const MEDIA_TYPES = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' }
@@ -22,13 +22,17 @@ export function loadAiConfig({ env = process.env, envPath = ENV_PATH } = {}) {
 }
 
 // Startup detection only inspects PATH; it never starts the CLI.
-export function findCodebuddy(env = process.env) {
-  const extensions = process.platform === 'win32' ? ['', '.cmd', '.exe'] : ['']
-  for (const directory of (env.PATH || '').split(path.delimiter).filter(Boolean)) {
+export function findCodebuddy(env = process.env, { platform = process.platform } = {}) {
+  const windows = platform === 'win32'
+  const extensions = windows
+    ? (env.PATHEXT ?? '.COM;.EXE;.BAT;.CMD').split(';').map((value) => value.trim().toLowerCase()).filter((value) => /^\.[a-z0-9]+$/.test(value))
+    : ['']
+  for (const directory of (env.PATH || '').split(windows ? ';' : path.delimiter).filter(Boolean)) {
     for (const extension of extensions) {
       const candidate = path.resolve(directory, `codebuddy${extension}`)
       try {
-        fs.accessSync(candidate, fs.constants.X_OK)
+        // Windows executability is defined by PATHEXT, not POSIX mode bits.
+        fs.accessSync(candidate, windows ? fs.constants.F_OK : fs.constants.X_OK)
         if (fs.statSync(candidate).isFile()) return candidate
       } catch {
         // Missing or non-executable entries are simply unavailable.
