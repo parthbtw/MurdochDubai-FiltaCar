@@ -248,6 +248,33 @@ test("Arabic electrical damage phrases raise the specialist conflict", () => {
   assert.ok(gapWhere(analyzeConflicts(record), "condition.testing_status", "conflict"));
 });
 
+test("every electrical pattern reports a plain finding in the gap and English question", () => {
+  const cases = [
+    { damage: "cut wires", label: "wires cut" },
+    { damage: "bent pins", label: "connector pins bent" },
+    { damage: "connector damaged", label: "connector damaged" },
+    { damage: "electrics unknown", label: "wiring or electrics unconfirmed" },
+    { note: "سلك مقطوع", label: "wires cut" },
+    { note: "الموصل منحني", label: "connector damaged" },
+    { note: "الكهرباء غير مؤكد", label: "wiring or electrics unconfirmed" },
+  ];
+  for (const { damage, note, label } of cases) {
+    const record = baseRecord({
+      condition: { cosmetic_damage: damage ? [damage] : [], testing_status: "Untested" },
+      notes_ar: note || "",
+    });
+    const result = runChecks(record);
+    const gap = gapWhere(result.gaps_and_conflicts, "condition.testing_status", "conflict");
+    assert.equal(gap.detail, `electrical function cannot be verified from the data (found: ${label}); specialist review required before listing`);
+    const question = result.questions.find((q) => q.field === gap.field);
+    assert.ok(question.question_en.includes(`found: ${label}`));
+    for (const text of [gap.detail, question.question_en, question.question_ar]) {
+      assert.equal(text.includes("\\"), false);
+      assert.doesNotMatch(text, /\(\?:|[|\[\]{}^$*+]/u);
+    }
+  }
+});
+
 test("untested without electrical damage stays a missing gap, not a conflict", () => {
   const record = baseRecord({
     condition: { state: "Used", cosmetic_damage: ["scratch across glass"], testing_status: "Untested" },

@@ -122,10 +122,10 @@ test('blocked drafts generate sourced cannot_claim gaps and matching questions',
   const record = baseRecord({ original_title_en: 'Authentic mirror' });
   const snapshot = structuredClone(record);
   const result = runChecks(record);
-  const gap = result.gaps_and_conflicts.find(g => g.field === 'draft');
+  const gap = result.gaps_and_conflicts.find(g => g.field === 'original_title_en');
   assert.equal(gap.type, 'cannot_claim');
   assert.ok(gap.sources.includes('original_title_en'));
-  assert.ok(result.questions.some(q => q.field === 'draft'));
+  assert.ok(result.questions.some(q => q.field === 'original_title_en'));
   assert.equal(result.readiness_status, 'ready_for_review');
   assert.deepEqual(record, snapshot);
 });

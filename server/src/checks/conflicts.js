@@ -34,16 +34,16 @@ export const SELLER_FIXABLE_CONFLICT_FIELDS = new Set([
 // Indicators that electrical function cannot be verified from the data, so a
 // specialist must inspect the part before it can be listed.
 const ELECTRICAL_DAMAGE_PATTERNS = [
-  /\bwires?\s+cut\b|\bcut\s+wires?\b/i,
-  /\bbent\s+pins?\b|\bpins?\s+bent\b/i,
-  /\bconnector\s+(?:pins?\s+)?(?:cut|bent|damaged)\b/i,
-  /\b(?:wiring|electrics?|electrical)\s+(?:unclear|unconfirmed|unknown|damaged|faulty)\b/i,
+  { pattern: /\bwires?\s+cut\b|\bcut\s+wires?\b/i, label: "wires cut" },
+  { pattern: /\bbent\s+pins?\b|\bpins?\s+bent\b/i, label: "connector pins bent" },
+  { pattern: /\bconnector\s+(?:pins?\s+)?(?:cut|bent|damaged)\b/i, label: "connector damaged" },
+  { pattern: /\b(?:wiring|electrics?|electrical)\s+(?:unclear|unconfirmed|unknown|damaged|faulty)\b/i, label: "wiring or electrics unconfirmed" },
 ];
 const ELECTRICAL_DAMAGE_AR = [
-  ["سلك", "مقطوع"], // wire ... cut
-  ["موصل", "منحني"], // connector ... bent
-  ["كهرب", "غير مؤكد"], // electrics ... unconfirmed
-].map(([a, b]) => [normalizeArabic(a), normalizeArabic(b)]);
+  { words: ["سلك", "مقطوع"], label: "wires cut" },
+  { words: ["موصل", "منحني"], label: "connector damaged" },
+  { words: ["كهرب", "غير مؤكد"], label: "wiring or electrics unconfirmed" },
+].map(({ words, label }) => ({ words: words.map(normalizeArabic), label }));
 
 function isBlank(value) {
   return value === undefined || value === null || value === "";
@@ -103,14 +103,14 @@ function electricalDamage(record, condition) {
     record.original_title_en ?? "",
     ...(Array.isArray(condition.cosmetic_damage) ? condition.cosmetic_damage : []),
   ].join(". ");
-  for (const pattern of ELECTRICAL_DAMAGE_PATTERNS) {
-    if (pattern.test(english)) return { hit: pattern.source };
+  for (const { pattern, label } of ELECTRICAL_DAMAGE_PATTERNS) {
+    if (pattern.test(english)) return { label };
   }
   const arabic = normalizeArabic(
     `${record.original_title_ar ?? ""} ${record.notes_ar ?? ""}`,
   );
-  for (const [a, b] of ELECTRICAL_DAMAGE_AR) {
-    if (arabic.includes(a) && arabic.includes(b)) return { hit: `${a} ... ${b}` };
+  for (const { words: [a, b], label } of ELECTRICAL_DAMAGE_AR) {
+    if (arabic.includes(a) && arabic.includes(b)) return { label };
   }
   return null;
 }
@@ -388,7 +388,7 @@ export function analyzeConflicts(record) {
         field: "condition.testing_status",
         type: "conflict",
         detail:
-          `electrical function cannot be verified from the data (matched: ${damage.hit}); ` +
+          `electrical function cannot be verified from the data (found: ${damage.label}); ` +
           "specialist review required before listing",
         sources: [
           sourceLabel(record, "condition.cosmetic_damage", "Arabic yard note"),
