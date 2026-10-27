@@ -9,9 +9,9 @@ import { OCR_ENGINE, OCR_MIN_CONFIDENCE } from '../src/config.js'
 import { appendHistory, setFieldSource } from '../src/records.js'
 import { readLabel, loadAiConfig, sanitizeAiError } from '../src/ai/codebuddyReader.js'
 import { createReadCache } from '../src/ai/readCache.js'
-import { applyAgreement, applyChecks, applyTesseractFallback } from '../src/ai/agreement.js'
+import { applyAgreement, applyChecks, applyTesseractFallback, compareReadings } from '../src/ai/agreement.js'
 
-const AGREEMENTS = ['agree', 'disagree', 'ai_only', 'tesseract_only']
+const AGREEMENTS = ['agree', 'disagree', 'ai_only', 'tesseract_only', 'neither']
 
 export async function runPreread({
   reader = readLabel,
@@ -82,7 +82,7 @@ export async function runPreread({
     let readAt = new Date().toISOString()
     let aiError = null
     try {
-      const reading = await cache.read(imagePath)
+      const reading = await cache.read(imagePath, { force })
       ai = reading.result
       readAt = reading.read_at
     } catch (error) {
@@ -106,7 +106,7 @@ export async function runPreread({
     part.ocr.push(tesseract)
     setFieldSource(part, 'ocr', 'build-time Tesseract')
 
-    let agreement = 'tesseract_only'
+    let agreement = compareReadings(null, tesseract)
     if (ai) {
       const entry = applyAgreement(part, { photo, result: ai, mode: 'build-time', readAt })
       agreement = entry.agreement

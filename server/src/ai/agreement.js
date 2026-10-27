@@ -11,8 +11,7 @@ export function compareReadings(result, ocrEntry) {
   const tesseract = normalizePartNumber(ocrEntry?.part_number_candidate)
   if (ai && tesseract) return ai === tesseract ? 'agree' : 'disagree'
   if (ai) return 'ai_only'
-  // Both empty also uses this outcome, without setting a part number.
-  return 'tesseract_only'
+  return tesseract ? 'tesseract_only' : 'neither'
 }
 
 function latestOcr(record, photo) {
@@ -60,7 +59,7 @@ export function applyAgreement(record, { photo, result, mode, readAt = new Date(
   const agreement = compareReadings(validated, latestOcr(record, photo))
   if (agreement === 'agree' && isEmptyValue(record.part_details.part_number.extracted_value)) {
     setNumber(record, normalizePartNumber(validated.part_number), `OCR + CodeBuddy AI agree (photo ${photoNumber})`, 'CodeBuddy AI + OCR')
-  } else if (agreement === 'tesseract_only') {
+  } else if (agreement === 'tesseract_only' || agreement === 'neither') {
     applyTesseractFallback(record, photo)
   }
   const entry = { engine: 'CodeBuddy AI', mode, photo, result: validated, agreement, read_at: readAt }

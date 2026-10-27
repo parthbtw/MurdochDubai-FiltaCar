@@ -298,11 +298,12 @@ Agreement compares the AI `part_number` with the newest Tesseract `part_number_c
 | `agree` | Both return the same normalized number | Fill an empty part number; preserve any existing different number. |
 | `disagree` | Both return different numbers | Set no fact. |
 | `ai_only` | Only AI returns a number | Set no fact until seller confirmation. |
-| `tesseract_only` | AI returns no number | Keep B2 behavior: fill an empty number only when Tesseract is clear; otherwise leave it empty and require verification. If both have no number, no number is set. |
+| `tesseract_only` | Only Tesseract returns a number | Keep B2 behavior: fill an empty number only when Tesseract is clear; otherwise leave it empty and require verification. |
+| `neither` | Neither reader returns a number | Set no number; keep the OCR Unclear/manual verification behavior. |
 
 An agreement that fills an empty number sets `part_details.part_number.extracted_value`, `extraction_method` to `"OCR + CodeBuddy AI agree (photo N)"`, and `requires_manual_verification` to false. All three field sources use that combined source; history records the changes by `"CodeBuddy AI + OCR"`. N is the 1-based position in `photos[]`. AI-only and disagree readings never overwrite the existing part number. A successful read and its checks output receive provenance even when no part number changes.
 
-The server keeps AI results and sanitized failed attempts in `data/ai_read_cache.json`, indexed by the image file's SHA-256, shared by preread and live reads. Identical image bytes reuse the result or failure without another CLI call, across records and restarts. A repeat of the same cached live reading for the same record/photo does not append a duplicate audit entry. Cache hits can be used offline. A cached failure requires manual review or a new photo; neither repeated clicks nor `--force` retry the CLI for those bytes. New calls use the stable isolated `server/.ai-sandbox/` directory with filesystem and web tools disabled and time out after 45 seconds. Each call captures stdout in a separate temporary file, reads it after the child closes and deletes that temporary directory. Invalid output is saved with the key redacted in `server/.ai-sandbox/last_failed_output.txt`; the sandbox is ignored by Git. The key is loaded through dotenv and passed only in the CLI child's inherited environment; responses and diagnostic snippets never contain it.
+The server keeps only successful AI results in `data/ai_read_cache.json`, indexed by the image file's SHA-256, shared by preread and live reads. Identical image bytes reuse a successful result without another CLI call, across records and restarts. Legacy disk entries containing an `error` are treated as absent and removed on the next successful save. A repeat of the same cached live reading for the same record/photo does not append a duplicate audit entry. Cache hits can be used offline. A sanitized failure stays only in process memory for at most 60 seconds to suppress rapid repeat clicks, then the same image can be retried. Failures are forgotten on process restart. Preread `--force` bypasses this failure window while retaining successful cached results. New calls use the stable isolated `server/.ai-sandbox/` directory with filesystem and web tools disabled and time out after 45 seconds. Each call captures stdout in a separate temporary file, reads it after the child closes and deletes that temporary directory. Invalid output is saved with the key redacted in `server/.ai-sandbox/last_failed_output.txt`; the sandbox is ignored by Git. The key is loaded through dotenv and passed only in the CLI child's inherited environment; responses and diagnostic snippets never contain it.
 
 ### GET /api/ai/status
 
@@ -340,7 +341,7 @@ Use the existing manual edit and upload flows when AI is unavailable. Reader fai
 
 Run `npm run ai:preread` from the root, or `npm run ai:preread -w server`. This command attaches `/demo/labels/<item_id>.png` once to each of the ten demo parts, runs the existing photo quality check and Tesseract, then obtains the cached or new AI reading. It saves the OCR entry and any successful AI entry, applies the agreement rule, runs checks and saves the parts after each item. An AI failure keeps Tesseract's B2 fallback, logs a sanitized diagnostic and continues.
 
-Successful build-time reads are skipped on subsequent runs. `npm run ai:preread -- --force` processes them again, reusing cached AI results for unchanged image bytes. The script prints one line per part and final counts for `agree`, `disagree`, `ai_only` and `tesseract_only`, plus skipped and failed totals. The counts describe parts processed in that run.
+Successful build-time reads are skipped on subsequent runs. `npm run ai:preread -- --force` processes them again, reusing successful cached AI results for unchanged image bytes and retrying failures immediately. The script prints one line per part and final counts for `agree`, `disagree`, `ai_only`, `tesseract_only` and `neither`, plus skipped and failed totals. The counts describe parts processed in that run.
 
 `data/ai_preread.json` contains one latest report entry per item and photo:
 
@@ -356,7 +357,7 @@ Successful build-time reads are skipped on subsequent runs. `npm run ai:preread 
 }
 ```
 
-A failed AI attempt has `ai: null`, `agreement: "tesseract_only"`, a sanitized `error` and label `"Tesseract fallback; CodeBuddy AI unavailable"`. The script will process that part again because it has no successful build-time `ai_reads` entry, but unchanged image bytes reuse the cached failure without a new CLI call. The script never labels a failed attempt as read by AI.
+A failed AI attempt has `ai: null`, `agreement: "tesseract_only"` when Tesseract has a candidate or `"neither"` when it has none, a sanitized `error` and label `"Tesseract fallback; CodeBuddy AI unavailable"`. The script will process that part again because it has no successful build-time `ai_reads` entry, but rapid reruns within the 60-second memory window reuse the failure without a new CLI call. After that window, or immediately with `--force`, the script retries the reader. The script never labels a failed attempt as read by AI.
 
 ## GET /api/compatibility/:partNumber
 

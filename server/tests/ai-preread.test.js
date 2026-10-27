@@ -13,6 +13,11 @@ function makeData() {
   const dataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'filtacar-preread-test-'))
   testDirs.push(dataDir)
   fs.copyFileSync(path.join(projectData, 'parts.json'), path.join(dataDir, 'parts.json'))
+  // Start unread in the temporary copy even when local demo parts were preread.
+  const partsFile = path.join(dataDir, 'parts.json')
+  const parts = JSON.parse(fs.readFileSync(partsFile, 'utf8'))
+  for (const part of parts) delete part.ai_reads
+  fs.writeFileSync(partsFile, JSON.stringify(parts))
   fs.cpSync(path.join(projectData, 'demo', 'labels'), path.join(dataDir, 'demo', 'labels'), { recursive: true })
   return dataDir
 }
@@ -59,7 +64,8 @@ test('preread uses fake readers, saves checks and sources, skips repeats and reu
   assert.equal(first.processed, 10)
   assert.equal(first.failed, 0)
   assert.equal(first.counts.agree, 8)
-  assert.equal(first.counts.tesseract_only, 2)
+  assert.equal(first.counts.tesseract_only, 0)
+  assert.equal(first.counts.neither, 2)
   // MIR-0003 and MIR-0006 carry identical label bytes.
   assert.equal(readerCalls, 9)
   const records = JSON.parse(fs.readFileSync(path.join(dataDir, 'parts.json'), 'utf8'))
@@ -79,6 +85,7 @@ test('preread uses fake readers, saves checks and sources, skips repeats and reu
   assert.equal(report.length, 10)
   assert.ok(report.every((entry) => entry.label === 'read by CodeBuddy AI'))
   assert.equal(logs.length, 11)
+  assert.match(logs.at(-1), /neither=2/)
 
   const before = fs.readFileSync(path.join(dataDir, 'parts.json'), 'utf8')
   const second = await runPreread(options)
@@ -132,4 +139,40 @@ test('preread keeps Tesseract fallback on AI failure, continues, and redacts err
   assert.ok(!reportText.includes(dummyKey))
   assert.ok(!logs.join('\n').includes(dummyKey))
   assert.ok(!fs.readFileSync(partsFile, 'utf8').includes(dummyKey))
+})
+
+test('preread force retries a recent failure while normal reruns respect its memory window', async () => {
+  const dataDir = makeData()
+  const known = numbers(dataDir)
+  let offline = true
+  let failedImageCalls = 0
+  const options = {
+    dataDir,
+    reader: async (image) => {
+      if (path.basename(image) === 'MIR-0002.png') {
+        failedImageCalls++
+        if (offline) throw new Error('temporarily offline')
+      }
+      return fakeResult(imageNumber(image, known))
+    },
+    ocr: async (image) => ({ text: imageNumber(image, known) || '', confidence: 99 }),
+    qualityCheck: async () => ({ sharpness: 500, blurry: false }),
+    checks: (record) => ({ readiness_status: record.readiness_status }),
+    logger: { log() {} },
+  }
+  assert.equal((await runPreread(options)).failed, 1)
+  assert.equal(failedImageCalls, 1)
+  offline = false
+  const normal = await runPreread(options)
+  assert.equal(normal.skipped, 9)
+  assert.equal(normal.failed, 1)
+  assert.equal(failedImageCalls, 1)
+  const forced = await runPreread({ ...options, force: true })
+  assert.equal(forced.failed, 0)
+  assert.equal(forced.processed, 10)
+  assert.equal(failedImageCalls, 2)
+  const report = JSON.parse(fs.readFileSync(path.join(dataDir, 'ai_preread.json'), 'utf8'))
+  const retried = report.find((entry) => entry.item_id === 'MIR-0002')
+  assert.deepEqual(retried.ai, fakeResult(known['MIR-0002']))
+  assert.equal(Object.hasOwn(retried, 'error'), false)
 })

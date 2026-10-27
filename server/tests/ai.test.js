@@ -141,6 +141,22 @@ test('Tesseract-only fallback keeps B2 confidence and no-overwrite rules', () =>
   assert.equal(existing.part_details.part_number.extracted_value, 'EXISTING-123')
 })
 
+test('neither records null readings, keeps the number empty and requires manual verification', () => {
+  const part = blankPart()
+  part.ocr = [ocr(null, photo, true)]
+  part.part_details.part_number.requires_manual_verification = false
+  const entry = applyAgreement(part, { photo, result: result(null), mode: 'live' })
+  assert.equal(entry.agreement, 'neither')
+  assert.equal(part.part_details.part_number.extracted_value, null)
+  assert.equal(part.part_details.part_number.requires_manual_verification, true)
+  assert.equal(part.ai_reads.at(-1).agreement, 'neither')
+  const existing = blankPart()
+  existing.ocr = [ocr(null, photo, true)]
+  existing.part_details.part_number.extracted_value = 'EXISTING-123'
+  applyAgreement(existing, { photo, result: result(null), mode: 'live' })
+  assert.equal(existing.part_details.part_number.extracted_value, 'EXISTING-123')
+})
+
 test('ai-read failure returns manual fallback, keeps record bytes and redacts the key from responses and logs', async () => {
   const logged = []
   const original = { log: console.log, warn: console.warn, error: console.error }
@@ -176,7 +192,7 @@ test('SHA-256 cache avoids repeated calls across photos and app recreation', asy
   assert.equal(other.body.ai_reads.at(-1).photo, otherPhoto)
 })
 
-test('failed attempts are cached across restarts without storing credentials or spending again', async () => {
+test('failed attempts briefly suppress repeat clicks across app instances without being written to disk', async () => {
   let calls = 0
   const reader = async () => { calls++; throw new Error(`offline ${key}`) }
   const before = fs.readFileSync(path.join(tmpDir, 'parts.json'), 'utf8')
@@ -188,7 +204,7 @@ test('failed attempts are cached across restarts without storing credentials or 
   }
   assert.equal(calls, 1)
   assert.equal(fs.readFileSync(path.join(tmpDir, 'parts.json'), 'utf8'), before)
-  assert.equal(fs.readFileSync(path.join(tmpDir, 'ai_read_cache.json'), 'utf8').includes(key), false)
+  assert.equal(fs.existsSync(path.join(tmpDir, 'ai_read_cache.json')), false)
 })
 
 test('sensitive successful reader output is rejected before cache or record persistence', async () => {
@@ -199,7 +215,7 @@ test('sensitive successful reader output is rejected before cache or record pers
   assert.equal(response.body.fallback, 'manual')
   assert.equal(response.text.includes(key), false)
   assert.equal(fs.readFileSync(path.join(tmpDir, 'parts.json'), 'utf8'), before)
-  assert.equal(fs.readFileSync(path.join(tmpDir, 'ai_read_cache.json'), 'utf8').includes(key), false)
+  assert.equal(fs.existsSync(path.join(tmpDir, 'ai_read_cache.json')), false)
 })
 
 test('a cache lock held by another process returns 429 without calling the reader', async () => {
@@ -224,6 +240,7 @@ test('reader and checks errors carrying HTTP statuses still use 503 and manual f
     { reader: async () => { throw Object.assign(new Error(`upstream ${key}`), { status: 400 }) } },
     { reader: async () => result(), checks: () => { throw Object.assign(new Error(`checks ${key}`), { status: 409 }) } },
   ]) {
+    fs.writeFileSync(path.join(tmpDir, 'demo', 'labels', 'read.png'), `independent status test ${fixtureNumber++}`)
     fs.rmSync(path.join(tmpDir, 'ai_read_cache.json'), { force: true })
     const app = appWith(extra.reader, extra)
     const before = fs.readFileSync(path.join(tmpDir, 'parts.json'), 'utf8')
