@@ -1,0 +1,30 @@
+{
+  "SBM-7940-LC17": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Catalogue entry mirrors the LHD Toyota Land Cruiser layout. UK RHD vehicles mirror the part side, so confirm placement before listing."
+  },
+  "SBM-7941-NP16": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Listed against LHD Nissan Patrol. Not checked against UK RHD Patrol variants, treat as reference only."
+  },
+  "SBM-7942-PR18": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Shared housing family across Prado trims. Painted finish, colour must be confirmed per unit. Not verified for UK market vehicles."
+  },
+  "SBM-7943-AC15": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Catalogue spans Acadia model years 2015 to 2018, which overlaps the recorded donor year conflict. Not verified."
+  },
+  "SBM-7944-LX570": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Lexus LX570 reference only. Side must be resolved because the UAE donor is LHD and UK cars are RHD."
+  },
+  "SBM-7945-HT": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Heated variant with connector-dependent function. Heating cannot be claimed unless wiring is tested. Not verified."
+  },
+  "SBM-7946-PF": {
+    "source": "synthetic reference catalogue (test data, not verified)",
+    "region_notes": "Power-fold camera variant. Electronics require specialist inspection. Part number read by OCR, verify before use. Not verified."
+  }
+}
