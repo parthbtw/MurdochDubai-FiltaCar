@@ -16,8 +16,10 @@ export function classifySource(label: string): ClassifiedSource {
   if (lower.includes('registration photo')) return result('document_photo', 'From a photo of the donor vehicle registration')
   if (lower.includes('codebuddy') || /\bai\b/.test(lower)) return result('ai', 'Read from a recorded image by the second reader. Reading evidence, not a verified fact')
   if (lower.includes('ocr') || lower.includes('tesseract') || lower === 'photo label') return result('ocr', photoNumber ? `Read from photo ${photoNumber} by the offline label reader` : 'Read from a recorded image by the offline label reader')
-  if (lower === 'runchecks' || lower === 'import validation') return result('computed', "Worked out by FiltaCar's checks")
+  if (lower === 'runchecks' || lower === 'import validation' || lower === "worked out by filtacar's checks") return { ...result('computed', "Worked out by FiltaCar's checks"), title: "Worked out by FiltaCar's checks" }
   if (lower.includes('reference catalogue')) return result('reference', 'Synthetic reference catalogue, test data, not verified')
   if (lower.includes('demo')) return result('demo', 'From the synthetic demo pack, test data only')
   return result('other', label)
 }
+
+export const sourceTitle = (source: string | null | undefined) => source ? classifySource(source).title : 'No source recorded'

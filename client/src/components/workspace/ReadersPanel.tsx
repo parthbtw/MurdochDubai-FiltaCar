@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import type { PartRecord } from '@/api/types'
 import { RecordedText } from '@/components/ArabicText'
 import { newestOcrFor, fileName, photoUrl } from '@/domain/photos'
@@ -6,9 +8,10 @@ import { agreementText, newestAiFor, readerPhotos } from '@/domain/workspace'
 import { SourceLine } from './SourceLine'
 import { WorkspaceSection } from './WorkspaceSection'
 
-export function ReadersPanel({ record, expanded = false }: { record: PartRecord; expanded?: boolean }) {
-  const photos = readerPhotos(record)
-  return <WorkspaceSection title="Label readers" summary={`${photos.length} ${photos.length === 1 ? 'photo' : 'photos'} with readings. Read only.`} expanded={expanded}>
+export function ReadersPanel({ record, expanded = false, selectedPhoto, hideNavigation = false }: { record: PartRecord; expanded?: boolean; selectedPhoto?: string; hideNavigation?: boolean }) {
+  const photos = readerPhotos(record).filter(photo => selectedPhoto === undefined || photo === photoUrl(selectedPhoto))
+  return <WorkspaceSection title="Label readers" summary={`${photos.length} ${photos.length === 1 ? 'photo' : 'photos'} with saved readings.`} expanded={expanded}>
+    {!hideNavigation && <div className="p-4"><Button asChild variant="outline" className="w-full"><Link to={`/parts/${encodeURIComponent(record.item_id)}/label`}>Check label</Link></Button></div>}
     {photos.length ? photos.map(photo => {
       const ocr = newestOcrFor(record, photo)
       const ai = newestAiFor(record, photo)

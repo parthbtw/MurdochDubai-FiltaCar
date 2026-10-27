@@ -50,7 +50,7 @@ it('supports keyboard lane selection', async () => {
   const ready = await screen.findByRole('tab', { name: 'Ready 3' })
   act(() => ready.focus())
   await userEvent.keyboard('{ArrowRight}')
-  expect(screen.getByRole('tab', { name: 'Missing 5' })).toHaveAttribute('aria-selected', 'true')
+  await waitFor(() => expect(screen.getByRole('tab', { name: 'Missing 5' })).toHaveAttribute('aria-selected', 'true'))
 })
 it('explains a failed queue fetch and offers retry', async () => {
   fetchMock.mockImplementation(async () => new Response(JSON.stringify({ error: 'parts unavailable' }), { status: 400 }))

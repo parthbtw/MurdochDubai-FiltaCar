@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import type { PartRecord } from '@/api/types'
 import { fileName, newestOcrFor, photoUrl, qualityFor } from '@/domain/photos'
@@ -17,7 +18,7 @@ export function PhotoTile({ path, record, compact = false }: { path: string; rec
       {!failed && url && <p className="break-all">{fileName(path)}</p>}
       <p className="mt-1">Source: {sourceFor(record, 'photos') ?? 'No source recorded'}</p>
       {quality ? <><p className="mt-1">Sharpness {quality.sharpness.toLocaleString('en-GB', { maximumFractionDigits: 2 })}</p>{quality.blurry && <span className="status-tag tone-warning mt-2">Blurry, retake</span>}</> : <p className="mt-1">Quality not recorded</p>}
-      {newestOcrFor(record, path)?.unclear && <span className="status-tag tone-warning mt-2">OCR unclear</span>}
+      {newestOcrFor(record, path)?.unclear && <Link className="pressable mt-2 flex min-h-11 items-center text-warning" to={`/parts/${encodeURIComponent(record.item_id)}/label?${new URLSearchParams({ photo: path })}`}><span className="status-tag tone-warning">OCR unclear</span><span className="ms-2">Check label</span></Link>}
     </figcaption>}
   </figure>
 }

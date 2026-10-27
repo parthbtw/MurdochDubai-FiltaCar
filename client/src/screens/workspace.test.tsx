@@ -68,12 +68,12 @@ it('shows MIR-0007 answers with blockers first, then priority, without mutating 
 })
 it('shows the empty answer state', () => {
   mount(<NeedsAnswer record={{ ...part, actions_required: [] }} />)
-  expect(screen.getByText('Nothing to answer.')).toBeInTheDocument()
+  expect(screen.getByText('Nothing else to answer')).toBeInTheDocument()
 })
 it('moves from an action to the related fact and respects reduced motion', async () => {
   vi.mocked(window.matchMedia).mockReturnValueOnce({ matches: true } as MediaQueryList)
-  mount(<App />, '/parts/MIR-0007')
-  const section = await screen.findByRole('region', { name: 'Needs your answer' })
+  mount(<><NeedsAnswer record={part} /><div id="fact-donor_vehicle.year" tabIndex={-1}>Donor year</div></>)
+  const section = screen.getByRole('region', { name: 'Needs your answer' })
   await userEvent.click(within(section).getByRole('button', { name: /Blocks approval/ }))
   const target = document.getElementById('fact-donor_vehicle.year')!
   expect(target).toHaveClass('fact-highlight')
@@ -203,14 +203,14 @@ it('pushes an evidence route with source labels next to values and a real print 
   mount(<App />, '/parts/MIR-0007')
   await userEvent.click(await screen.findByRole('link', { name: 'View evidence' }))
   const facts = await screen.findByRole('region', { name: 'Facts and sources' })
-  const year = within(facts).getByText('donor_vehicle.year', { selector: 'dt' }).closest('div')!
+  const year = within(facts).getByText('Donor year', { selector: 'dt' }).closest('div')!
   expect(year).toHaveTextContent('2018')
   expect(year).toHaveTextContent('Source: spreadsheet row 9')
   await userEvent.click(screen.getByRole('button', { name: 'Print or save as PDF' }))
   expect(print).toHaveBeenCalledOnce()
   expect(screen.getByRole('region', { name: 'Gaps and conflicts' })).toHaveTextContent('Arabic yard note')
   expect(screen.getByText('Synthetic demo data. FiltaCar prepares drafts; the seller approves; nothing is published.')).toBeInTheDocument()
-  expect(screen.getByRole('link', { name: 'Back to part' })).toHaveAttribute('href', '/parts/MIR-0007')
+  expect(screen.getByRole('link', { name: 'Back to MIR-0007' })).toHaveAttribute('href', '/parts/MIR-0007')
 })
 it('keeps the seven requested workspace panels in order below Next step', async () => {
   mount(<App />, '/parts/MIR-0007')

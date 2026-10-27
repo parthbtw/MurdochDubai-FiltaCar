@@ -20,8 +20,8 @@ describe('source classification', () => {
     ['CodeBuddy AI, confirmed by seller', 'ai_confirmed'],
     ['synthetic reference catalogue (test data, not verified)', 'reference'], ['Warehouse ticket', 'other'],
   ]
-  it.each(labels)('%s has the correct kind and unchanged title', (label, kind) => {
-    expect(classifySource(label)).toMatchObject({ kind, title: label })
+  it.each(labels)('%s has the correct kind and a human source title', (label, kind) => {
+    expect(classifySource(label)).toMatchObject({ kind, title: kind === 'computed' ? "Worked out by FiltaCar's checks" : label })
     expect(classifySource(label).explanation).not.toBe('')
   })
   it('keeps parsed evidence coordinates', () => {

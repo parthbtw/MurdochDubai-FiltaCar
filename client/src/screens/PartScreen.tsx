@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { usePart } from '@/api/queries'
 import { ArabicText } from '@/components/ArabicText'
@@ -17,6 +17,12 @@ import { CorridorPanel } from '@/components/workspace/CorridorPanel'
 import { ReadersPanel } from '@/components/workspace/ReadersPanel'
 import { PhotoQualityPanel } from '@/components/workspace/PhotoQualityPanel'
 import { ApprovalPanel } from '@/components/workspace/ApprovalPanel'
+import { FactEditor } from '@/components/FactEditor'
+import { RippleBanner } from '@/components/RippleBanner'
+import { ApprovalAction } from '@/components/ApprovalAction'
+import { Button } from '@/components/ui/button'
+import { editorFor, type EditableField } from '@/domain/fields'
+import type { Ripple } from '@/domain/ripple'
 import { factId } from '@/domain/workspace'
 
 function FactSection({ title, children, footer }: { title: string; children: ReactNode; footer?: string }) {
@@ -28,22 +34,39 @@ export function PartScreen() {
   const part = usePart(id)
   const [field, setField] = useState<TraceField | null>(null)
   const [lastTrigger, setLastTrigger] = useState<HTMLButtonElement | null>(null)
+  const [editing, setEditing] = useState<EditableField | null>(null)
+  const [ripple, setRipple] = useState<Ripple | null>(null)
+  const [changedFields, setChangedFields] = useState<string[]>([])
+  useEffect(() => {
+    if (!changedFields.length) return
+    const timer = setTimeout(() => setChangedFields([]), 1800)
+    return () => clearTimeout(timer)
+  }, [changedFields])
   const returnTo: unknown = location.state?.returnTo
   const backTo = typeof returnTo === 'string' && /^\/(?:\?|$)/.test(returnTo) ? returnTo : '/'
   const record = part.data
-  const fact = (path: string, label: string, value: unknown, options: { note?: ReactNode; mono?: boolean; traceLabel?: string } = {}) => record && <FactCell key={path} record={record} path={path} label={label} value={value} {...options} onTrace={next => { setLastTrigger(next.trigger); setField(next) }} />
+  function edit(path: string) {
+    const editor = editorFor(path)
+    if (editor) setEditing(editor)
+    else {
+      const target = document.getElementById(factId(path))
+      target?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); target?.focus()
+    }
+  }
+  const fact = (path: string, label: string, value: unknown, options: { note?: ReactNode; mono?: boolean; traceLabel?: string } = {}) => record && <FactCell key={path} record={record} path={path} label={label} value={value} {...options} changed={changedFields.includes(path)} onEdit={editorFor(path) ? () => edit(path) : undefined} onTrace={next => { setLastTrigger(next.trigger); setField(next) }} />
   const action = record ? firstBlockingAction(record) : null
   return <PhoneScreen title={record?.item_id ?? id} detail backTo={backTo}>
     {part.isPending ? <div className="mt-4"><LoadingRows label="Loading part details" /></div> : part.isError ? <div className="mt-4"><ErrorBlock error={part.error} retry={() => void part.refetch()} /></div> : record && <>
       <div className="mt-3"><StatusPill status={record.readiness_status} /><p className="mt-2 text-footnote text-muted-foreground">{approvalText(record)}</p>{record.draft?.title && <PartTitle text={record.draft.title} partNumber={record.part_details.part_number.extracted_value} className="mt-3 text-title-3 font-semibold" />}</div>
-      <section className="mt-5" aria-labelledby="next-step"><h2 id="next-step" className="group-heading">Next step</h2><div className="group p-4">{action ? <><p>{action.action_en}</p><ArabicText className="mt-2">{action.action_ar}</ArabicText></> : <p>No blockers. Ready for your review.</p>}</div></section>
-      <NeedsAnswer record={record} />
+      <section className="mt-5" aria-labelledby="next-step"><h2 id="next-step" className="group-heading">Next step</h2><div className="group p-4">{action ? <><p>{action.action_en}</p><ArabicText className="mt-2">{action.action_ar}</ArabicText><Button variant="outline" className="mt-3" onClick={() => edit(action.field)}>Answer this question</Button></> : <p>No blockers. Ready for your review.</p>}</div></section>
+      <NeedsAnswer record={record} omitFirstBlocker onEdit={edit} />
+      {ripple && <RippleBanner ripple={ripple} onClose={() => setRipple(null)} />}
       <QuestionsPanel key={record.item_id} record={record} />
       <DraftPanel record={record} />
       <CorridorPanel record={record} />
       <ReadersPanel record={record} />
       <PhotoQualityPanel record={record} />
-      <ApprovalPanel record={record} />
+      <ApprovalPanel record={record} actionable />
       <div className="group mt-5"><Link className="pressable flex min-h-11 items-center justify-between p-4 font-semibold" to={`/parts/${encodeURIComponent(record.item_id)}/evidence`} state={{ returnTo: `/parts/${record.item_id}` }}>View evidence<span aria-hidden="true">›</span></Link></div>
       <FactSection title="Part">
         {fact('part_details.category', 'Category', record.part_details.category)}
@@ -80,6 +103,8 @@ export function PartScreen() {
         {fact('original_title_ar', 'Original Arabic title', record.original_title_ar)}
         {fact('notes_ar', 'Arabic yard note', record.notes_ar)}
       </FactSection>
+      {editing && <FactEditor key={editing.path} record={record} field={editing} onClose={() => setEditing(null)} onSaved={next => { setRipple(next); setChangedFields(next.changedFields) }} />}
+      <div className="approval-space" aria-hidden="true" /><ApprovalAction record={record} sticky />
       <SourceSheet record={record} field={field} onClose={() => { setField(null); requestAnimationFrame(() => lastTrigger?.focus()) }} />
     </>}
   </PhoneScreen>

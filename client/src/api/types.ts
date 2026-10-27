@@ -128,7 +128,7 @@ export interface CompatibilityEntry {
   reference_vehicles: { make: string; model: string; years: string; drive_side: string }[]
   field_sources: Record<string, string>
 }
-export interface ApiErrorBody { error?: string; gaps_and_conflicts?: Gap[]; fallback?: string; [key: string]: unknown }
+export interface ApiErrorBody { error?: string; gaps_and_conflicts?: Gap[]; gaps?: Gap[]; fallback?: string; [key: string]: unknown }
 type DeepPartial<T> = T extends readonly unknown[] ? T : T extends object ? { [K in keyof T]?: DeepPartial<T[K]> } : T
 export type PartPatch = DeepPartial<Pick<PartRecord,
   'seller_id' | 'original_title_ar' | 'original_title_en' | 'part_details' | 'condition' |

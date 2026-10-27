@@ -1,4 +1,4 @@
-import type { AiStatus, CompatibilityEntry, ExportPreview, Metrics, PartRecord, PartsResponse, QuestionPack } from '@/api/types'
+import type { ApiErrorBody, AiStatus, CompatibilityEntry, ExportPreview, Metrics, PartRecord, PartsResponse, QuestionPack } from '@/api/types'
 import partsJson from './parts.json'
 import metricsJson from './metrics.json'
 import partJson from './part-MIR-0007.json'
@@ -27,3 +27,27 @@ export const part0005 = part0005Json as unknown as PartRecord
 export const part0009 = part0009Json as unknown as PartRecord
 export const compatibility = compatibilityJson as unknown as CompatibilityEntry
 export const questionPack0001 = questionPack0001Json as unknown as QuestionPack
+
+import putYearJson from './put-MIR-0007-year.json'
+export const putYear = putYearJson as unknown as PartRecord
+
+import putNumberJson from './put-MIR-0004-part-number.json'
+export const putNumber = putNumberJson as unknown as PartRecord
+
+import approvedPartJson from './approve-MIR-0001.json'
+export const approvedPart = approvedPartJson as unknown as PartRecord
+
+import afterApprovalEditJson from './put-MIR-0001-after-approval.json'
+export const afterApprovalEdit = afterApprovalEditJson as unknown as PartRecord
+
+import approveMissingErrorJson from './approve-MIR-0005-409.json'
+export const approveMissingError = approveMissingErrorJson as unknown as ApiErrorBody
+
+import approveSpecialistErrorJson from './approve-MIR-0009-409.json'
+export const approveSpecialistError = approveSpecialistErrorJson as unknown as ApiErrorBody
+
+import aiReadPartJson from './ai-read-MIR-0005.json'
+export const aiReadPart = aiReadPartJson as unknown as PartRecord
+
+import aiStatusNowJson from './ai-status-now.json'
+export const aiStatusNow = aiStatusNowJson as unknown as AiStatus
