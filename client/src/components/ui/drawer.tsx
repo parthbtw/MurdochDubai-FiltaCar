@@ -4,21 +4,31 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
+import { useDevicePortalContainer } from "@/lib/deviceFrame"
 
 const Drawer = ({
   shouldScaleBackground = false,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root
-    shouldScaleBackground={shouldScaleBackground}
-    {...props}
-  />
-)
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
+  const container = useDevicePortalContainer()
+  return (
+    <DrawerPrimitive.Root
+      shouldScaleBackground={shouldScaleBackground}
+      {...props}
+      container={container ?? props.container}
+      noBodyStyles={container ? true : props.noBodyStyles}
+      repositionInputs={container ? false : props.repositionInputs}
+    />
+  )
+}
 Drawer.displayName = "Drawer"
 
 const DrawerTrigger = DrawerPrimitive.Trigger
 
-const DrawerPortal = DrawerPrimitive.Portal
+const DrawerPortal = (props: React.ComponentProps<typeof DrawerPrimitive.Portal>) => {
+  const container = useDevicePortalContainer()
+  return <DrawerPrimitive.Portal {...props} container={container ?? props.container} />
+}
 
 const DrawerClose = DrawerPrimitive.Close
 
@@ -36,25 +46,39 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerPrimitive.Content
-      ref={ref}
-      className={cn(
-        "evidence-drawer fixed inset-x-0 bottom-0 z-50 flex h-[92dvh] flex-col rounded-t-lg bg-background text-foreground",
-        className
-      )}
-      {...props}
-    >
-      <DrawerPrimitive.Handle aria-hidden={false} role="button" aria-label="Change sheet height" tabIndex={0} className="flex shrink-0 items-center justify-center" style={{ height: 44, width: '100%', margin: 0, background: 'transparent' }} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.currentTarget.click() } }}>
-        <span className="mx-auto block h-1 w-9 rounded-full bg-input" />
-      </DrawerPrimitive.Handle>
-      {children}
-    </DrawerPrimitive.Content>
-  </DrawerPortal>
-))
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & { onHandleClick?: () => void }
+>(({ className, children, onHandleClick, onOpenAutoFocus, onCloseAutoFocus, ...props }, ref) => {
+  const returnFocus = React.useRef<HTMLElement | null>(null)
+  return (
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerPrimitive.Content
+        ref={ref}
+        className={cn(
+          "evidence-drawer fixed inset-x-0 bottom-0 z-50 flex h-[calc(var(--screen-height)*0.92)] flex-col rounded-t-lg bg-background text-foreground",
+          className
+        )}
+        {...props}
+        onOpenAutoFocus={event => {
+          returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
+          onOpenAutoFocus?.(event)
+        }}
+        onCloseAutoFocus={event => {
+          onCloseAutoFocus?.(event)
+          if (!event.defaultPrevented && returnFocus.current?.isConnected) {
+            event.preventDefault()
+            returnFocus.current.focus()
+          }
+        }}
+      >
+        <DrawerPrimitive.Handle {...(onHandleClick ? { onClick: onHandleClick } : {})} aria-hidden={false} role="button" aria-label="Change sheet height" tabIndex={0} className="flex shrink-0 items-center justify-center" style={{ height: 44, width: '100%', margin: 0, background: 'transparent' }} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.currentTarget.click() } }}>
+          <span className="mx-auto block h-1 w-9 rounded-full bg-input" />
+        </DrawerPrimitive.Handle>
+        {children}
+      </DrawerPrimitive.Content>
+    </DrawerPortal>
+  )
+})
 DrawerContent.displayName = "DrawerContent"
 
 const DrawerHeader = ({

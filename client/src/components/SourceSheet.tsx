@@ -1,7 +1,8 @@
+import { useDevicePortalContainer } from '@/lib/deviceFrame'
 import { formatTime } from '@/domain/time'
 import { historyValue } from '@/domain/workspace'
 import { sourceTitle } from '@/domain/sources'
-import { useState } from 'react'
+import { useRef, useState, type ComponentProps } from 'react'
 import type { PartRecord } from '@/api/types'
 import { ArabicText, RecordedText } from '@/components/ArabicText'
 import { PhotoTile } from '@/components/PhotoTile'
@@ -14,16 +15,22 @@ import { newestOcrFor } from '@/domain/photos'
 
 export interface TraceField { path: string; label: string; trigger: HTMLButtonElement }
 export function SourceSheet({ record, field, onClose }: { record: PartRecord; field: TraceField | null; onClose: () => void }) {
+  const lastTrigger = useRef<HTMLButtonElement | null>(null)
+  if (field) lastTrigger.current = field.trigger
+  const framed = Boolean(useDevicePortalContainer())
   const [snap, setSnap] = useState<string | number | null>(0.55)
+  // Vaul measures snap points after the device transform. Use local detent heights
+  // when framed so a short desktop window does not scale that measurement twice.
+  const detents: ComponentProps<typeof Drawer> = framed ? {} : { snapPoints: [0.55, 0.92], activeSnapPoint: snap, setActiveSnapPoint: setSnap, fadeFromIndex: 0 }
   const source = field ? sourceFor(record, field.path) : null
   const classified = source ? classifySource(source) : null
   const photo = classified?.photoNumber ? record.photos[classified.photoNumber - 1] : classified?.kind === 'ocr' ? record.ocr?.at(-1)?.photo : undefined
   const ocr = photo ? newestOcrFor(record, photo) : null
   const history = field ? [...record.history].reverse().find(entry => entry.field === field.path || field.path.startsWith(`${entry.field}.`)) : undefined
   const questions = field ? record.questions.filter(question => question.field === field.path || field.path.startsWith(`${question.field}.`)) : []
-  return <Drawer open={Boolean(field)} onOpenChange={open => { if (!open) onClose(); else setSnap(0.55) }} snapPoints={[0.55, 0.92]} activeSnapPoint={snap} setActiveSnapPoint={setSnap} fadeFromIndex={0} handleOnly autoFocus>
-    <DrawerContent className="h-dvh" onCloseAutoFocus={event => { event.preventDefault(); field?.trigger.focus() }}>
-      <div className="flex min-h-0 flex-col" style={{ height: `calc(${typeof snap === 'number' ? snap * 100 : 55}dvh - 44px)` }}>
+  return <Drawer open={Boolean(field)} onOpenChange={open => { if (!open) onClose(); else setSnap(0.55) }} {...detents} handleOnly autoFocus>
+    <DrawerContent className="h-[var(--screen-height)]" style={framed ? { height: `calc(var(--screen-height) * ${typeof snap === 'number' ? snap : 0.55})` } : undefined} onHandleClick={framed ? () => setSnap(snap === 0.55 ? 0.92 : 0.55) : undefined} onCloseAutoFocus={event => { event.preventDefault(); lastTrigger.current?.focus() }}>
+      <div className="flex min-h-0 flex-col" style={{ height: framed ? 'calc(100% - 44px)' : `calc(var(--screen-height) * ${typeof snap === 'number' ? snap : 0.55} - 44px)` }}>
       <DrawerHeader className="shrink-0 border-b pb-3 pt-0">
         <div className="flex items-center justify-between gap-3"><DrawerTitle className="text-title-3">Where this came from</DrawerTitle><DrawerClose asChild><Button variant="ghost" size="sm">Done</Button></DrawerClose></div>
         <DrawerDescription>{field?.label ?? 'Recorded evidence'}</DrawerDescription>

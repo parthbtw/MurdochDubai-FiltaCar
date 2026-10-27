@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom'
+import { useDevicePortalContainer } from '@/lib/deviceFrame'
 import { useEffect, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import type { PartRecord } from '@/api/types'
@@ -17,6 +19,7 @@ export function QuestionsContent({ record }: { record: PartRecord }) {
 }
 
 export function QuestionsPanel({ record, expanded = false }: { record: PartRecord; expanded?: boolean }) {
+  const container = useDevicePortalContainer()
   const [fallback, setFallback] = useState(false)
   const [copied, setCopied] = useState(false)
   const [copying, setCopying] = useState(false)
@@ -42,12 +45,13 @@ export function QuestionsPanel({ record, expanded = false }: { record: PartRecor
     }
     setCopying(false)
   }
+  const toast = <p role="status" className="copy-toast">Copied. Nothing was sent.</p>
   return <WorkspaceSection title="Questions for the yard" summary={`${record.questions.length} open ${record.questions.length === 1 ? 'question' : 'questions'}`} expanded={expanded}>
     <QuestionsContent record={record} />
     <div className="p-4 border-t">
       <p className="text-footnote text-muted-foreground">FiltaCar never sends messages. You paste it into WhatsApp yourself.</p>
       {record.questions.length > 0 && <div className="no-print"><Button className="mt-3 w-full" disabled={copying} onClick={() => void copy()}>{copying ? 'Preparing message...' : 'Copy WhatsApp message'}</Button>
-        {copied && <p role="status" className="copy-toast">Copied. Nothing was sent.</p>}
+        {copied && (container ? createPortal(toast, container) : toast)}
         {fallback && <div className="mt-3"><label htmlFor={`copy-${record.item_id}`} className="block text-footnote">Select the message and copy it yourself. Nothing was sent.</label><Textarea ref={textarea} id={`copy-${record.item_id}`} readOnly value={pack.data?.text ?? ''} dir="auto" className="mt-2 min-h-48" /></div>}
         <details className="mt-3" onToggle={event => { if (event.currentTarget.open && !pack.data && !pack.isFetching) void pack.refetch() }}>
           <summary className="pressable min-h-11 py-3 text-sm">Message preview</summary>

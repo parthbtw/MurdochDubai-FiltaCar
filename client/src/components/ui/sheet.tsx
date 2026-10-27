@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useDevicePortalContainer } from "@/lib/deviceFrame"
 
 const Sheet = SheetPrimitive.Root
 
@@ -13,7 +14,10 @@ const SheetTrigger = SheetPrimitive.Trigger
 
 const SheetClose = SheetPrimitive.Close
 
-const SheetPortal = SheetPrimitive.Portal
+const SheetPortal = (props: React.ComponentProps<typeof SheetPrimitive.Portal>) => {
+  const container = useDevicePortalContainer()
+  return <SheetPrimitive.Portal {...props} container={container ?? props.container} />
+}
 
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Overlay>,
@@ -37,7 +41,7 @@ const sheetVariants = cva(
       side: {
         top: "inset-x-0 top-0 rounded-b-lg",
         bottom:
-          "evidence-drawer inset-x-0 bottom-0 max-h-[92dvh] rounded-t-lg",
+          "evidence-drawer inset-x-0 bottom-0 max-h-[calc(var(--screen-height)*0.92)] rounded-t-lg",
         left: "inset-y-0 start-0 h-full w-full max-w-[430px]",
         right:
           "inset-y-0 end-0 h-full w-full max-w-[430px]",

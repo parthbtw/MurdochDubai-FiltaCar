@@ -5,6 +5,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useDevicePortalContainer } from "@/lib/deviceFrame"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
@@ -12,7 +13,10 @@ const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
 
 const DropdownMenuGroup = DropdownMenuPrimitive.Group
 
-const DropdownMenuPortal = DropdownMenuPrimitive.Portal
+const DropdownMenuPortal = (props: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) => {
+  const container = useDevicePortalContainer()
+  return <DropdownMenuPrimitive.Portal {...props} container={container ?? props.container} />
+}
 
 const DropdownMenuSub = DropdownMenuPrimitive.Sub
 
@@ -43,35 +47,43 @@ DropdownMenuSubTrigger.displayName =
 const DropdownMenuSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(
-      "z-50 min-w-48 overflow-hidden rounded-lg border bg-popover p-1 text-popover-foreground",
-      className
-    )}
-    {...props}
-  />
-))
+>(({ className, ...props }, ref) => {
+  const container = useDevicePortalContainer()
+  return (
+    <DropdownMenuPrimitive.SubContent
+      ref={ref}
+      collisionBoundary={container}
+      className={cn(
+        "z-50 min-w-48 overflow-hidden rounded-lg border bg-popover p-1 text-popover-foreground",
+        className
+      )}
+      {...props}
+    />
+  )
+})
 DropdownMenuSubContent.displayName =
   DropdownMenuPrimitive.SubContent.displayName
 
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-48 overflow-y-auto rounded-lg border bg-popover p-1 text-popover-foreground",
-        className
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-))
+>(({ className, sideOffset = 4, ...props }, ref) => {
+  const container = useDevicePortalContainer()
+  return (
+    <DropdownMenuPortal>
+      <DropdownMenuPrimitive.Content
+        ref={ref}
+        collisionBoundary={container}
+        sideOffset={sideOffset}
+        className={cn(
+          "z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-48 overflow-y-auto rounded-lg border bg-popover p-1 text-popover-foreground",
+          className
+        )}
+        {...props}
+      />
+    </DropdownMenuPortal>
+  )
+})
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 
 const DropdownMenuItem = React.forwardRef<
@@ -173,10 +185,10 @@ const DropdownMenuShortcut = ({
   ...props
 }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
-    <span
-      className={cn("ms-auto text-footnote text-muted-foreground", className)}
-      {...props}
-    />
+      <span
+        className={cn("ms-auto text-footnote text-muted-foreground", className)}
+        {...props}
+      />
   )
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"

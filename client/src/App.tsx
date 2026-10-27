@@ -14,9 +14,10 @@ import { SellerProvider } from '@/components/SellerProvider'
 import { useSeller } from '@/domain/seller'
 import { SellScreen } from '@/screens/SellScreen'
 import { MyPartsScreen } from '@/screens/MyPartsScreen'
+import { DeviceFrame } from '@/components/DeviceFrame'
 
 export default function App() {
-  return <SellerProvider><SellerApp /></SellerProvider>
+  return <SellerProvider><DeviceFrame><SellerApp /></DeviceFrame></SellerProvider>
 }
 function SellerApp() {
   const { mode, revision } = useSeller()

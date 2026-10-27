@@ -1,10 +1,15 @@
 import type * as React from "react"
 import { Toaster as Sonner } from "sonner"
+import { createPortal } from "react-dom"
+import { useDevicePortalContainer } from "@/lib/deviceFrame"
 
-type ToasterProps = React.ComponentProps<typeof Sonner>
+type ToasterProps = React.ComponentProps<typeof Sonner> & { container?: HTMLElement }
 
-const Toaster = ({ ...props }: ToasterProps) => {
-  return (
+const Toaster = ({ container: target, ...props }: ToasterProps) => {
+  const screen = useDevicePortalContainer()
+  const container = screen ?? target ?? document.body
+  // This Sonner version has no container prop; portal its rendered host instead.
+  return createPortal(
     <Sonner
       theme="light"
       className="toaster group"
@@ -20,7 +25,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
         },
       }}
       {...props}
-    />
+      offset={screen ? { top: 59, bottom: 106, left: 16, right: 16 } : props.offset}
+      mobileOffset={screen ? { top: 59, bottom: 106, left: 16, right: 16 } : props.mobileOffset}
+      style={{ ...props.style, ...(screen ? { '--width': '361px' } : {}) } as React.CSSProperties}
+    />,
+    container,
   )
 }
 

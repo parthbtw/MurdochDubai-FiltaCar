@@ -140,21 +140,31 @@ Evidence sheets have a grabber, medium and large detents, named close control an
 +--------------------------------------+
 ```
 
-1440 px, identical phone application without a device bezel:
+Above 600 px, the same portrait application sits in a pure CSS device frame:
 
 ```text
 +-----------------------------------------------------------------------+
-|           tinted ground     430 px app     tinted ground               |
-|         505 px gutter   +----------------+   505 px gutter             |
-|                         | same top bar   |                             |
-|                         | same queue or  |                             |
-|                         | detail groups  |                             |
-|                         | same scrolling |                             |
-|                         +----------------+                             |
+|                    calm tinted page ground                            |
+|                    +---------------------+                            |
+|                    | dark 12 px bezel    |                            |
+|                    | 9:41   pill   icons |                            |
+|                    | +-----------------+ |                            |
+|                    | | 393 x 852 screen| |                            |
+|                    | | same app content| |                            |
+|                    | | same bottom tabs| |                            |
+|                    | | home indicator  | |                            |
+|                    | +-----------------+ |                            |
+|                    +---------------------+                            |
 +-----------------------------------------------------------------------+
 ```
 
-375 px: 16 + 343 + 16. 430 px: 16 + 398 + 16. Above 600 px the column is 430 px.
+375 px: 16 + 343 + 16. 430 px: 16 + 398 + 16. At 600 px and below the app fills
+its viewport without device chrome. Above 600 px the screen is 393 x 852 CSS px,
+inside a 417 x 876 px body. The body scales down to fit with 24 px page margins;
+it never scales above 1. The URL query frame=0 restores the previous 430 px desktop
+column for screenshots and tests, without storing a preference.
+Safe areas use --safe-top, --safe-bottom, --safe-left and --safe-right. Their defaults
+come from the environment; framed top and bottom values are 47 px and 34 px.
 Safe areas add logical inline padding only when larger than the normal inset.
 
 ## Principles and generic-default review
@@ -353,3 +363,32 @@ ESLint has no errors and the same three component refresh warnings. Source desig
 zero failures and 16 warnings: 15 permitted identifier monospace uses and the existing print
 rule that removes shadows. Phone screenshots and the browser inspector are deferred because
 this task prohibits starting a server; no visual inspection is claimed.
+
+
+### F6b desktop device frame
+
+The existing direction and ground tokens continue. Device chrome consists only of CSS
+shapes and two inline status SVGs. There are no device images, logos, remote assets or
+frame animations. Reduced motion continues to remove app transitions.
+
+The rounded screen provides a scroll boundary and transformed containing block. The
+existing route scroll viewport retains queue positions and sticky headers. All shared
+portals use the screen context when framed and their body default otherwise. Floating
+content uses the screen as its collision boundary. Sonner has no native container prop
+in the installed version, so the shared Toaster portals its host into that context.
+Approval controls and copy confirmations portal outside the animated route when framed.
+Approval spacer measurements use layout pixels so scaling does not shrink them twice.
+
+Sheet heights use the screen-height variable. Framed source sheets use local medium and
+large heights with the existing keyboard-operable handle, avoiding Vaul's transformed
+viewport measurements. Mobile detents keep their original behaviour. Print removes the
+frame and keeps the existing expanded evidence layout.
+
+F6b validation: 205 client tests pass in two consecutive complete suite runs, including
+17 frame tests for app drawers, shared portals, toasts, source detents, fixed approval,
+copy confirmation, resizing, scaling and the URL escape hatch. Typecheck and production
+build pass. ESLint has zero errors and the same three existing refresh warnings.
+The matchMedia test default is recreated before each test so restoring mocks cannot
+remove its implementation. Existing assertions and 390 px e2e files are unchanged.
+Node 18.20.8 was retained. No packages, servers or browsers were started or installed.
+Visual inspection and e2e execution remain deferred by this task's sandbox constraints.
