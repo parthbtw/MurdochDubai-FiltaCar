@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "reads": {
+    "ebdd49d99369687767cfac5599251ec5a2cc72377b5b22617363f293f760fcff": {
+      "result": {
+        "part_number": "SBM-7940-LC17",
+        "visible_text": "PART NUMBER\nSBM-7940-LC17",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:33:33.063Z"
+    },
+    "7995523f31e6c7f58c78005951bad52487e432d1705e976634766ec8c4e311cc": {
+      "result": {
+        "part_number": "SBM-7941-NP16",
+        "visible_text": "PART NUMBER SBM-7941-NP16",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:33:38.025Z"
+    },
+    "3857a5aa09f56c5cf91854988b877aeded5ca70eb5a6f6a08a88bd85235c4972": {
+      "result": {
+        "part_number": "SBM-7942-PR18",
+        "visible_text": "PART NUMBER\nSBM-7942-PR18",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:33:42.079Z"
+    },
+    "7555a612a8cfc4a2295aceea1f8861d99ab43e8c8f62b9ae55d95ddc33bdb666": {
+      "result": {
+        "part_number": null,
+        "visible_text": "",
+        "damage_notes": [],
+        "readable": false
+      },
+      "read_at": "2026-10-27T15:33:47.499Z"
+    },
+    "1c6e4aa5ce4b250db46a7df275119ffe6a58d2fe9d2dfe29302e0f23b96d7a8b": {
+      "result": {
+        "part_number": null,
+        "visible_text": "PART NUMBER",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:33:51.152Z"
+    },
+    "7b08d4304a82662c4f5aed0784413be8cdabdd7a5703ab7a4d4392e678b4d30c": {
+      "result": {
+        "part_number": "SBM-7943-AC15",
+        "visible_text": "PART NUMBER\nSBM-7943-AC15",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:33:56.890Z"
+    },
+    "b30baec1fc51b5fbaf8c19e09586620814613ece54a47097c41dec10c1adb094": {
+      "result": {
+        "part_number": "SBM-7944-LX570",
+        "visible_text": "PART NUMBER\nSBM-7944-LX570",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:34:00.521Z"
+    },
+    "fd05fd71abcdd04795655f266bdc728d60670bd9fc98fb6dca7047febf1d2f6a": {
+      "result": {
+        "part_number": "SBM-7945-HT",
+        "visible_text": "PART NUMBER\nSBM-7945-HT",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:34:04.058Z"
+    },
+    "926fc6f0191445a5498931cbc4a07043158568e8b2f93085b47f6a78e965877b": {
+      "result": {
+        "part_number": "SBM-7946-PX",
+        "visible_text": "PART NUMBER SBM-7946-PX",
+        "damage_notes": [],
+        "readable": true
+      },
+      "read_at": "2026-10-27T15:34:07.840Z"
+    }
+  }
+}

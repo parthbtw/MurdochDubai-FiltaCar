@@ -4,7 +4,6 @@ import { runChecks } from '../checks/index.js'
 
 const router = Router()
 
-// TODO next milestone: POST /api/upload (photo upload + OCR enrichment).
 // TODO next milestone: GET /api/export/ebay.csv (UK buyer listing export).
 // TODO next milestone: GET /api/metrics (pipeline quality metrics).
 
@@ -17,6 +16,8 @@ const PROTECTED_FIELDS = [
   'draft',
   'corridor',
   'ocr',
+  'ai_reads',
+  'candidates',
   'history',
   'seller_approval',
   'item_id',

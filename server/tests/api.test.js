@@ -76,22 +76,24 @@ test('GET /api/parts/:id returns 404 for unknown id', async () => {
 })
 
 test('PUT /api/parts/:id writes field_sources and history', async () => {
+  const before = (await request(app).get('/api/parts/MIR-0007')).body
   const res = await request(app)
     .put('/api/parts/MIR-0007')
     .send({ donor_vehicle: { year: 2015 } })
   assert.equal(res.status, 200)
   assert.equal(res.body.donor_vehicle.year, 2015)
   assert.equal(res.body.field_sources['donor_vehicle.year'], 'seller edit')
-  assert.equal(res.body.history.length, 1)
-  assert.equal(res.body.history[0].field, 'donor_vehicle.year')
-  assert.equal(res.body.history[0].old, 2018)
-  assert.equal(res.body.history[0].new, 2015)
-  assert.equal(res.body.history[0].by, 'seller')
+  assert.equal(res.body.history.length, before.history.length + 1)
+  assert.deepEqual(res.body.history.slice(0, -1), before.history)
+  assert.equal(res.body.history.at(-1).field, 'donor_vehicle.year')
+  assert.equal(res.body.history.at(-1).old, 2018)
+  assert.equal(res.body.history.at(-1).new, 2015)
+  assert.equal(res.body.history.at(-1).by, 'seller')
 
   // Persisted: a second read sees the same record.
   const again = await request(app).get('/api/parts/MIR-0007')
   assert.equal(again.body.donor_vehicle.year, 2015)
-  assert.equal(again.body.history.length, 1)
+  assert.deepEqual(again.body.history, res.body.history)
 })
 
 test('PUT /api/parts/:id cannot change item_id', async () => {

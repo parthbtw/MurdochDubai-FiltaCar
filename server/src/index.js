@@ -1,8 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+import path from 'node:path'
 import partsRouter, { compatibilityLookup } from './routes/parts.js'
+import uploadRouter from './routes/upload.js'
+import { createAiRouter } from './routes/ai.js'
+import { DATA_DIR } from './store.js'
 
-export function createApp() {
+export function createApp({ ai = {} } = {}) {
   const app = express()
   app.disable('x-powered-by')
 
@@ -23,7 +27,14 @@ export function createApp() {
     res.json({ ok: true })
   })
 
+  app.use('/api', createAiRouter(ai))
   app.use('/api/parts', partsRouter)
+  app.use('/api/upload', uploadRouter)
+
+  // Static photos from data/uploads, so the frontend can show them at
+  // /uploads/<item_id>/<filename>.
+  app.use('/uploads', express.static(path.join(DATA_DIR, 'uploads')))
+  app.use('/demo', express.static(path.join(DATA_DIR, 'demo')))
 
   // GET /api/compatibility/:partNumber: reference catalogue lookup or 404.
   app.get('/api/compatibility/:partNumber', (req, res) => {
@@ -45,6 +56,7 @@ export function createApp() {
   // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
     let status = err.status || 500
+    if (err.name === 'MulterError') status = 400
     if (err.message && err.message.includes('CORS')) status = 403
     res.status(status).json({ error: err.message || 'internal server error' })
   })
