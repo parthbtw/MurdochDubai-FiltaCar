@@ -1,11 +1,28 @@
 import { Router } from 'express'
-import { readParts } from '../store.js'
+import { readParts, readJson, DATA_DIR } from '../store.js'
+import path from 'node:path'
 import { MANUAL_MINUTES_PER_LISTING, FILTACAR_MINUTES_PER_LISTING } from '../config.js'
 
 const router = Router()
 
+function baselineFor() {
+  let baseline
+  try {
+    baseline = readJson(path.join(DATA_DIR, 'manual_baseline.json'))
+  } catch (error) {
+    if (error.code === 'ENOENT' || error instanceof SyntaxError) return null
+    throw error
+  }
+  if (!baseline || typeof baseline.parts !== 'number' || !Number.isFinite(baseline.parts) || baseline.parts <= 0 ||
+    typeof baseline.total_minutes !== 'number' || !Number.isFinite(baseline.total_minutes) || baseline.total_minutes < 0 ||
+    typeof baseline.measured_on !== 'string' || !baseline.measured_on.trim() ||
+    typeof baseline.method !== 'string' || !baseline.method.trim()) return null
+  return { minutes_per_listing: baseline.total_minutes / baseline.parts, measured_on: baseline.measured_on, method: baseline.method }
+}
+
 router.get('/', (req, res) => {
-  const parts = readParts()
+  const parts = readParts().filter(part => req.query.seller_id === undefined || part.seller_id === req.query.seller_id)
+  const timings = []
   const metrics = {
     parts_total: parts.length,
     approved: 0,
@@ -22,7 +39,9 @@ router.get('/', (req, res) => {
       ai_declined_to_guess: 0,
     },
     seller_edits: 0,
+    measured: { approved_with_timing: 0, median_minutes_to_approval: null },
     time_estimate: {
+      source: 'assumption',
       manual_minutes_per_listing: MANUAL_MINUTES_PER_LISTING,
       filtacar_minutes_per_listing: FILTACAR_MINUTES_PER_LISTING,
       basis: 'assumption for illustration, not measured',
@@ -30,6 +49,11 @@ router.get('/', (req, res) => {
   }
   for (const part of parts) {
     if (part.seller_approval?.approved === true) metrics.approved++
+    if (typeof part.created_at === 'string' && typeof part.seller_approval?.approved_at === 'string') {
+      const start = Date.parse(part.created_at)
+      const end = Date.parse(part.seller_approval.approved_at)
+      if (Number.isFinite(start) && Number.isFinite(end) && end >= start) timings.push((end - start) / 60000)
+    }
     if (Object.hasOwn(metrics.by_status, part.readiness_status)) metrics.by_status[part.readiness_status]++
     metrics.facts_with_sources += Object.values(part.field_sources || {})
       .filter((source) => typeof source === 'string' && source.trim()).length
@@ -46,6 +70,23 @@ router.get('/', (req, res) => {
       if (read.result?.part_number === null) metrics.readers.ai_declined_to_guess++
     }
     metrics.seller_edits += (part.history || []).filter((entry) => entry.by === 'seller').length
+  }
+  timings.sort((a, b) => a - b)
+  metrics.measured.approved_with_timing = timings.length
+  if (timings.length) {
+    const middle = Math.floor(timings.length / 2)
+    metrics.measured.median_minutes_to_approval = timings.length % 2
+      ? timings[middle] : (timings[middle - 1] + timings[middle]) / 2
+  }
+  const baseline = baselineFor()
+  if (baseline) metrics.baseline = baseline
+  if (baseline && timings.length) {
+    metrics.time_estimate = {
+      manual_minutes_per_listing: baseline.minutes_per_listing,
+      filtacar_minutes_per_listing: metrics.measured.median_minutes_to_approval,
+      source: 'measured',
+      basis: 'manual baseline and median recorded creation-to-approval elapsed time; not active working time',
+    }
   }
   res.json(metrics)
 })

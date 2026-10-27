@@ -28,6 +28,7 @@ const GROUPS = [
   [['guaranteed', 'guarantee', 'warranty', 'مضمون'], 'Cannot claim: no guarantees offered'],
   [['fits all', 'universal', 'fits any', 'يركب على الكل'], 'Cannot claim: compatibility is not guaranteed'],
   [['tested working', 'fully functional', 'working', 'شغال', 'مجرب'], 'Cannot claim: no test record', 'test'],
+  [['excellent condition', 'good condition', 'like new', 'excellent', 'perfect', 'mint', 'حالة جيدة', 'حالة ممتازة', 'ممتاز', 'نظيف', 'زي الجديد', 'مثل الجديد'], 'Cannot claim: subjective condition; describe the actual condition instead', 'subjective'],
 ];
 
 export function applyClaimGuard(text, record) {
@@ -43,7 +44,7 @@ export function applyClaimGuard(text, record) {
         const letter = char === 'ا' ? '[اأإآٱ]' : char === 'ه' ? '[هة]' : char === 'ي' ? '[يى]' : char;
         return `${letter}[\\u064b-\\u0652\\u0670\\u0640]*`;
       }).join('');
-      const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${arabic ? arabicPattern : escaped}(?![\\p{L}\\p{N}])`, 'giu');
+      const pattern = new RegExp(`(?<![\\p{L}\\p{N}])${arabic ? `${kind === 'subjective' ? '(?:ب|و|ال)?' : ''}${arabicPattern}` : escaped}(?![\\p{L}\\p{N}])`, 'giu');
       output = output.replace(pattern, match => {
         blocked.push({ phrase: match, reason });
         return '';

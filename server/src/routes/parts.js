@@ -8,6 +8,8 @@ const VALID_STATUSES = ['ready_for_review', 'information_missing', 'specialist_r
 const PROTECTED_FIELDS = [
   'gaps_and_conflicts',
   'questions',
+  'actions_required',
+  'created_at',
   'readiness_status',
   'field_sources',
   'draft',
@@ -65,7 +67,8 @@ function validatePatch(patch, existing) {
 // GET /api/parts: all records, optional ?status= filter.
 router.get('/', (req, res) => {
   let parts = readParts()
-  const { status } = req.query
+  const { status, seller_id } = req.query
+  if (seller_id !== undefined) parts = parts.filter(part => part.seller_id === seller_id)
   if (status) {
     if (!VALID_STATUSES.includes(status)) {
       return res.status(400).json({
@@ -135,6 +138,8 @@ router.put('/:id', (req, res) => {
   const checked = runChecks(part)
   for (const key of Object.keys(checked)) {
     part[key] = checked[key]
+    part.field_sources = part.field_sources || {}
+    part.field_sources[key] = 'runChecks'
   }
 
   writeParts(parts)
@@ -170,6 +175,14 @@ router.post('/:id/approve', (req, res) => {
   part.seller_approval = {
     approved: true,
     approved_at: new Date().toISOString(),
+  }
+  part.field_sources = part.field_sources || {}
+  part.field_sources['seller_approval.approved'] = 'seller approval'
+  part.field_sources['seller_approval.approved_at'] = 'server approval timestamp'
+  if (part.corridor?.checklist) {
+    const approval = part.corridor.checklist.items.find(item => item.id === 'seller_approval')
+    if (approval) approval.status = 'pass'
+    part.field_sources.corridor = 'runChecks and seller approval'
   }
   if (!alreadyApproved) {
     part.history.push({

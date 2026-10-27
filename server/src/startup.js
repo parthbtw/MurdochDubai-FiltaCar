@@ -14,6 +14,8 @@ export async function runChecksOnStartup({ checks = runChecks } = {}) {
       const checked = checks(structuredClone(part))
       for (const key of Object.keys(checked)) {
         part[key] = checked[key]
+        part.field_sources = part.field_sources || {}
+        part.field_sources[key] = 'runChecks'
       }
       processed++
     } catch (err) {

@@ -74,7 +74,7 @@ test('draft uses part facts only, omits conflicts and caps title length', () => 
 
 test('corridor sides and every top-level item carry guidance labels', () => {
   for (const [side, expected] of [['Left', 'N/S (nearside, left)'], ['Right', 'O/S (offside, right)'], [null, null]]) {
-    const corridor = buildCorridor(baseRecord({ part_details: { placement: side } }));
+    const corridor = buildCorridor(baseRecord({ part_details: { placement: side }, weight_kg: null }));
     assert.equal(corridor.uk_side_wording.value, expected);
     assert.ok(Object.values(corridor).every(item => item.label === 'guidance, verify'));
     assert.match(corridor.drive_side_warning.value, /Mirror glass and angle can differ/);
@@ -83,7 +83,7 @@ test('corridor sides and every top-level item carry guidance labels', () => {
 });
 
 test('shipping tier comes from the top-level weight_kg', () => {
-  const tier = weight_kg => buildCorridor(baseRecord({ weight_kg })).shipping;
+  const tier = weight_kg => buildCorridor(baseRecord({ weight_kg, packaged_dimensions_cm: null })).shipping;
   assert.deepEqual(tier(1.2), { label: 'guidance, verify', tier: 'under 2 kg', size: 'standard', fragile: true, estimated: false });
   assert.deepEqual(tier(2), { label: 'guidance, verify', tier: '2 to 15 kg', size: 'medium', fragile: true, estimated: false });
   assert.deepEqual(tier(15), { label: 'guidance, verify', tier: '2 to 15 kg', size: 'medium', fragile: true, estimated: false });
@@ -91,7 +91,7 @@ test('shipping tier comes from the top-level weight_kg', () => {
   for (const missing of [undefined, null, '', 'abc', 0]) {
     assert.deepEqual(tier(missing), { label: 'guidance, verify', tier: '2 to 15 kg', size: 'medium', fragile: true, estimated: true });
   }
-  assert.equal(buildCorridor(baseRecord({ part_details: { weight: 3 } })).shipping.estimated, true, 'only weight_kg counts');
+  assert.equal(buildCorridor(baseRecord({ weight_kg: null, part_details: { weight: 3 } })).shipping.estimated, true, 'only weight_kg counts');
 });
 
 test('under 2 kg is not fragile unless glass applies; the packing alert always stays', () => {

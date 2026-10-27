@@ -19,13 +19,13 @@ const VALID_READINESS = new Set([
   "specialist_review_required",
 ]);
 
-test("every seed part runs through runChecks and returns all 5 keys with a valid status", () => {
+test("every seed part runs through runChecks and returns all 6 keys with a valid status", () => {
   assert.equal(seeds.length, 10);
   for (const record of seeds) {
     const result = runChecks(record);
     assert.deepEqual(
       Object.keys(result).sort(),
-      ["corridor", "draft", "gaps_and_conflicts", "questions", "readiness_status"],
+      ["actions_required", "corridor", "draft", "gaps_and_conflicts", "questions", "readiness_status"],
     );
     assert.ok(
       VALID_READINESS.has(result.readiness_status),
@@ -57,7 +57,7 @@ test("all 10 seed records in data/parts.json reach the expected readiness for th
   for (const id of ["MIR-0001", "MIR-0002", "MIR-0003"]) {
     assert.equal(results[id].readiness_status, "ready_for_review", id);
     assert.ok(!results[id].gaps_and_conflicts.some((g) => g.type === "missing" || g.type === "conflict"), id);
-    assert.deepEqual(results[id].draft.blocked_claims, [], id);
+    assert.ok(results[id].draft.blocked_claims.every(block => block.reason === 'Cannot claim: subjective condition; describe the actual condition instead'), id);
   }
   for (const id of ["MIR-0004", "MIR-0005"]) {
     assert.equal(results[id].readiness_status, "information_missing", id);
@@ -290,10 +290,10 @@ test("real seed journey: MIR-0007 becomes ready_for_review once the seller sets 
 
 // ---- Demo journeys ----------------------------------------------------------
 
-test("demo success: MIR-0001 is ready_for_review with no blocked claims", () => {
+test("demo success: MIR-0001 stays ready_for_review while subjective wording is removed", () => {
   const result = runChecks(seed('MIR-0001'));
   assert.equal(result.readiness_status, 'ready_for_review');
-  assert.deepEqual(result.draft.blocked_claims, []);
+  assert.deepEqual(result.draft.blocked_claims, [{ phrase: 'حالة جيدة', reason: 'Cannot claim: subjective condition; describe the actual condition instead' }]);
   assert.equal(result.draft.item_specifics['Manufacturer Part Number'], 'SBM-7940-LC17');
 });
 

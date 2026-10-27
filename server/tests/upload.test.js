@@ -23,7 +23,7 @@ process.env.FILTA_DATA_DIR = tmpDir
 
 const { createApp } = await import('../src/index.js')
 const { terminateOcrWorker } = await import('../src/ocr.js')
-const app = createApp()
+const app = createApp({ ai: { config: { apiKey: '', liveEnabled: false }, cliPath: null } })
 
 after(async () => {
   // Stop the shared OCR worker so the test process can exit.
@@ -89,6 +89,8 @@ test('photos without item_id create MIR-0011', async () => {
 
   const record = res.body.parts[0]
   assert.equal(record.item_id, 'MIR-0011')
+  assert.equal(new Date(record.created_at).toISOString(), record.created_at)
+  assert.equal(record.field_sources.created_at, 'server record creation')
   assert.equal(record.readiness_status, 'information_missing')
   assert.equal(record.seller_id, null)
   assert.equal(record.photos.length, 1)

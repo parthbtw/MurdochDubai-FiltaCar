@@ -64,6 +64,11 @@ export function nextItemId(parts) {
 export function newRecord(item_id) {
   return {
     item_id,
+    created_at: new Date().toISOString(),
+    storage_location: null,
+    weight_kg: null,
+    packaged_dimensions_cm: null,
+    included_components: null,
     seller_id: null,
     original_title_ar: null,
     original_title_en: null,
@@ -91,7 +96,7 @@ export function newRecord(item_id) {
       year: null,
       drive_side: null,
     },
-    field_sources: {},
+    field_sources: { created_at: 'server record creation' },
     questions: [],
     gaps_and_conflicts: [],
     photos: [],

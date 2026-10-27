@@ -227,6 +227,8 @@ router.post('/', upload.fields([
       const checked = runChecks(part)
       for (const key of Object.keys(checked)) {
         part[key] = checked[key]
+        part.field_sources = part.field_sources || {}
+        part.field_sources[key] = 'runChecks'
       }
     } catch (err) {
       warnings.push(`checks failed for ${part.item_id}: ${err.message}`)

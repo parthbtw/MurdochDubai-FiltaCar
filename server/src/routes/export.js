@@ -52,6 +52,7 @@ function draftSources(part) {
   include('part_details.part_number.extracted_value', `${title}\n${specifics['Manufacturer Part Number'] || ''}`)
   include('part_details.colour', specifics.Colour || '')
   include('part_details.features', specifics.Features || '')
+  include('included_components', description)
   for (const field of ['state', 'cosmetic_damage', 'testing_status']) include(`condition.${field}`, description)
   for (const field of ['make', 'model', 'year']) include(`donor_vehicle.${field}`, description)
 

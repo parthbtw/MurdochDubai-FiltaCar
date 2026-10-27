@@ -59,7 +59,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 3",
+      "weight_kg": "spreadsheet row 3",
+      "packaged_dimensions_cm": "spreadsheet row 3",
+      "packaged_dimensions_cm.length": "spreadsheet row 3",
+      "packaged_dimensions_cm.width": "spreadsheet row 3",
+      "packaged_dimensions_cm.height": "spreadsheet row 3",
+      "included_components": "spreadsheet row 3"
     },
     "questions": [],
     "gaps_and_conflicts": [],
@@ -113,6 +120,18 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:33:33.063Z"
       }
+    ],
+    "storage_location": "Rack B1, Bay 2",
+    "weight_kg": 2.4,
+    "packaged_dimensions_cm": {
+      "length": 38,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -175,7 +194,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 4",
+      "weight_kg": "spreadsheet row 4",
+      "packaged_dimensions_cm": "spreadsheet row 4",
+      "packaged_dimensions_cm.length": "spreadsheet row 4",
+      "packaged_dimensions_cm.width": "spreadsheet row 4",
+      "packaged_dimensions_cm.height": "spreadsheet row 4",
+      "included_components": "spreadsheet row 4"
     },
     "questions": [],
     "gaps_and_conflicts": [],
@@ -228,6 +254,18 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:33:38.025Z"
       }
+    ],
+    "storage_location": "Rack B2, Bay 2",
+    "weight_kg": 2.1,
+    "packaged_dimensions_cm": {
+      "length": 39,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -287,7 +325,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 5",
+      "weight_kg": "spreadsheet row 5",
+      "packaged_dimensions_cm": "spreadsheet row 5",
+      "packaged_dimensions_cm.length": "spreadsheet row 5",
+      "packaged_dimensions_cm.width": "spreadsheet row 5",
+      "packaged_dimensions_cm.height": "spreadsheet row 5",
+      "included_components": "spreadsheet row 5"
     },
     "questions": [],
     "gaps_and_conflicts": [],
@@ -342,6 +387,18 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:33:42.079Z"
       }
+    ],
+    "storage_location": "Rack B3, Bay 2",
+    "weight_kg": 2.3,
+    "packaged_dimensions_cm": {
+      "length": 40,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -407,7 +464,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 6",
+      "weight_kg": "spreadsheet row 6",
+      "packaged_dimensions_cm": "spreadsheet row 6",
+      "packaged_dimensions_cm.length": "spreadsheet row 6",
+      "packaged_dimensions_cm.width": "spreadsheet row 6",
+      "packaged_dimensions_cm.height": "spreadsheet row 6",
+      "included_components": "spreadsheet row 6"
     },
     "questions": [
       {
@@ -477,6 +541,18 @@
         "agreement": "neither",
         "read_at": "2026-10-27T15:33:47.499Z"
       }
+    ],
+    "storage_location": "Rack B4, Bay 2",
+    "weight_kg": 1.8,
+    "packaged_dimensions_cm": {
+      "length": 41,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -542,7 +618,9 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 7",
+      "included_components": "spreadsheet row 7"
     },
     "questions": [
       {
@@ -624,6 +702,12 @@
         "agreement": "neither",
         "read_at": "2026-10-27T15:33:51.152Z"
       }
+    ],
+    "storage_location": "Rack B5, Bay 2",
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -688,7 +772,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 8",
+      "weight_kg": "spreadsheet row 8",
+      "packaged_dimensions_cm": "spreadsheet row 8",
+      "packaged_dimensions_cm.length": "spreadsheet row 8",
+      "packaged_dimensions_cm.width": "spreadsheet row 8",
+      "packaged_dimensions_cm.height": "spreadsheet row 8",
+      "included_components": "spreadsheet row 8"
     },
     "questions": [
       {
@@ -758,6 +849,18 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:33:42.079Z"
       }
+    ],
+    "storage_location": "Rack B6, Bay 2",
+    "weight_kg": 2.2,
+    "packaged_dimensions_cm": {
+      "length": 43,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -822,7 +925,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 9",
+      "weight_kg": "spreadsheet row 9",
+      "packaged_dimensions_cm": "spreadsheet row 9",
+      "packaged_dimensions_cm.length": "spreadsheet row 9",
+      "packaged_dimensions_cm.width": "spreadsheet row 9",
+      "packaged_dimensions_cm.height": "spreadsheet row 9",
+      "included_components": "spreadsheet row 9"
     },
     "questions": [
       {
@@ -891,6 +1001,18 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:33:56.890Z"
       }
+    ],
+    "storage_location": "Rack B7, Bay 2",
+    "weight_kg": 1.9,
+    "packaged_dimensions_cm": {
+      "length": 44,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover"
     ]
   },
   {
@@ -955,7 +1077,12 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "weight_kg": "spreadsheet row 10",
+      "packaged_dimensions_cm": "spreadsheet row 10",
+      "packaged_dimensions_cm.length": "spreadsheet row 10",
+      "packaged_dimensions_cm.width": "spreadsheet row 10",
+      "packaged_dimensions_cm.height": "spreadsheet row 10"
     },
     "questions": [
       {
@@ -1025,7 +1152,13 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:34:00.521Z"
       }
-    ]
+    ],
+    "weight_kg": 3.1,
+    "packaged_dimensions_cm": {
+      "length": 45,
+      "width": 26,
+      "height": 22
+    }
   },
   {
     "item_id": "MIR-0009",
@@ -1090,7 +1223,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 11",
+      "weight_kg": "spreadsheet row 11",
+      "packaged_dimensions_cm": "spreadsheet row 11",
+      "packaged_dimensions_cm.length": "spreadsheet row 11",
+      "packaged_dimensions_cm.width": "spreadsheet row 11",
+      "packaged_dimensions_cm.height": "spreadsheet row 11",
+      "included_components": "spreadsheet row 11"
     },
     "questions": [
       {
@@ -1160,6 +1300,19 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:34:04.058Z"
       }
+    ],
+    "storage_location": "Rack B9, Bay 2",
+    "weight_kg": 1.2,
+    "packaged_dimensions_cm": {
+      "length": 46,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover",
+      "connector"
     ]
   },
   {
@@ -1226,7 +1379,14 @@
       "gaps_and_conflicts": "runChecks",
       "questions": "runChecks",
       "draft": "runChecks",
-      "corridor": "runChecks"
+      "corridor": "runChecks",
+      "storage_location": "spreadsheet row 12",
+      "weight_kg": "spreadsheet row 12",
+      "packaged_dimensions_cm": "spreadsheet row 12",
+      "packaged_dimensions_cm.length": "spreadsheet row 12",
+      "packaged_dimensions_cm.width": "spreadsheet row 12",
+      "packaged_dimensions_cm.height": "spreadsheet row 12",
+      "included_components": "spreadsheet row 12"
     },
     "questions": [
       {
@@ -1311,6 +1471,20 @@
         "agreement": "agree",
         "read_at": "2026-10-27T15:34:07.840Z"
       }
+    ],
+    "storage_location": "Rack B10, Bay 2",
+    "weight_kg": 3.5,
+    "packaged_dimensions_cm": {
+      "length": 47,
+      "width": 26,
+      "height": 22
+    },
+    "included_components": [
+      "mirror glass",
+      "housing",
+      "cover",
+      "connector",
+      "camera"
     ]
   }
 ]

@@ -16,6 +16,22 @@ const sidesIn = (text) =>
   [...new Set((String(text).match(/\b(?:left|right)\b/gi) || []).map((s) => SIDE_AR[s.toLowerCase()]))].join("، ");
 
 const TEMPLATES = {
+  "missing:weight_kg": {
+    en: r => `For item ${r.item_id}, what is the packaged weight in kilograms? Please weigh the package.`,
+    ar: r => `بالنسبة للقطعة رقم ${r.item_id}: ما وزن العبوة بالكيلوغرام؟ يرجى وزن العبوة.`,
+  },
+  "missing:packaged_dimensions_cm": {
+    en: r => `For item ${r.item_id}, what are the packaged length, width and height in centimetres?`,
+    ar: r => `بالنسبة للقطعة رقم ${r.item_id}: ما طول العبوة وعرضها وارتفاعها بالسنتيمتر؟`,
+  },
+  "missing:included_components": {
+    en: r => `For item ${r.item_id}, which components are included? List only the components supplied with this part.`,
+    ar: r => `بالنسبة للقطعة رقم ${r.item_id}: ما المكونات المرفقة؟ يرجى ذكر المكونات التي ستباع مع هذه القطعة فقط.`,
+  },
+  "missing:condition.cosmetic_damage": {
+    en: r => `For item ${r.item_id}, describe the actual defects, or explicitly record none reported.`,
+    ar: r => `بالنسبة للقطعة رقم ${r.item_id}: صف العيوب الفعلية أو سجل صراحة عدم وجود عيوب مبلغة.`,
+  },
   "cannot_claim:draft": {
     en: (r, g) => `For item ${r.item_id}, we removed an unsupported claim (${g.detail}). Please confirm the factual wording.`,
     ar: (r) => `بالنسبة للقطعة رقم ${r.item_id}: حذفنا وصفا غير موثق. يرجى تأكيد الوصف الواقعي للقطعة.`,
@@ -168,6 +184,12 @@ const DEFAULT_TEMPLATE = {
 };
 
 function templateFor(gap) {
+  if (gap.type === 'cannot_claim' && gap.detail.includes('subjective condition')) {
+    return { template: {
+      en: r => `For item ${r.item_id}, subjective condition cannot be claimed. Please describe the actual damage and condition instead.`,
+      ar: r => `بالنسبة للقطعة رقم ${r.item_id}: لا نستخدم أوصاف الحالة الذاتية. يرجى وصف الحالة الفعلية والعيوب بدلا من ذلك.`,
+    }, groups: [] };
+  }
   const key = `${gap.type}:${gap.field}`;
   for (const variant of VARIANTS[key] || []) {
     const groups = String(gap.detail ?? "").match(variant.match);
