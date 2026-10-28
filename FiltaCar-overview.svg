@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8A93A8"/></marker>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0064D2"/><stop offset="1" stop-color="#4C9BFF"/></linearGradient>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#12306E" flood-opacity="0.12"/></filter>
+    <style>
+      .title { font-size: 19px; font-weight: 800; fill: #0B1430; }
+      .sub { font-size: 14px; fill: #5B6478; }
+      .flow { stroke: #8A93A8; stroke-width: 2.5; fill: none; marker-end: url(#a); }
+      .step { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; fill: #8A93A8; }
+    </style>
+  </defs>
+  <rect width="1280" height="720" fill="#F4F6FA"/>
+
+  <text x="60" y="70" font-size="32" font-weight="800" fill="#0B1430">FiltaCar</text>
+  <text x="60" y="100" font-size="16" fill="#5B6478">From messy salvage-yard records to honest eBay listings</text>
+  <g transform="translate(1048,58)"><rect width="38" height="7" rx="3.5" fill="#E53238"/><rect x="42" width="38" height="7" rx="3.5" fill="#0064D2"/><rect x="84" width="38" height="7" rx="3.5" fill="#F5AF02"/><rect x="126" width="38" height="7" rx="3.5" fill="#86B817"/></g>
+
+  <!-- 1 Seller inputs -->
+  <text x="60" y="176" class="step">1 · INPUT</text>
+  <rect x="60" y="190" width="230" height="300" rx="26" fill="#fff" filter="url(#sh)"/>
+  <circle cx="175" cy="248" r="34" fill="#FDEBEC"/>
+  <text x="175" y="260" font-size="32" text-anchor="middle">🧑‍🔧</text>
+  <text x="175" y="310" class="title" text-anchor="middle">Salvage seller</text>
+  <text x="175" y="334" class="sub" text-anchor="middle">Noor, Dubai</text>
+  <text x="88" y="378" class="sub">📷 Part &amp; label photos</text>
+  <text x="88" y="404" class="sub">📊 Inventory spreadsheet</text>
+  <text x="88" y="430" class="sub">🚗 Donor-vehicle notes</text>
+  <text x="88" y="456" class="sub">✍️ Arabic yard notes</text>
+
+  <path class="flow" d="M296 340 L346 340"/>
+
+  <!-- 2 App -->
+  <text x="352" y="176" class="step">2 · PHONE APP</text>
+  <rect x="352" y="190" width="250" height="300" rx="26" fill="url(#blue)" filter="url(#sh)"/>
+  <rect x="436" y="216" width="82" height="140" rx="16" fill="none" stroke="#fff" stroke-width="3"/>
+  <rect x="460" y="224" width="34" height="8" rx="4" fill="#fff"/>
+  <rect x="448" y="246" width="58" height="12" rx="4" fill="#fff" fill-opacity="0.7"/>
+  <rect x="448" y="266" width="58" height="12" rx="4" fill="#fff" fill-opacity="0.45"/>
+  <rect x="448" y="286" width="58" height="12" rx="4" fill="#fff" fill-opacity="0.45"/>
+  <rect x="448" y="320" width="58" height="22" rx="11" fill="#fff"/>
+  <text x="477" y="400" font-size="19" font-weight="800" fill="#fff" text-anchor="middle">FiltaCar app</text>
+  <text x="477" y="426" font-size="14" fill="#fff" fill-opacity="0.9" text-anchor="middle">Answer questions in</text>
+  <text x="477" y="446" font-size="14" fill="#fff" fill-opacity="0.9" text-anchor="middle">English or Arabic,</text>
+  <text x="477" y="466" font-size="14" fill="#fff" fill-opacity="0.9" text-anchor="middle">review &amp; approve</text>
+
+  <path class="flow" d="M608 340 L658 340"/>
+  <path class="flow" d="M658 372 L608 372"/>
+
+  <!-- 3 Server / brain -->
+  <text x="664" y="176" class="step">3 · FILTACAR ENGINE</text>
+  <rect x="664" y="190" width="300" height="300" rx="26" fill="#0B1430" filter="url(#sh)"/>
+  <text x="814" y="234" font-size="19" font-weight="800" fill="#fff" text-anchor="middle">Server (API)</text>
+  <rect x="690" y="256" width="248" height="62" rx="14" fill="#fff" fill-opacity="0.08"/>
+  <text x="708" y="282" font-size="15" font-weight="700" fill="#F5AF02">👁 Read the evidence</text>
+  <text x="708" y="304" font-size="13" fill="#DCE6FA">Label OCR + optional CodeBuddy AI</text>
+  <rect x="690" y="328" width="248" height="62" rx="14" fill="#fff" fill-opacity="0.08"/>
+  <text x="708" y="354" font-size="15" font-weight="700" fill="#4C9BFF">🧩 Find gaps &amp; conflicts</text>
+  <text x="708" y="376" font-size="13" fill="#DCE6FA">Ask focused questions (EN / AR)</text>
+  <rect x="690" y="400" width="248" height="62" rx="14" fill="#fff" fill-opacity="0.08"/>
+  <text x="708" y="426" font-size="15" font-weight="700" fill="#86B817">🛡 Honesty checks</text>
+  <text x="708" y="448" font-size="13" fill="#DCE6FA">No guessed fitment or claims</text>
+
+  <path class="flow" d="M970 340 L1020 340"/>
+
+  <!-- 4 Output -->
+  <text x="1026" y="176" class="step">4 · OUTPUT</text>
+  <rect x="1026" y="190" width="200" height="300" rx="26" fill="#fff" filter="url(#sh)"/>
+  <text x="1126" y="234" font-size="18" font-weight="800" fill="#0B1430" text-anchor="middle">Listing draft</text>
+  <rect x="1048" y="256" width="156" height="30" rx="15" fill="#86B817"/><text x="1126" y="276" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">Ready for review</text>
+  <rect x="1048" y="296" width="156" height="30" rx="15" fill="#F5AF02"/><text x="1126" y="316" font-size="13" font-weight="700" fill="#0B1430" text-anchor="middle">Information missing</text>
+  <rect x="1048" y="336" width="156" height="30" rx="15" fill="#E53238"/><text x="1126" y="356" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">Specialist review</text>
+  <text x="1126" y="404" font-size="14" fill="#5B6478" text-anchor="middle">Seller approves →</text>
+  <text x="1126" y="426" font-size="14" font-weight="700" fill="#0064D2" text-anchor="middle">eBay export (mock)</text>
+  <text x="1126" y="450" font-size="12" fill="#8A93A8" text-anchor="middle">UAE → UK buyers</text>
+
+  <!-- Data store under engine -->
+  <path class="flow" d="M814 496 L814 540"/>
+  <rect x="664" y="546" width="300" height="84" rx="22" fill="#fff" filter="url(#sh)"/>
+  <text x="690" y="580" font-size="16" font-weight="800" fill="#0B1430">🗂 Part records</text>
+  <text x="690" y="604" font-size="13" fill="#5B6478">Every fact saved with its source + history</text>
+
+  <!-- principles strip -->
+  <rect x="60" y="546" width="542" height="84" rx="22" fill="#EFF7DF"/>
+  <text x="86" y="580" font-size="16" font-weight="800" fill="#3F5E00">Facts in. Guesses out.</text>
+  <text x="86" y="604" font-size="13" fill="#3F5E00">Known (with source) · Needs confirming (question) · Cannot claim (reason)</text>
+
+  <rect x="1026" y="546" width="200" height="84" rx="22" fill="#E7F0FF"/>
+  <text x="1046" y="580" font-size="14" font-weight="800" fill="#0050A8">Seller always</text>
+  <text x="1046" y="602" font-size="14" font-weight="800" fill="#0050A8">has the final say</text>
+
+  <text x="60" y="680" font-size="13" fill="#8A93A8">Runs on one laptop, offline (only optional AI reads go online) · Synthetic demo data · Nothing is published to eBay</text>
+</svg>
